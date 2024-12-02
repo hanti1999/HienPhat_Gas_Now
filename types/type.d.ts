@@ -4,6 +4,12 @@ declare interface SigninData {
   phone: string;
   password: string;
 }
+
+declare interface ZaloToken {
+  access_token: string;
+  refresh_token: string;
+}
+
 declare interface SignupData {
   name: string;
   phone: string;

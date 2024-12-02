@@ -18,7 +18,7 @@ const SignIn = () => {
 
   const onSignIn = async () => {};
 
-  const toggleShowPassword = () => {
+  const onTogglePassword = () => {
     setShowPassword(!showPassword);
   };
 
@@ -51,7 +51,7 @@ const SignIn = () => {
                   name={showPassword ? 'eye-off' : 'eye'}
                   size={24}
                   color='gray'
-                  onPress={toggleShowPassword}
+                  onPress={onTogglePassword}
                 />
               }
             />

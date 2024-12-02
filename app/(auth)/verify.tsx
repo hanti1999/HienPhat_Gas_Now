@@ -2,21 +2,23 @@ import { Keyboard, TouchableWithoutFeedback, StatusBar } from 'react-native';
 import { Text, View, ScrollView, StyleSheet } from 'react-native';
 import OTPInputView from '@twotalltotems/react-native-otp-input';
 import { Link, useLocalSearchParams } from 'expo-router';
+import Toast from 'react-native-toast-message';
 import React, { useState } from 'react';
 import CustomButton from '@/components/CustomButton';
 import HeaderImage from '@/components/HeaderImage';
 
 const Verify = () => {
   const { phone, name, address, password, otp } = useLocalSearchParams();
-  const [loading, setLoading] = useState(false);
-  const [code, setCode] = useState('');
+  const [loading, setLoading] = useState<boolean>(false);
+  const [code, setCode] = useState<string>('');
 
   const onVerify = async () => {
     if (code != otp) {
-      console.log('Mã OTP không trùng khớp');
+      Toast.show({ type: 'error', text1: 'Mã OTP không chính xác' });
+      return;
     }
-    console.log(code);
   };
+
   return (
     <ScrollView className='bg-white flex-1'>
       <StatusBar />
