@@ -1,12 +1,13 @@
-import { Text, ScrollView, View, Image, TouchableOpacity } from 'react-native';
+import { TouchableOpacity, StatusBar } from 'react-native';
+import { Text, ScrollView, View } from 'react-native';
 import { Link, router } from 'expo-router';
 import * as Location from 'expo-location';
 import React, { useState } from 'react';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import CustomButton from '@/components/CustomButton';
+import HeaderImage from '@/components/HeaderImage';
 import InputField from '@/components/InputField';
 import { Ionicons } from '@expo/vector-icons';
-import hpLogo from '@/assets/logoHp.png';
 
 const SignUp = () => {
   const [form, setForm] = useState({
@@ -61,16 +62,9 @@ const SignUp = () => {
 
   return (
     <ScrollView className='flex-1 bg-white'>
-      <View className='flex bg-white flex-col'>
-        <View
-          className='mt-10 flex-row items-center justify-center'
-          style={{ gap: 20 }}
-        >
-          <Image source={hpLogo} className='w-24 h-24' />
-          <Text className='text-2xl text-primary-black font-RobotoMedium'>
-            Đăng ký
-          </Text>
-        </View>
+      <StatusBar />
+      <View>
+        <HeaderImage text='Đăng ký' />
 
         <View className='p-5'>
           <InputField
@@ -148,14 +142,14 @@ const SignUp = () => {
           <CustomButton
             onPress={onSignUp}
             title='Đăng ký'
-            className='mt-6'
+            className='mt-5'
             loading={loading}
             disabled={loading}
           />
 
           <Link
             href={'/sign-in'}
-            className='text-lg text-center mt-4 text-primary-black'
+            className='text-lg text-center mt-5 text-primary-black'
           >
             <Text>Đã có tài khoản? </Text>
             <Text className='text-primary-pink'>Đăng nhập ngay</Text>

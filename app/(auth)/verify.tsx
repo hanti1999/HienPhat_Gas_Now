@@ -1,16 +1,10 @@
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { Keyboard, TouchableWithoutFeedback, StatusBar } from 'react-native';
+import { Text, View, ScrollView, StyleSheet } from 'react-native';
+import OTPInputView from '@twotalltotems/react-native-otp-input';
 import { Link, useLocalSearchParams } from 'expo-router';
-import {
-  Text,
-  View,
-  Image,
-  Keyboard,
-  TouchableWithoutFeedback,
-} from 'react-native';
 import React, { useState } from 'react';
 import CustomButton from '@/components/CustomButton';
-import InputField from '@/components/InputField';
-import hpLogo from '@/assets/logoHp.png';
+import HeaderImage from '@/components/HeaderImage';
 
 const Verify = () => {
   const { phone, name, address, password, otp } = useLocalSearchParams();
@@ -19,59 +13,60 @@ const Verify = () => {
 
   const onVerify = async () => {
     if (code != otp) {
-      console.log('object');
+      console.log('Mã OTP không trùng khớp');
     }
     console.log(code);
   };
   return (
-    <SafeAreaView className='bg-white flex-1'>
+    <ScrollView className='bg-white flex-1'>
+      <StatusBar />
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <View className='flex-1'>
-          <View
-            className='my-8 flex-row items-center justify-center'
-            style={{ gap: 20 }}
-          >
-            <Image source={hpLogo} className='w-24 h-24' />
-            <Text className='text-2xl text-primary-black font-RobotoMedium'>
-              Đăng ký
-            </Text>
-          </View>
+        <View className='flex'>
+          <HeaderImage text='Xác minh OTP' />
           <View className='p-5'>
             <Text className='text-center'>
               Vui lòng kiểm tra mã OTP được gửi đến Zalo {phone}
             </Text>
             <Link href={`https://zaloapp.com/`}>
               <Text className='text-blue-500 underline text-center text-lg'>
-                Ấn để mở Zalo
+                Mở Zalo
               </Text>
             </Link>
-
-            <InputField
-              placeholder='Nhập mã xác minh'
-              maxLength={6}
-              keyboardType='numeric'
-              value={code}
-              textContentType='password'
-              onChangeText={setCode}
+            <OTPInputView
+              pinCount={6}
+              style={{ height: 120 }}
+              codeInputFieldStyle={styles.codeInputFieldStyle}
+              codeInputHighlightStyle={{ borderColor: '#fb77c5' }}
+              onCodeChanged={(code) => setCode(code)}
+              autoFocusOnLoad={false}
+              code={code}
             />
             <CustomButton
               title='Xác minh'
               onPress={onVerify}
               disabled={loading}
               loading={loading}
-              className='mt-4'
             />
             <Link
               href={'/sign-in'}
-              className='text-center mt-4 text-primary-black'
+              className='text-center text-lg mt-5 text-primary-black'
             >
               <Text>Quay về đăng nhập</Text>
             </Link>
           </View>
         </View>
       </TouchableWithoutFeedback>
-    </SafeAreaView>
+    </ScrollView>
   );
 };
 
 export default Verify;
+
+const styles = StyleSheet.create({
+  codeInputFieldStyle: {
+    borderRadius: 12,
+    color: '#333',
+    height: 50,
+    fontSize: 16,
+  },
+});

@@ -35,10 +35,10 @@ const InputField = ({
             </Text>
           )}
           <View
-            className={`flex flex-row justify-start items-center border-b border-gray-300 focus:border-primary-pink ${containerStyle}`}
+            className={`flex flex-row px-4 justify-start items-center border bg-gray-50 rounded-full border-gray-300 focus:border-primary-pink ${containerStyle}`}
           >
             {icon && (
-              <View className='ml-4'>
+              <View>
                 <AntDesign
                   name={icon}
                   size={24}

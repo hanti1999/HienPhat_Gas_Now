@@ -1,19 +1,12 @@
-import { SafeAreaView } from 'react-native-safe-area-context';
-import {
-  Text,
-  View,
-  Image,
-  ScrollView,
-  TouchableWithoutFeedback,
-  Keyboard,
-} from 'react-native';
+import { TouchableWithoutFeedback, Keyboard, StatusBar } from 'react-native';
+import { Text, View, ScrollView } from 'react-native';
 import React, { useState } from 'react';
 import { Link } from 'expo-router';
 import CustomButton from '@/components/CustomButton';
+import HeaderImage from '@/components/HeaderImage';
 import InputField from '@/components/InputField';
 import { Ionicons } from '@expo/vector-icons';
 import { SigninData } from '@/types/type';
-import hpLogo from '@/assets/logoHp.png';
 
 const SignIn = () => {
   const [form, setForm] = useState<SigninData>({
@@ -30,23 +23,17 @@ const SignIn = () => {
   };
 
   return (
-    <SafeAreaView className='flex-1 bg-white'>
+    <ScrollView className='flex-1 bg-white'>
+      <StatusBar />
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <View className='flex bg-white flex-col'>
-          <View
-            className='my-8 flex-row items-center justify-center'
-            style={{ gap: 20 }}
-          >
-            <Image source={hpLogo} className='w-24 h-24' />
-            <Text className='text-2xl text-primary-black font-RobotoMedium'>
-              Đăng nhập
-            </Text>
-          </View>
+        <View>
+          <HeaderImage text='Đăng nhập' />
 
           <View className='p-5'>
             <InputField
               label='Điện thoại'
               placeholder='Nhập số điện thoại của bạn'
+              keyboardType='numeric'
               icon='phone'
               value={form.phone}
               onChangeText={(value) => setForm({ ...form, phone: value })}
@@ -71,14 +58,14 @@ const SignIn = () => {
             <CustomButton
               onPress={onSignIn}
               title='Đăng nhập'
-              className='mt-6'
+              className='mt-5'
               loading={loading}
               disabled={loading}
             />
 
             <Link
               href={'/sign-up'}
-              className='text-lg text-center mt-10 text-primary-black'
+              className='text-lg text-center mt-5 text-primary-black'
             >
               <Text>Chưa có tài khoản? </Text>
               <Text className='text-primary-pink'>Đăng ký ngay</Text>
@@ -86,7 +73,7 @@ const SignIn = () => {
           </View>
         </View>
       </TouchableWithoutFeedback>
-    </SafeAreaView>
+    </ScrollView>
   );
 };
 
