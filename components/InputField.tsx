@@ -1,12 +1,5 @@
-import {
-  View,
-  Text,
-  KeyboardAvoidingView,
-  TouchableWithoutFeedback,
-  Platform,
-  Keyboard,
-  TextInput,
-} from 'react-native';
+import { TouchableWithoutFeedback, Keyboard, TextInput } from 'react-native';
+import { View, Text, KeyboardAvoidingView, Platform } from 'react-native';
 import React from 'react';
 import { InputFieldProps } from '@/types/type';
 import { AntDesign } from '@expo/vector-icons';

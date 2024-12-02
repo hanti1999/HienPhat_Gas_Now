@@ -1,13 +1,13 @@
 import { TextInputProps, TouchableOpacityProps } from 'react-native';
 
-declare interface SigninData {
-  phone: string;
-  password: string;
-}
-
 declare interface ZaloToken {
   access_token: string;
   refresh_token: string;
+}
+
+declare interface SigninData {
+  phone: string;
+  password: string;
 }
 
 declare interface SignupData {
@@ -17,6 +17,29 @@ declare interface SignupData {
   password: string;
   confirmPass: string;
 }
+
+declare interface ButtonProps extends TouchableOpacityProps {
+  title?: string;
+  bgVariant?: 'primary' | 'secondary' | 'danger' | 'outline' | 'success';
+  textVariant?: 'primary' | 'default' | 'secondary' | 'danger' | 'success';
+  IconLeft?: React.ComponentType<any>;
+  IconRight?: React.ComponentType<any>;
+  className?: string;
+  loading?: boolean;
+}
+
+declare interface InputFieldProps extends TextInputProps {
+  label?: string;
+  icon?: any;
+  secureTextEntry?: boolean;
+  labelStyle?: string;
+  containerStyle?: string;
+  inputStyle?: string;
+  iconStyle?: string;
+  className?: string;
+  children?: React.ReactNode;
+}
+
 declare interface Driver {
   driver_id: number;
   first_name: string;
@@ -70,16 +93,6 @@ declare interface Ride {
   };
 }
 
-declare interface ButtonProps extends TouchableOpacityProps {
-  title?: string;
-  bgVariant?: 'primary' | 'secondary' | 'danger' | 'outline' | 'success';
-  textVariant?: 'primary' | 'default' | 'secondary' | 'danger' | 'success';
-  IconLeft?: React.ComponentType<any>;
-  IconRight?: React.ComponentType<any>;
-  className?: string;
-  loading?: boolean;
-}
-
 declare interface GoogleInputProps {
   icon?: string;
   initialLocation?: string;
@@ -94,18 +107,6 @@ declare interface GoogleInputProps {
     longitude: number;
     address: string;
   }) => void;
-}
-
-declare interface InputFieldProps extends TextInputProps {
-  label?: string;
-  icon?: any;
-  secureTextEntry?: boolean;
-  labelStyle?: string;
-  containerStyle?: string;
-  inputStyle?: string;
-  iconStyle?: string;
-  className?: string;
-  children?: React.ReactNode;
 }
 
 declare interface PaymentProps {

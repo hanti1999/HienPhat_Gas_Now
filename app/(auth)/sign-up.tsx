@@ -1,9 +1,9 @@
 import { TouchableOpacity, StatusBar } from 'react-native';
 import { Text, ScrollView, View } from 'react-native';
+import React, { useEffect, useState } from 'react';
 import Toast from 'react-native-toast-message';
 import { Link, router } from 'expo-router';
 import * as Location from 'expo-location';
-import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import CustomButton from '@/components/CustomButton';
@@ -53,7 +53,7 @@ const SignUp = () => {
     // Lấy OTP từ Zalo
     const otp = generateOTP();
     const formatedPhone = form.phone.replace('0', '84');
-    const api = 'https://business.openapi.zalo.me/message/template';
+    const url = 'https://business.openapi.zalo.me/message/template';
     const data = {
       phone: formatedPhone,
       template_id: '353435',
@@ -62,7 +62,7 @@ const SignUp = () => {
     const config = {
       headers: { access_token: token.access_token },
     };
-    const res = await axios.post(api, data, config);
+    const res = await axios.post(url, data, config);
     if (res.data.error === 0) {
       setLoading(false);
       console.log('Gửi OTP thành công:', otp);
@@ -71,7 +71,7 @@ const SignUp = () => {
         params: { ...form, otp },
       });
     } else if (res.data.error === -124) {
-      console.error('(hàng 76) Access token hết hạn', res.data);
+      console.error('Access token hết hạn', res.data);
       Toast.show({ type: 'info', text1: 'Vui lòng chờ trong giây lát' });
       getNewToken();
     } else {
@@ -80,7 +80,7 @@ const SignUp = () => {
         type: 'error',
         text1: `${res.data.message} (${res.data.error})`,
       });
-      console.error(`(hàng 85) Lỗi: ${res.data.message} (${res.data.error})`);
+      console.error(`Lỗi: ${res.data.message} (${res.data.error})`);
     }
   };
 
@@ -89,7 +89,7 @@ const SignUp = () => {
     setLoading(true);
     const zaloAppIdSecretKey = process.env.ZALO_APP_SECRET_KEY;
     const zaloAppId = process.env.ZALO_APP_ID as string;
-    const api = 'https://oauth.zaloapp.com/v4/oa/access_token';
+    const url = 'https://oauth.zaloapp.com/v4/oa/access_token';
     const data = new URLSearchParams();
     data.append('refresh_token', token.refresh_token);
     data.append('app_id', zaloAppId);
@@ -100,42 +100,39 @@ const SignUp = () => {
         secret_key: zaloAppIdSecretKey,
       },
     };
-    const res = await axios.post(api, data, config);
+    const res = await axios.post(url, data, config);
     if (res?.data.error < 0) {
-      Toast.show({ type: 'error', text1: 'Vui lòng thử lại sau' });
-      console.error('(hàng 106) Lỗi:', res?.data);
+      Toast.show({ type: 'error', text1: 'Vui lòng liên hệ bộ phận hỗ trợ' });
+      console.error('Nhận token mới không thành công:', res?.data);
       setLoading(false);
       return;
     } else {
-      console.log('(hàng 109) Đã nhận token mới');
+      console.log('Đã nhận token mới');
       updateNewTokenToNode(res.data);
     }
   };
 
-  const updateNewTokenToNode = async (props: {
-    access_token: string;
-    refresh_token: string;
-  }) => {
+  const updateNewTokenToNode = async (props: ZaloToken) => {
     try {
       setLoading(true);
       // Lưu access token lên node server cho người dùng sau
-      const api = `api/token/update/66adeb7e4a83ea4165473167`;
+      const url = `api/token/update/66adeb7e4a83ea4165473167`;
       const data = {
         access_token: props.access_token,
         refresh_token: props.refresh_token,
         updateAt: Date.now(),
       };
-      const res = await axios.patch(api, data);
+      const res = await axios.patch(url, data);
       if (res.status === 200) {
         getAccessToken();
         Toast.show({ text1: 'Vui lòng thử lại lần nữa' });
       } else {
-        console.error('(hàng 133) Cập nhật token mới không thành công');
-        Toast.show({ type: 'error', text1: 'Vui lòng thử lại sau' });
+        console.error('Cập nhật token mới không thành công');
+        Toast.show({ type: 'error', text1: 'Vui lòng liên hệ bộ phận hỗ trợ' });
       }
     } catch (error) {
-      console.error('(hàng 138) Cập nhật token mới không thành công', error);
-      Toast.show({ type: 'error', text1: 'Vui lòng thử lại sau' });
+      console.error('Cập nhật token mới không thành công', error);
+      Toast.show({ type: 'error', text1: 'Vui lòng liên hệ bộ phận hỗ trợ' });
     } finally {
       setLoading(false);
     }
@@ -204,30 +201,30 @@ const SignUp = () => {
         <HeaderImage text='Đăng ký' />
         <View className='p-5'>
           <InputField
-            label='Điện thoại'
+            onChangeText={(value) => setForm({ ...form, phone: value })}
             placeholder='Nhập số điện thoại của bạn'
             keyboardType='numeric'
-            icon='phone'
             value={form.phone}
-            onChangeText={(value) => setForm({ ...form, phone: value })}
+            label='Điện thoại'
+            icon='phone'
           />
           <InputField
-            label='Tên'
-            placeholder='Nhập tên của bạn'
-            icon='user'
-            value={form.name}
             onChangeText={(value) => setForm({ ...form, name: value })}
+            placeholder='Nhập tên của bạn'
+            value={form.name}
+            label='Tên'
+            icon='user'
           />
           <InputField
-            label='Địa chỉ'
-            placeholder='Nhập địa chỉ của bạn'
-            icon='home'
-            value={form.address}
             onChangeText={(value) => setForm({ ...form, address: value })}
+            placeholder='Nhập địa chỉ của bạn'
+            value={form.address}
+            label='Địa chỉ'
+            icon='home'
             children={
               <TouchableOpacity
-                onPress={onGetLocation}
                 className='border border-gray-300 rounded-full p-1 flex flex-row items-center'
+                onPress={onGetLocation}
               >
                 <Text className='text-[12px] text-primary-black'>GPS </Text>
                 <MaterialIcons name='gps-fixed' size={12} color='gray' />
@@ -235,36 +232,36 @@ const SignUp = () => {
             }
           />
           <InputField
-            label='Mật khẩu'
-            placeholder='Nhập mật khẩu của bạn'
-            icon='lock'
-            secureTextEntry={!showPassword}
-            value={form.password}
-            textContentType='password'
             onChangeText={(value) => setForm({ ...form, password: value })}
+            placeholder='Nhập mật khẩu của bạn'
+            secureTextEntry={!showPassword}
+            textContentType='password'
+            value={form.password}
+            label='Mật khẩu'
+            icon='lock'
             children={
               <Ionicons
                 name={showPassword ? 'eye-off' : 'eye'}
-                size={24}
-                color='gray'
                 onPress={toggleShowPassword}
+                color='gray'
+                size={24}
               />
             }
           />
           <InputField
-            label='Nhập lại mật khẩu'
-            placeholder='Nhập lại mật khẩu của bạn'
-            icon='lock'
-            secureTextEntry={!showPassword}
-            value={form.confirmPass}
-            textContentType='password'
             onChangeText={(value) => setForm({ ...form, confirmPass: value })}
+            placeholder='Nhập lại mật khẩu của bạn'
+            secureTextEntry={!showPassword}
+            textContentType='password'
+            label='Nhập lại mật khẩu'
+            value={form.confirmPass}
+            icon='lock'
             children={
               <Ionicons
                 name={showPassword ? 'eye-off' : 'eye'}
-                size={24}
-                color='gray'
                 onPress={toggleShowPassword}
+                color='gray'
+                size={24}
               />
             }
           />
@@ -274,15 +271,15 @@ const SignUp = () => {
             </Text>
           </View>
           <CustomButton
-            onPress={onSignUp}
-            title='Đăng ký'
-            className='mt-5'
-            loading={loading}
             disabled={loading}
+            onPress={onSignUp}
+            loading={loading}
+            className='mt-5'
+            title='Đăng ký'
           />
           <Link
-            href={'/sign-in'}
             className='text-lg text-center mt-5 text-primary-black'
+            href={'/sign-in'}
           >
             <Text>Đã có tài khoản? </Text>
             <Text className='text-primary-pink'>Đăng nhập ngay</Text>

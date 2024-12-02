@@ -35,19 +35,19 @@ const Verify = () => {
               </Text>
             </Link>
             <OTPInputView
-              pinCount={6}
-              style={{ height: 120 }}
-              codeInputFieldStyle={styles.codeInputFieldStyle}
               codeInputHighlightStyle={{ borderColor: '#fb77c5' }}
+              codeInputFieldStyle={styles.codeInputFieldStyle}
               onCodeChanged={(code) => setCode(code)}
               autoFocusOnLoad={false}
+              style={{ height: 120 }}
+              pinCount={6}
               code={code}
             />
             <CustomButton
-              title='Xác minh'
-              onPress={onVerify}
               disabled={loading}
+              onPress={onVerify}
               loading={loading}
+              title='Xác minh'
             />
             <Link
               href={'/sign-in'}

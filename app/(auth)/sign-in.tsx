@@ -1,5 +1,5 @@
-import { TouchableWithoutFeedback, Keyboard, StatusBar } from 'react-native';
-import { Text, View, ScrollView } from 'react-native';
+import { TouchableWithoutFeedback, Keyboard } from 'react-native';
+import { Text, View, ScrollView, StatusBar } from 'react-native';
 import React, { useState } from 'react';
 import { Link } from 'expo-router';
 import CustomButton from '@/components/CustomButton';
@@ -31,21 +31,21 @@ const SignIn = () => {
 
           <View className='p-5'>
             <InputField
-              label='Điện thoại'
+              onChangeText={(value) => setForm({ ...form, phone: value })}
               placeholder='Nhập số điện thoại của bạn'
               keyboardType='numeric'
-              icon='phone'
               value={form.phone}
-              onChangeText={(value) => setForm({ ...form, phone: value })}
+              label='Điện thoại'
+              icon='phone'
             />
             <InputField
-              label='Mật khẩu'
-              placeholder='Nhập mật khẩu của bạn'
-              icon='lock'
-              secureTextEntry={!showPassword}
-              value={form.password}
-              textContentType='password'
               onChangeText={(value) => setForm({ ...form, password: value })}
+              placeholder='Nhập mật khẩu của bạn'
+              secureTextEntry={!showPassword}
+              textContentType='password'
+              value={form.password}
+              label='Mật khẩu'
+              icon='lock'
               children={
                 <Ionicons
                   name={showPassword ? 'eye-off' : 'eye'}
@@ -57,15 +57,15 @@ const SignIn = () => {
             />
             <CustomButton
               onPress={onSignIn}
+              disabled={loading}
+              loading={loading}
               title='Đăng nhập'
               className='mt-5'
-              loading={loading}
-              disabled={loading}
             />
 
             <Link
-              href={'/sign-up'}
               className='text-lg text-center mt-5 text-primary-black'
+              href={'/sign-up'}
             >
               <Text>Chưa có tài khoản? </Text>
               <Text className='text-primary-pink'>Đăng ký ngay</Text>

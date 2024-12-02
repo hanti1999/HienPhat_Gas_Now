@@ -1,7 +1,7 @@
+import { LinearGradient } from 'expo-linear-gradient';
 import { View, Text, Image } from 'react-native';
 import React from 'react';
-import { LinearGradient } from 'expo-linear-gradient';
-import bg from '@/assets/images/bg.png';
+import bg from '@/assets/images/bg.jpg';
 
 interface IProps {
   text: string;
