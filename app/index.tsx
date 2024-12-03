@@ -5,7 +5,7 @@ import { useEffect } from 'react';
 const Home = () => {
   useEffect(() => {
     const checkLoginStatus = async () => {
-      const isSignedin = await SecureStore.getItemAsync('token');
+      const isSignedin = await SecureStore.getItemAsync('accessToken');
       if (isSignedin != null) {
         console.log('Redirected');
         return <Redirect href='/(root)/(tabs)/home' />;

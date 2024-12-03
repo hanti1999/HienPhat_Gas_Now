@@ -6,16 +6,36 @@ declare interface ZaloToken {
 }
 
 declare interface SigninData {
-  phone: string;
+  phonenumber: string;
   password: string;
 }
 
 declare interface SignupData {
-  name: string;
-  phone: string;
-  address: string;
+  user_fullname: string;
+  phonenumber: string;
+  address_detail: string;
   password: string;
   confirmPass: string;
+}
+
+declare interface CartType {
+  cartItems: Array<{
+    id: string;
+    title: string;
+    productImg: string;
+    price: number;
+    quantity: number;
+    totalPrice: number;
+  }>;
+  totalAmount: number;
+  totalQuantity: number;
+}
+
+declare interface AuthType {
+  accessToken: string | null;
+  refreshToken: string | null;
+  accessTokenExpiry: string | null;
+  refreshTokenExpiry: string | null;
 }
 
 declare interface ButtonProps extends TouchableOpacityProps {

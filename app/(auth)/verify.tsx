@@ -1,14 +1,16 @@
 import { Keyboard, TouchableWithoutFeedback, StatusBar } from 'react-native';
 import { Text, View, ScrollView, StyleSheet } from 'react-native';
 import OTPInputView from '@twotalltotems/react-native-otp-input';
-import { Link, useLocalSearchParams } from 'expo-router';
+import { Link, useLocalSearchParams, router } from 'expo-router';
 import Toast from 'react-native-toast-message';
 import React, { useState } from 'react';
 import CustomButton from '@/components/CustomButton';
 import HeaderImage from '@/components/HeaderImage';
+import axios from 'axios';
 
 const Verify = () => {
-  const { phone, name, address, password, otp } = useLocalSearchParams();
+  const { phonenumber, user_fullname, address_detail, password, otp } =
+    useLocalSearchParams();
   const [loading, setLoading] = useState<boolean>(false);
   const [code, setCode] = useState<string>('');
 
@@ -16,6 +18,37 @@ const Verify = () => {
     if (code != otp) {
       Toast.show({ type: 'error', text1: 'Mã OTP không chính xác' });
       return;
+    }
+
+    try {
+      setLoading(true);
+      const url = `${process.env.EXPO_PUBLIC_API}/register`;
+      const data = {
+        accounts: {
+          phonenumber: phonenumber,
+          password: password,
+        },
+        users: {
+          user_fullname: user_fullname,
+        },
+        address: {
+          address_detail: address_detail,
+        },
+      };
+
+      const res = await axios.post(url, data);
+      if (res.status === 201) {
+        Toast.show({ type: 'success', text1: 'Tạo tài khoản thành công' });
+        router.push('/(auth)/sign-in');
+      } else {
+        Toast.show({ type: 'error', text1: 'Đăng ký không thành công' });
+        console.log(res);
+      }
+    } catch (error) {
+      Toast.show({ type: 'error', text1: 'Đăng ký không thành công' });
+      console.error('Lỗi (VerifyScreen): ', error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -27,7 +60,7 @@ const Verify = () => {
           <HeaderImage text='Xác minh OTP' />
           <View className='p-5'>
             <Text className='text-center'>
-              Vui lòng kiểm tra mã OTP được gửi đến Zalo {phone}
+              Vui lòng kiểm tra mã OTP được gửi đến Zalo {phonenumber}
             </Text>
             <Link href={`https://zaloapp.com/`}>
               <Text className='text-blue-500 underline text-center text-lg'>

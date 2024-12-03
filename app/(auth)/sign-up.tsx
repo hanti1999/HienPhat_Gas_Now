@@ -14,9 +14,9 @@ import { Ionicons } from '@expo/vector-icons';
 
 const SignUp = () => {
   const [form, setForm] = useState<SignupData>({
-    name: '',
-    phone: '',
-    address: '',
+    user_fullname: '',
+    phonenumber: '',
+    address_detail: '',
     password: '88888888',
     confirmPass: '88888888',
   });
@@ -26,9 +26,9 @@ const SignUp = () => {
   });
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
-  const url = process.env.EXPO_PUBLIC_API;
+  const api = process.env.EXPO_PUBLIC_API;
 
-  const toggleShowPassword = () => {
+  const onTogglePassword = () => {
     setShowPassword(!showPassword);
   };
 
@@ -36,9 +36,13 @@ const SignUp = () => {
     // lấy access token từ node server
     try {
       setLoading(true);
-      const res = await axios.get(`${url}/token`);
+      const url = `${api}/zalo-tokens/b0455d2d-d138-46ad-b6c7-42aab30acf4b`;
+      const res = await axios.get(url);
       if (res.status === 200) {
-        setToken(res.data.token[0]);
+        setToken({
+          access_token: res.data.ztk_access_token,
+          refresh_token: res.data.ztk_refresh_token,
+        });
       } else {
         Toast.show({ type: 'error', text1: 'Lấy token không thành công' });
       }
@@ -52,7 +56,7 @@ const SignUp = () => {
   const getOtp = async () => {
     // Lấy OTP từ Zalo
     const otp = generateOTP();
-    const formatedPhone = form.phone.replace('0', '84');
+    const formatedPhone = form.phonenumber.replace('0', '84');
     const url = 'https://business.openapi.zalo.me/message/template';
     const data = {
       phone: formatedPhone,
@@ -116,13 +120,13 @@ const SignUp = () => {
     try {
       setLoading(true);
       // Lưu access token lên node server cho người dùng sau
-      const url = `api/token/update/66adeb7e4a83ea4165473167`;
+      const url = `/zalo-tokens/b0455d2d-d138-46ad-b6c7-42aab30acf4b`;
       const data = {
-        access_token: props.access_token,
-        refresh_token: props.refresh_token,
+        accessToken: props.access_token,
+        refreshToken: props.refresh_token,
         updateAt: Date.now(),
       };
-      const res = await axios.patch(url, data);
+      const res = await axios.put(url, data);
       if (res.status === 200) {
         getAccessToken();
         Toast.show({ text1: 'Vui lòng thử lại lần nữa' });
@@ -143,7 +147,7 @@ const SignUp = () => {
       Toast.show({ type: 'error', text1: 'Mật khẩu không giống nhau' });
       return;
     }
-    if (form.address === '') {
+    if (form.address_detail === '') {
       Toast.show({ type: 'error', text1: 'Vui lòng nhập địa chỉ' });
       return;
     }
@@ -180,19 +184,19 @@ const SignUp = () => {
     if (reverseGeocode[0]?.formattedAddress === undefined) {
       setForm({
         ...form,
-        address: `${reverseGeocode[0]?.name}, ${reverseGeocode[0]?.street}, ${reverseGeocode[0]?.subregion}, ${reverseGeocode[0]?.region}`,
+        address_detail: `${reverseGeocode[0]?.name}, ${reverseGeocode[0]?.street}, ${reverseGeocode[0]?.subregion}, ${reverseGeocode[0]?.region}`,
       });
     } else {
       setForm({
         ...form,
-        address: `${reverseGeocode[0]?.formattedAddress}`,
+        address_detail: `${reverseGeocode[0]?.formattedAddress}`,
       });
     }
   };
 
-  // useEffect(() => {
-  //   getAccessToken();
-  // }, []);
+  useEffect(() => {
+    getAccessToken();
+  }, []);
 
   return (
     <ScrollView className='flex-1 bg-white'>
@@ -201,25 +205,27 @@ const SignUp = () => {
         <HeaderImage text='Đăng ký' />
         <View className='p-5'>
           <InputField
-            onChangeText={(value) => setForm({ ...form, phone: value })}
+            onChangeText={(value) => setForm({ ...form, phonenumber: value })}
             placeholder='Nhập số điện thoại của bạn'
+            value={form.phonenumber}
             keyboardType='numeric'
-            value={form.phone}
             label='Điện thoại'
             icon='phone'
           />
           <InputField
-            onChangeText={(value) => setForm({ ...form, name: value })}
+            onChangeText={(value) => setForm({ ...form, user_fullname: value })}
             placeholder='Nhập tên của bạn'
-            value={form.name}
+            value={form.user_fullname}
             label='Tên'
             icon='user'
           />
           <InputField
-            onChangeText={(value) => setForm({ ...form, address: value })}
-            placeholder='Nhập địa chỉ của bạn'
-            value={form.address}
-            label='Địa chỉ'
+            onChangeText={(value) =>
+              setForm({ ...form, address_detail: value })
+            }
+            placeholder='Nhập địa chỉ nhận hàng'
+            label='Địa chỉ nhận hàng'
+            value={form.address_detail}
             icon='home'
             children={
               <TouchableOpacity
@@ -242,7 +248,7 @@ const SignUp = () => {
             children={
               <Ionicons
                 name={showPassword ? 'eye-off' : 'eye'}
-                onPress={toggleShowPassword}
+                onPress={onTogglePassword}
                 color='gray'
                 size={24}
               />
@@ -259,7 +265,7 @@ const SignUp = () => {
             children={
               <Ionicons
                 name={showPassword ? 'eye-off' : 'eye'}
-                onPress={toggleShowPassword}
+                onPress={onTogglePassword}
                 color='gray'
                 size={24}
               />

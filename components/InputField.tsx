@@ -28,17 +28,15 @@ const InputField = ({
             </Text>
           )}
           <View
-            className={`flex flex-row px-4 justify-start items-center border bg-gray-50 rounded-full border-gray-300 focus:border-primary-pink ${containerStyle}`}
+            className={`flex flex-row px-4 justify-start items-center border bg-gray-50 rounded-full border-gray-200 focus:border-primary-pink ${containerStyle}`}
           >
             {icon && (
-              <View>
-                <AntDesign
-                  name={icon}
-                  size={24}
-                  color='gray'
-                  className={`${iconStyle}`}
-                />
-              </View>
+              <AntDesign
+                color='gray'
+                name={icon}
+                size={24}
+                className={`${iconStyle}`}
+              />
             )}
             <TextInput
               className={`p-4 font-RobotoMedium text-[16px] flex-1 text-left ${inputStyle}`}
