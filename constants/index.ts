@@ -1,4 +1,4 @@
-import onboarding1 from '@/assets/daisy.png';
+import onboarding1 from '@/assets/images/daisy.png';
 
 export const onboarding = [
   {

@@ -38,6 +38,12 @@ declare interface AuthType {
   refreshTokenExpiry: string | null;
 }
 
+declare interface ITabIcon {
+  icon1: any;
+  icon2: any;
+  focused: boolean;
+}
+
 declare interface ButtonProps extends TouchableOpacityProps {
   title?: string;
   bgVariant?: 'primary' | 'secondary' | 'danger' | 'outline' | 'success';
