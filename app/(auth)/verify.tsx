@@ -1,12 +1,12 @@
 import { Keyboard, TouchableWithoutFeedback, StatusBar } from 'react-native';
 import { Text, View, ScrollView, StyleSheet } from 'react-native';
-import OTPInputView from '@twotalltotems/react-native-otp-input';
 import { Link, useLocalSearchParams, router } from 'expo-router';
 import Toast from 'react-native-toast-message';
 import React, { useState } from 'react';
+import axios from 'axios';
+import OTPInputView from '@twotalltotems/react-native-otp-input';
 import CustomButton from '@/components/CustomButton';
 import HeaderImage from '@/components/HeaderImage';
-import axios from 'axios';
 
 const Verify = () => {
   const { phonenumber, user_fullname, address_detail, password, otp } =
@@ -38,7 +38,7 @@ const Verify = () => {
 
       const res = await axios.post(url, data);
       if (res.status === 201) {
-        Toast.show({ type: 'success', text1: 'Tạo tài khoản thành công' });
+        Toast.show({ type: 'success', text1: 'Đăng ký tài khoản thành công' });
         router.push('/(auth)/sign-in');
       } else {
         Toast.show({ type: 'error', text1: 'Đăng ký không thành công' });

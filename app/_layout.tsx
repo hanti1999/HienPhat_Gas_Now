@@ -1,11 +1,11 @@
 import * as SplashScreen from 'expo-splash-screen';
 import Toast from 'react-native-toast-message';
 import { Provider } from 'react-redux';
-import { store } from '@/redux/store';
 import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
 import { useEffect } from 'react';
 import 'react-native-reanimated';
+import { store } from '@/redux/store';
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();

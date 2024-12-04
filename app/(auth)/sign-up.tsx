@@ -28,10 +28,6 @@ const SignUp = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const api = process.env.EXPO_PUBLIC_API;
 
-  const onTogglePassword = () => {
-    setShowPassword(!showPassword);
-  };
-
   const getAccessToken = async () => {
     // lấy access token từ node server
     try {
@@ -69,7 +65,6 @@ const SignUp = () => {
     const res = await axios.post(url, data, config);
     if (res.data.error === 0) {
       setLoading(false);
-      console.log('Gửi OTP thành công:', otp);
       router.push({
         pathname: '/(auth)/verify',
         params: { ...form, otp },
@@ -247,8 +242,8 @@ const SignUp = () => {
             icon='lock'
             children={
               <Ionicons
+                onPress={() => setShowPassword(!showPassword)}
                 name={showPassword ? 'eye-off' : 'eye'}
-                onPress={onTogglePassword}
                 color='gray'
                 size={24}
               />
@@ -264,8 +259,8 @@ const SignUp = () => {
             icon='lock'
             children={
               <Ionicons
+                onPress={() => setShowPassword(!showPassword)}
                 name={showPassword ? 'eye-off' : 'eye'}
-                onPress={onTogglePassword}
                 color='gray'
                 size={24}
               />
