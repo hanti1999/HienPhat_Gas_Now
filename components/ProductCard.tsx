@@ -9,7 +9,7 @@ import { Product } from '@/types/type';
 
 interface IProductCard {
   item: Product;
-  token: string | null;
+  token: string | null | string[];
   size: number;
 }
 

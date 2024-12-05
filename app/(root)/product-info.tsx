@@ -150,12 +150,12 @@ const ProductInfo = () => {
 
   return (
     <SafeAreaView className='flex-1 bg-white'>
+      <StatusBar />
       <ScrollView
         stickyHeaderIndices={[0]}
         showsVerticalScrollIndicator={false}
         className='bg-gray-100'
       >
-        <StatusBar />
         <ScreenHeader text={'Chi tiết sản phẩm'} />
         <Swiper
           dot={<View className='w-1 h-1 mx-1 bg-gray-200 rounded-full' />}

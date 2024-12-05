@@ -10,7 +10,7 @@ const LoadingScreen = () => {
         style={{ gap: 10 }}
         className='bg-white py-2 h-full flex-row justify-center items-center'
       >
-        <Text>Đang tải...</Text>
+        <Text className='text-lg'>Đang tải...</Text>
         <ActivityIndicator color={'#000'} />
       </View>
     </SafeAreaView>
