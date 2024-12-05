@@ -3,17 +3,18 @@ import { Redirect } from 'expo-router';
 import { useEffect } from 'react';
 
 const Page = () => {
-  useEffect(() => {
-    const checkLoginStatus = async () => {
-      const isSignedin = await SecureStore.getItemAsync('accessToken');
-      if (isSignedin != null) {
-        return <Redirect href='/(root)/(tabs)/home' />;
-      }
-    };
-    checkLoginStatus();
-  }, []);
+  // useEffect(() => {
+  //   const checkLoginStatus = async () => {
+  //     const isSignedin = await SecureStore.getItemAsync('accessToken');
+  //     if (isSignedin != null) {
+  //       return <Redirect href='/(root)/(tabs)/home' />;
+  //     }
+  //   };
+  //   checkLoginStatus();
+  // }, []);
 
-  return <Redirect href='/(auth)/sign-in' />;
+  // return <Redirect href='/(auth)/sign-in' />;
+  return <Redirect href='/(root)/(tabs)/home' />;
 };
 
 export default Page;

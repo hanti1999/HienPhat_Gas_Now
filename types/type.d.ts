@@ -44,6 +44,41 @@ declare interface ITabIcon {
   focused: boolean;
 }
 
+declare interface Product {
+  _id: string;
+  title: string;
+  image: string;
+  discount: number;
+  price: number;
+  sold: number;
+  brand: {
+    _id?: string;
+    name: string;
+    description?: string;
+    image?: string;
+  };
+  category: {
+    _id?: string;
+    name: string;
+    description?: string;
+    image?: string;
+  };
+  carouselImages?: string[];
+  features?: string[];
+  description?: string[];
+  inStock?: boolean;
+  review: [
+    {
+      name?: string;
+      comment?: string;
+      rating?: number;
+      productRating?: number;
+      serviceRating?: number;
+      createAt?: Date;
+    }
+  ];
+}
+
 declare interface ButtonProps extends TouchableOpacityProps {
   title?: string;
   bgVariant?: 'primary' | 'secondary' | 'danger' | 'outline' | 'success';
