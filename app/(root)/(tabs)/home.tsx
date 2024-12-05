@@ -2,20 +2,24 @@ import { Image, ScrollView, RefreshControl, View, Text } from 'react-native';
 import { StatusBar, Dimensions, FlatList, Pressable } from 'react-native';
 import { ActivityIndicator, SafeAreaView } from 'react-native';
 import React, { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import Swiper from 'react-native-swiper';
+import { router } from 'expo-router';
 import axios from 'axios';
 import banner2 from '@/assets/slider-img/DonTetSaleHet_MayLocNuoc.png';
-import LoadingScreen from '@/components/LoadingScreen';
 import banner1 from '@/assets/slider-img/sale8-3.jpg';
 import ProductTitle from '@/components/ProductTitle';
 import ProductCard from '@/components/ProductCard';
 import SeeMoreCard from '@/components/SeeMoreCard';
 import SearchBar from '@/components/SearchBar';
 import daisy from '@/assets/images/daisy.png';
+import { RootState } from '@/redux/store';
 import { Product } from '@/types/type';
 import { slider } from '@/constants';
+import LoadingScreen from '../loading-screen';
 
 const Home = () => {
+  const token = useSelector((state: RootState) => state.auth.accessToken);
   const [refreshing, setRefreshing] = useState<boolean>(false);
   const [products, setProduct] = useState<Product[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -29,7 +33,7 @@ const Home = () => {
 
   const fetchProducts = async () => {
     try {
-      const api = `${process.env.EXPO_PUBLIC_API}/product`;
+      const api = `https://hien-phat-expoapp-api.onrender.com/product`;
       const res = await axios.get(api);
       if (res.status === 200) {
         const data = res?.data?.products;
@@ -80,8 +84,8 @@ const Home = () => {
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
       >
-        <SearchBar userId={'123'} />
-        <HorizontalCategory userId={'123'} />
+        <SearchBar token={token} />
+        <HorizontalCategory token={token} />
         <Swiper
           dot={<View className='w-1 h-1 mx-1 bg-gray-200 rounded-full' />}
           activeDot={
@@ -118,7 +122,7 @@ const Home = () => {
           data={sale?.slice(0, 6)}
           style={{ backgroundColor: 'white', paddingHorizontal: 4 }}
           renderItem={({ item }) => (
-            <ProductCard userId={'123'} item={item} size={0.45} />
+            <ProductCard token={token} item={item} size={0.45} />
           )}
           keyExtractor={(item) => item?._id}
           showsHorizontalScrollIndicator={false}
@@ -136,14 +140,14 @@ const Home = () => {
               marginTop: 20,
             }}
             renderItem={({ item }) => (
-              <ProductCard userId={'123'} item={item} size={0.45} />
+              <ProductCard token={token} item={item} size={0.45} />
             )}
             keyExtractor={(item) => item?._id}
             showsHorizontalScrollIndicator={false}
             horizontal
           />
           <SeeMoreCard
-            userId={'123'}
+            token={token}
             categoryId={'6666d75349ada55e0903d7ec'}
             extraText={'Bếp gas'}
           />
@@ -161,7 +165,7 @@ const Home = () => {
               marginTop: 20,
             }}
             renderItem={({ item }) => (
-              <ProductCard userId={'123'} item={item} size={0.45} />
+              <ProductCard token={token} item={item} size={0.45} />
             )}
             keyExtractor={(item) => item?._id}
             data={bepDien?.slice(0, 6)}
@@ -170,7 +174,7 @@ const Home = () => {
           />
 
           <SeeMoreCard
-            userId={'123'}
+            token={token}
             categoryId={'6667cd3d026b92076ff622a5'}
             extraText={'Bếp điện'}
           />
@@ -188,7 +192,7 @@ const Home = () => {
               marginTop: 20,
             }}
             renderItem={({ item }) => (
-              <ProductCard userId={'123'} item={item} size={0.45} />
+              <ProductCard token={token} item={item} size={0.45} />
             )}
             keyExtractor={(item) => item?._id}
             data={giaDung?.slice(0, 6)}
@@ -197,7 +201,7 @@ const Home = () => {
           />
 
           <SeeMoreCard
-            userId={'123'}
+            token={token}
             categoryId={'6667cd99026b92076ff622a7'}
             extraText={'Gia dụng'}
           />
@@ -213,7 +217,7 @@ const Home = () => {
               marginTop: 20,
             }}
             renderItem={({ item }) => (
-              <ProductCard userId={'123'} item={item} size={0.45} />
+              <ProductCard token={token} item={item} size={0.45} />
             )}
             keyExtractor={(item) => item?._id}
             data={phuKien?.slice(0, 6)}
@@ -222,7 +226,7 @@ const Home = () => {
           />
 
           <SeeMoreCard
-            userId={'123'}
+            token={token}
             categoryId={'6667cdc6026b92076ff622ab'}
             extraText={'Phụ kiện'}
           />
@@ -234,21 +238,22 @@ const Home = () => {
               Thương hiệu
             </Text>
           </View>
-          <HorizontalBrand userId={'123'} />
+          <HorizontalBrand token={token} />
         </View>
       </ScrollView>
     </SafeAreaView>
   );
 };
 
-const HorizontalCategory = ({ userId }: { userId: string }) => {
+const HorizontalCategory = ({ token }: { token: string | null }) => {
   const [catList, setCatList] = useState();
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchCategory = async () => {
       try {
-        const res = await axios.get(`${process.env.EXPO_PUBLIC_API}/category`);
+        const url = `https://hien-phat-expoapp-api.onrender.com/category`;
+        const res = await axios.get(url);
 
         if (res.status === 200) {
           const cat = res.data.category;
@@ -278,12 +283,12 @@ const HorizontalCategory = ({ userId }: { userId: string }) => {
     <FlatList
       renderItem={({ item }) => (
         <Pressable
-          // onPress={() =>
-          //   navigation.navigate('ProductByCategory', {
-          //     categoryId: item?._id,
-          //     userId: userId,
-          //   })
-          // }
+          onPress={() =>
+            router.push({
+              pathname: '/(root)/product-by-category',
+              params: { categoryId: item?._id, token: token },
+            })
+          }
           className='m-1'
         >
           <Image
@@ -303,14 +308,15 @@ const HorizontalCategory = ({ userId }: { userId: string }) => {
   );
 };
 
-const HorizontalBrand = ({ userId }: { userId: string }) => {
+const HorizontalBrand = ({ token }: { token: string | null }) => {
   const [brandList, setBrandList] = useState();
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchBrand = async () => {
       try {
-        const res = await axios.get(`${process.env.EXPO_PUBLIC_API}/brand`);
+        const url = `https://hien-phat-expoapp-api.onrender.com/brand`;
+        const res = await axios.get(url);
         if (res.status === 200) {
           setBrandList(res?.data.brand.reverse());
         } else {
@@ -338,12 +344,12 @@ const HorizontalBrand = ({ userId }: { userId: string }) => {
     <FlatList
       renderItem={({ item }) => (
         <Pressable
-          // onPress={() =>
-          //   navigation.navigate('ProductByBrand', {
-          //     brandId: item?._id,
-          //     userId: userId,
-          //   })
-          // }
+          onPress={() =>
+            router.push({
+              pathname: '/(root)/product-by-brand',
+              params: { brandId: item?._id, token: token },
+            })
+          }
           className='m-1'
         >
           <Image

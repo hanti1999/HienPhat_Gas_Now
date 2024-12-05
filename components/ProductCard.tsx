@@ -3,17 +3,18 @@ import { Text, View, Image, ActivityIndicator } from 'react-native';
 import Toast from 'react-native-toast-message';
 import { useDispatch } from 'react-redux';
 import React, { useState } from 'react';
+import { router } from 'expo-router';
 import { addToCart } from '@/redux/slices/cartSlice';
 import { Product } from '@/types/type';
 
 interface IProductCard {
   item: Product;
-  userId: string;
+  token: string | null;
   size: number;
 }
 
-const ProductCard = ({ item, userId, size }: IProductCard) => {
-  const [isLoading, setLoading] = useState(false);
+const ProductCard = ({ item, token, size }: IProductCard) => {
+  const [isLoading, setLoading] = useState<boolean>(false);
   const dispatch = useDispatch();
   const actualPrice = item?.price * (1 - item.discount / 100);
   const width = Dimensions.get('window').width;
@@ -39,7 +40,10 @@ const ProductCard = ({ item, userId, size }: IProductCard) => {
   };
 
   const navToInfo = () => {
-    // navigation.navigate('Info', { item, userId });
+    router.push({
+      pathname: '/(root)/product-info',
+      params: { token: token, itemId: item._id },
+    });
   };
 
   return (

@@ -4,15 +4,15 @@ import { Entypo } from '@expo/vector-icons';
 
 interface IProps {
   categoryId: string;
-  userId: string;
+  token: string | null;
   extraText: string;
 }
 
-const SeeMoreCard = ({ categoryId, userId, extraText }: IProps) => {
+const SeeMoreCard = ({ categoryId, token, extraText }: IProps) => {
   return (
     <TouchableOpacity
       //   onPress={() =>
-      //     navigation.navigate('ProductByCategory', { categoryId, userId })
+      //     navigation.navigate('ProductByCategory', { categoryId, token })
       //   }
       className='flex-row items-center justify-center py-2'
     >

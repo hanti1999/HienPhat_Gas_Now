@@ -6,14 +6,14 @@ import tulip from '@/assets/images/tulip.png';
 import { Ionicons } from '@expo/vector-icons';
 import { RootState } from '@/redux/store';
 
-const SearchBar = ({ userId }: { userId: string }) => {
+const SearchBar = ({ token }: { token: string | null }) => {
   const cartQuantity = useSelector(
     (state: RootState) => state.cart.totalQuantity
   );
-  const [input, setInput] = useState('');
+  const [input, setInput] = useState<string>('');
 
   const searchHandler = () => {
-    // navigation.navigate('SearchResult', { input: input, userId: userId });
+    // navigation.navigate('SearchResult', { input: input, token: token });
   };
 
   return (

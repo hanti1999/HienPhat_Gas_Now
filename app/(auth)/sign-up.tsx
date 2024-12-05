@@ -165,7 +165,7 @@ const SignUp = () => {
     let { status } = await Location.requestForegroundPermissionsAsync();
 
     if (status !== 'granted') {
-      console.error('Người dùng từ chối quyền truy cập');
+      Toast.show({ type: 'info', text1: 'Quyền truy cập vị trí bị từ chối' });
       return;
     }
 

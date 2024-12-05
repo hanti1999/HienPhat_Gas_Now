@@ -1,6 +1,6 @@
 import { Text, View, SafeAreaView, ActivityIndicator } from 'react-native';
 import React from 'react';
-import ScreenHeader from './ScreenHeader';
+import ScreenHeader from '@/components/ScreenHeader';
 
 const LoadingScreen = () => {
   return (

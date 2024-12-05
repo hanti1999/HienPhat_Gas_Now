@@ -52,29 +52,30 @@ declare interface Product {
   price: number;
   sold: number;
   brand: {
-    _id?: string;
+    _id: string;
     name: string;
-    description?: string;
-    image?: string;
+    description: string;
+    image: string;
   };
   category: {
-    _id?: string;
+    _id: string;
     name: string;
-    description?: string;
-    image?: string;
+    description: string;
+    image: string;
   };
-  carouselImages?: string[];
-  features?: string[];
-  description?: string[];
-  inStock?: boolean;
-  review: [
+  carouselImages: string[];
+  features: string[];
+  description: string[];
+  inStock: boolean;
+  reviews: [
     {
-      name?: string;
-      comment?: string;
-      rating?: number;
-      productRating?: number;
-      serviceRating?: number;
-      createAt?: Date;
+      _id: string;
+      name: string;
+      comment: string;
+      rating: number;
+      productRating: number;
+      serviceRating: number;
+      createAt: Date;
     }
   ];
 }
