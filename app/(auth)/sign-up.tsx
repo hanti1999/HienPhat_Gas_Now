@@ -137,7 +137,7 @@ const SignUp = () => {
     }
   };
 
-  const onSignUp = async () => {
+  const hanldeSignUp = async () => {
     if (form.password != form.confirmPass) {
       Toast.show({ type: 'error', text1: 'Mật khẩu không giống nhau' });
       return;
@@ -161,7 +161,7 @@ const SignUp = () => {
     }
   };
 
-  const onGetLocation = async () => {
+  const handleGetLocation = async () => {
     let { status } = await Location.requestForegroundPermissionsAsync();
 
     if (status !== 'granted') {
@@ -225,7 +225,7 @@ const SignUp = () => {
             children={
               <TouchableOpacity
                 className='border border-gray-300 rounded-full p-1 flex flex-row items-center'
-                onPress={onGetLocation}
+                onPress={handleGetLocation}
               >
                 <Text className='text-[12px] text-primary-black'>GPS </Text>
                 <MaterialIcons name='gps-fixed' size={12} color='gray' />
@@ -273,7 +273,7 @@ const SignUp = () => {
           </View>
           <CustomButton
             disabled={loading}
-            onPress={onSignUp}
+            onPress={hanldeSignUp}
             loading={loading}
             className='mt-5'
             title='Đăng ký'

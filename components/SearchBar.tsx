@@ -13,7 +13,10 @@ const SearchBar = ({ token }: { token: string | null }) => {
   const [input, setInput] = useState<string>('');
 
   const searchHandler = () => {
-    // navigation.navigate('SearchResult', { input: input, token: token });
+    router.push({
+      pathname: '/(root)/search-result',
+      params: { input: input, token: token },
+    });
   };
 
   return (

@@ -21,7 +21,7 @@ const SignIn = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const dispatch = useDispatch();
 
-  const onSignIn = async () => {
+  const handleSignIn = async () => {
     try {
       const url = `${process.env.EXPO_PUBLIC_API}/auth/login`;
       const data = {
@@ -106,7 +106,7 @@ const SignIn = () => {
               </TouchableOpacity>
             </View>
             <CustomButton
-              onPress={onSignIn}
+              onPress={handleSignIn}
               disabled={loading}
               loading={loading}
               title='Đăng nhập'

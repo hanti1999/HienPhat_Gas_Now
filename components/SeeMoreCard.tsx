@@ -1,6 +1,7 @@
 import { Text, TouchableOpacity } from 'react-native';
 import React from 'react';
 import { Entypo } from '@expo/vector-icons';
+import { router } from 'expo-router';
 
 interface IProps {
   categoryId: string;
@@ -11,9 +12,12 @@ interface IProps {
 const SeeMoreCard = ({ categoryId, token, extraText }: IProps) => {
   return (
     <TouchableOpacity
-      //   onPress={() =>
-      //     navigation.navigate('ProductByCategory', { categoryId, token })
-      //   }
+      onPress={() =>
+        router.push({
+          pathname: '/(root)/product-by-category',
+          params: { categoryId: categoryId, token: token },
+        })
+      }
       className='flex-row items-center justify-center py-2'
     >
       <Text className='text-[#60a5fa]'>Xem thêm</Text>

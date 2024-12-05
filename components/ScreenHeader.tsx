@@ -1,8 +1,7 @@
 import { Text, Pressable, View } from 'react-native';
+import { router, useNavigation } from 'expo-router';
 import { useSelector } from 'react-redux';
-import { router } from 'expo-router';
 import React from 'react';
-import { useNavigation } from '@react-navigation/native';
 import { Entypo, Ionicons } from '@expo/vector-icons';
 import { RootState } from '@/redux/store';
 

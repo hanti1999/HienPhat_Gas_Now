@@ -21,8 +21,8 @@ import LoadingScreen from '../loading-screen';
 const Home = () => {
   const token = useSelector((state: RootState) => state.auth.accessToken);
   const [refreshing, setRefreshing] = useState<boolean>(false);
-  const [products, setProduct] = useState<Product[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const [products, setProduct] = useState<Product[]>([]);
   const width = Dimensions.get('window').width;
 
   const onRefresh = async () => {
@@ -33,6 +33,7 @@ const Home = () => {
 
   const fetchProducts = async () => {
     try {
+      // need replace
       const api = `https://hien-phat-expoapp-api.onrender.com/product`;
       const res = await axios.get(api);
       if (res.status === 200) {

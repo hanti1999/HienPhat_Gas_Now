@@ -29,6 +29,7 @@ const ProductInfo = () => {
 
   const checkWishlist = async () => {
     try {
+      // need replace
       const url = `check-wishlist-url`;
       const res = await axios.get(url);
       if (res.status === 200) {
@@ -62,16 +63,10 @@ const ProductInfo = () => {
     };
   };
 
-  const navigateToReview = () => {
-    router.push({
-      pathname: '/(root)/review',
-      params: { productId: data?._id, token: token },
-    });
-  };
-
   const addWishlist = async () => {
     try {
       setLoading(true);
+      // need replace
       const url = `add-wishlist-url`;
       const res = await axios.post(url);
       if (res.status === 200) {
@@ -91,6 +86,7 @@ const ProductInfo = () => {
   const removeWishlist = async () => {
     try {
       setLoading(true);
+      // need replace
       const url = `delete-wishlist-url`;
       const res = await axios.delete(url);
       if (res.status === 200) {
@@ -115,12 +111,12 @@ const ProductInfo = () => {
       );
       setAverageRating(totalRating && totalRating / data?.reviews.length);
     }
-    console.log('data changed');
   }, [data]);
 
   useEffect(() => {
     const getProductInfo = async () => {
       try {
+        // need replace
         const url = `https://hien-phat-expoapp-api.onrender.com/product/${itemId}`;
         const res = await axios.get(url);
         if (res.status === 200) {
@@ -245,7 +241,12 @@ const ProductInfo = () => {
           <Text className='text-[16px] font-semibold mb-2'>Bài đánh giá</Text>
           <Reviews reviews={data?.reviews} />
           <TouchableOpacity
-            onPress={navigateToReview}
+            onPress={() =>
+              router.push({
+                pathname: '/(root)/review',
+                params: { productId: data?._id, token: token },
+              })
+            }
             className='bg-white w-[200px] rounded-full p-2 mt-2'
           >
             <Text className='text-[16px] text-center'>
@@ -281,25 +282,23 @@ const ProductInfo = () => {
   );
 };
 
-const Reviews = (props: any) => {
-  const { reviews } = props;
+const Reviews = ({ reviews }: { reviews: any }) => {
   if (reviews.length === 0) {
     return <Text>Chưa có đánh giá!</Text>;
   }
 
   return (
     <FlatList
-      data={reviews}
-      initialNumToRender={6}
-      horizontal
-      showsHorizontalScrollIndicator={false}
       renderItem={({ item, index }) => <RenderItem item={item} index={index} />}
+      showsHorizontalScrollIndicator={false}
+      initialNumToRender={6}
+      data={reviews}
+      horizontal
     />
   );
 };
 
-const RenderItem = (props: any) => {
-  const { item, index } = props;
+const RenderItem = ({ item, index }: { item: any; index: number }) => {
   return (
     <View key={index} className='mr-2 bg-white rounded-lg p-2 w-[360px]'>
       <View className='flex-row items-center' style={{ gap: 4 }}>

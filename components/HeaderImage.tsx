@@ -3,11 +3,7 @@ import { View, Text, Image } from 'react-native';
 import React from 'react';
 import bg from '@/assets/images/bg.jpg';
 
-interface IProps {
-  text: string;
-}
-
-const HeaderImage = ({ text }: IProps) => {
+const HeaderImage = ({ text }: { text: string }) => {
   return (
     <View className='relative w-full'>
       <Image source={bg} className='z-0 w-full h-[180px]' />

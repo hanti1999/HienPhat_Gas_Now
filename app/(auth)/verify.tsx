@@ -14,7 +14,7 @@ const Verify = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [code, setCode] = useState<string>('');
 
-  const onVerify = async () => {
+  const handleVerify = async () => {
     if (code != otp) {
       Toast.show({ type: 'error', text1: 'Mã OTP không chính xác' });
       return;
@@ -78,7 +78,7 @@ const Verify = () => {
             />
             <CustomButton
               disabled={loading}
-              onPress={onVerify}
+              onPress={handleVerify}
               loading={loading}
               title='Xác minh'
             />
