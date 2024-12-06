@@ -1,23 +1,17 @@
+import { StatusBar, FlatList, SafeAreaView } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
-import { StatusBar, FlatList } from 'react-native';
 import React, { useEffect, useState } from 'react';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import axios from 'axios';
 import ScreenHeader from '@/components/ScreenHeader';
 import ProductCard from '@/components/ProductCard';
 import { Product } from '@/types/type';
-import axios from 'axios';
 import LoadingScreen from './loading-screen';
 import NoProduct from './no-product';
 
-interface SearchParams {
-  input: string;
-  token: string | null;
-}
-
 const SearchResult = () => {
   const { input, token } = useLocalSearchParams();
-  const [loading, setLoading] = useState<boolean>(true);
   const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     const searchProduct = async () => {
@@ -32,7 +26,7 @@ const SearchResult = () => {
           console.log('Tìm kiếm không thành công!');
         }
       } catch (error) {
-        console.log('Lỗi (SearchResultList)', error);
+        console.log('Tìm kiếm không thành công!', error);
       } finally {
         setLoading(false);
       }

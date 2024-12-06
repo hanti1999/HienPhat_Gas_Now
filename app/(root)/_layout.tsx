@@ -6,6 +6,9 @@ const Layout = () => {
       <Stack.Screen name='(tabs)' options={{ headerShown: false }} />
       <Stack.Screen name='loading-screen' options={{ headerShown: false }} />
       <Stack.Screen name='product-info' options={{ headerShown: false }} />
+      <Stack.Screen name='account' options={{ headerShown: false }} />
+      <Stack.Screen name='password' options={{ headerShown: false }} />
+      <Stack.Screen name='user-info' options={{ headerShown: false }} />
       <Stack.Screen name='about' options={{ headerShown: false }} />
       <Stack.Screen name='edit-profile' options={{ headerShown: false }} />
       <Stack.Screen name='orders' options={{ headerShown: false }} />

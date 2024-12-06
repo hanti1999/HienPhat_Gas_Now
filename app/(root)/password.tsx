@@ -2,13 +2,13 @@ import { View, Text } from 'react-native';
 import React from 'react';
 import { useLocalSearchParams } from 'expo-router';
 
-const Orders = () => {
+const Password = () => {
   const { token } = useLocalSearchParams();
   return (
     <View>
-      <Text>Orders</Text>
+      <Text>Password</Text>
     </View>
   );
 };
 
-export default Orders;
+export default Password;

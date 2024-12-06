@@ -80,6 +80,13 @@ declare interface Product {
   ];
 }
 
+declare interface User {
+  name: string;
+  phoneNumber: string;
+  password: string;
+  address: string;
+}
+
 declare interface ButtonProps extends TouchableOpacityProps {
   title?: string;
   bgVariant?: 'primary' | 'secondary' | 'danger' | 'outline' | 'success';
