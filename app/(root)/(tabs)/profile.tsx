@@ -15,10 +15,10 @@ import openLink from '@/utils/openLink';
 import LoadingScreen from '../loading-screen';
 
 const Profile = () => {
-  const token = useSelector((state: RootState) => state.auth.accessToken);
+  const token = useSelector((state: RootState) => state?.auth.accessToken);
   const [refreshing, setRefreshing] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
-  const [currentUser, setCurrentUser] = useState();
+  const [currentUser, setCurrentUser] = useState<any>();
 
   const onRefresh = async () => {
     setRefreshing(true);
@@ -29,8 +29,13 @@ const Profile = () => {
   const fetchUserProfile = async () => {
     try {
       // need replace
-      const url = `get-profile-url`;
-      const res = await axios.get(url);
+      const url = `${process.env.EXPO_PUBLIC_API}/account`;
+      const config = {
+        headers: {
+          Authorization: ` Bearer ${token}`,
+        },
+      };
+      const res = await axios.get(url, config);
       if (res.status === 200) {
         const user = res.data.user;
         setCurrentUser(user);
@@ -42,10 +47,6 @@ const Profile = () => {
     } finally {
       setLoading(false);
     }
-  };
-
-  const openZalo498 = async () => {
-    openLink('https://zalo.me/0986359498');
   };
 
   // useEffect(() => {
@@ -71,7 +72,7 @@ const Profile = () => {
           style={{ gap: 12 }}
           className='py-2 px-3 flex-row items-center bg-white'
         >
-          {/* {currentUser?.image != '' ? (
+          {currentUser?.image != '' ? (
             <Image
               className='w-20 h-20 rounded-full border border-primary-pink'
               source={{ uri: currentUser?.image }}
@@ -80,13 +81,17 @@ const Profile = () => {
             <View className='bg-primary-pink flex justify-center items-center w-20 h-20 rounded-full'>
               <FontAwesome name='user-o' size={40} color='white' />
             </View>
-          )} */}
+          )}
           <View>
-            <Text className='text-xl font-semibold'>{`currentUser?.name`}</Text>
-            <Text className='font-semibold'>
-              {`currentUser?.points?.toLocaleString()`} điểm
+            <Text className='text-xl font-semibold'>
+              {currentUser?.user_fullname}
             </Text>
-            <Text className='text-gray-500'>{`currentUser?.phoneNumber`}</Text>
+            <Text className='font-semibold'>
+              {currentUser?.points?.toLocaleString()} điểm
+            </Text>
+            <Text className='text-gray-500'>
+              {currentUser?.account_phonenumber}
+            </Text>
           </View>
         </View>
 
@@ -95,7 +100,13 @@ const Profile = () => {
             onPress={() =>
               router.push({
                 pathname: '/(root)/account',
-                params: { token: token },
+                params: {
+                  token: token,
+                  account_phonenumber: currentUser?.account_phonenumber,
+                  user_fullname: currentUser?.user_fullname,
+                  address_detail: currentUser?.address_detail,
+                  account_email: currentUser?.account_email,
+                },
               })
             }
             className='flex-row items-center justify-between py-3'
@@ -183,7 +194,7 @@ const Profile = () => {
               <View className='w-6'>
                 <FontAwesome name='bug' size={24} color='black' />
               </View>
-              <Text className='text-base'>Báo lỗi ứng dụng</Text>
+              <Text className='text-base'>Báo lỗi ứng dụng/Hỗ trợ</Text>
             </View>
             <AntDesign name='right' size={16} color='black' />
           </Pressable>

@@ -109,6 +109,21 @@ declare interface InputFieldProps extends TextInputProps {
   children?: React.ReactNode;
 }
 
+declare type PossibleRuleType =
+  | 'MIN_LENGTH'
+  | 'MAX_LENGTH'
+  | 'SPECIAL_CHARS'
+  | 'NUMERIC'
+  | 'UPPERCASE_LETTER'
+  | 'LOWERCASE_LETTER'
+  | 'PASSWORDS_MATCH';
+
+declare type RuleType = {
+  key: PossibleRuleType;
+  label?: string;
+  ruleValue?: number;
+};
+
 declare interface Driver {
   driver_id: number;
   first_name: string;

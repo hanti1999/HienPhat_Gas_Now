@@ -1,6 +1,7 @@
 import * as SecureStore from 'expo-secure-store';
 import { createSlice } from '@reduxjs/toolkit';
 import { AuthType } from '@/types/type';
+import { save } from '@/utils/sercureStore';
 
 const initialState: AuthType = {
   accessToken: SecureStore.getItem('accessToken')
@@ -26,16 +27,10 @@ export const authSlice = createSlice({
       state.refreshToken = action.payload.refreshToken;
       state.accessTokenExpiry = action.payload.accessTokenExpiry;
       state.refreshTokenExpiry = action.payload.refreshTokenExpiry;
-      SecureStore.setItemAsync('accessToken', action.payload.accessToken);
-      SecureStore.setItemAsync('refreshToken', action.payload.refreshToken);
-      SecureStore.setItemAsync(
-        'accessTokenExpiry',
-        action.payload.accessTokenExpiry
-      );
-      SecureStore.setItemAsync(
-        'refreshTokenExpiry',
-        action.payload.refreshTokenExpiry
-      );
+      save('accessToken', action.payload.accessToken);
+      save('refreshToken', action.payload.refreshToken);
+      save('accessTokenExpiry', action.payload.accessTokenExpiry);
+      save('refreshTokenExpiry', action.payload.refreshTokenExpiry);
     },
     logout: (state) => {
       state.accessToken = null;
