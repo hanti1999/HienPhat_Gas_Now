@@ -6,6 +6,7 @@ import { Link, router } from 'expo-router';
 import * as Location from 'expo-location';
 import axios from 'axios';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import PasswordValidate from '@/components/PasswordValidate';
 import CustomButton from '@/components/CustomButton';
 import { ZaloToken, SignupData } from '@/types/type';
 import HeaderImage from '@/components/HeaderImage';
@@ -25,14 +26,14 @@ const SignUp = () => {
     refresh_token: '',
   });
   const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [validated, setValidated] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
-  const api = process.env.EXPO_PUBLIC_API;
 
   const getAccessToken = async () => {
     // lấy access token từ node server
     try {
       setLoading(true);
-      const url = `${api}/zalo-tokens/b0455d2d-d138-46ad-b6c7-42aab30acf4b`;
+      const url = `${process.env.EXPO_PUBLIC_API}/zalo-tokens/b0455d2d-d138-46ad-b6c7-42aab30acf4b`;
       const res = await axios.get(url);
       if (res.status === 200) {
         setToken({
@@ -138,16 +139,12 @@ const SignUp = () => {
   };
 
   const hanldeSignUp = async () => {
-    if (form.password != form.confirmPass) {
-      Toast.show({ type: 'error', text1: 'Mật khẩu không giống nhau' });
+    if (!validated) {
+      Toast.show({ type: 'error', text1: 'Mật khẩu hợp lệ' });
       return;
     }
     if (form.address_detail === '') {
       Toast.show({ type: 'error', text1: 'Vui lòng nhập địa chỉ' });
-      return;
-    }
-    if (form.password.length < 8) {
-      Toast.show({ type: 'error', text1: 'Mật khẩu tối thiểu 8 ký tự' });
       return;
     }
 
@@ -271,6 +268,26 @@ const SignUp = () => {
               (Đã điền sẵn mật khẩu mặc định là: 88888888)
             </Text>
           </View>
+          <PasswordValidate
+            newPassword={form.password}
+            confirmPassword={form.confirmPass}
+            validationRules={[
+              {
+                key: 'MIN_LENGTH',
+                ruleValue: 8,
+                label: 'Tối thiểu 8 ký tự',
+              },
+              {
+                key: 'MAX_LENGTH',
+                ruleValue: 20,
+                label: 'Tối đa 20 ký tự',
+              },
+              { key: 'PASSWORDS_MATCH', label: 'Mật khẩu trùng khớp' },
+            ]}
+            onPasswordValidateChange={(validatedBoolean) =>
+              setValidated(validatedBoolean)
+            }
+          />
           <CustomButton
             disabled={loading}
             onPress={hanldeSignUp}

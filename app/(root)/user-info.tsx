@@ -14,12 +14,7 @@ const UserInfo = () => {
         <ScreenHeader text={'Thông tin người dùng'} />
         <View className='py-2 px-3 mt-2 bg-white'>
           <Pressable className='flex-row items-center justify-between py-3'>
-            <View style={{ gap: 8 }} className='flex-row items-center'>
-              <View className='w-6'>
-                <AntDesign name='phone' size={24} color='black' />
-              </View>
-              <Text className='text-base'>Số điện thoại</Text>
-            </View>
+            <Text className='text-base'>Số điện thoại</Text>
             <View style={{ gap: 8 }} className='flex-row items-center'>
               <Text className='text-[#999]'>{phonenumber}</Text>
               <AntDesign name='right' size={16} color='black' />
@@ -27,12 +22,7 @@ const UserInfo = () => {
           </Pressable>
 
           <Pressable className='flex-row items-center justify-between py-3'>
-            <View style={{ gap: 8 }} className='flex-row items-center'>
-              <View className='w-6'>
-                <AntDesign name='user' size={24} color='black' />
-              </View>
-              <Text className='text-base'>Tên</Text>
-            </View>
+            <Text className='text-base'>Tên</Text>
             <View style={{ gap: 8 }} className='flex-row items-center'>
               <Text className='text-[#999]'>{user_fullname}</Text>
               <AntDesign name='right' size={16} color='black' />
@@ -40,12 +30,7 @@ const UserInfo = () => {
           </Pressable>
 
           <Pressable className='flex-row items-center justify-between py-3'>
-            <View style={{ gap: 8 }} className='flex-row items-center'>
-              <View className='w-6'>
-                <AntDesign name='home' size={24} color='black' />
-              </View>
-              <Text className='text-base'>Địa chỉ giao hàng</Text>
-            </View>
+            <Text className='text-base'>Địa chỉ giao hàng</Text>
             <AntDesign name='right' size={16} color='black' />
           </Pressable>
         </View>

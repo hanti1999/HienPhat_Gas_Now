@@ -27,12 +27,7 @@ const Account = () => {
             }
             className='flex-row items-center justify-between py-3'
           >
-            <View style={{ gap: 8 }} className='flex-row items-center'>
-              <View className='w-6'>
-                <AntDesign name='user' size={24} color='black' />
-              </View>
-              <Text className='text-base'>Thông tin người dùng</Text>
-            </View>
+            <Text className='text-base'>Thông tin người dùng</Text>
             <AntDesign name='right' size={16} color='black' />
           </Pressable>
 
@@ -40,17 +35,12 @@ const Account = () => {
             onPress={() =>
               router.push({
                 pathname: '/(root)/password',
-                params: { token },
+                params: { token, account_phonenumber },
               })
             }
             className='flex-row items-center justify-between py-3'
           >
-            <View style={{ gap: 8 }} className='flex-row items-center'>
-              <View className='w-6'>
-                <AntDesign name='lock' size={24} color='black' />
-              </View>
-              <Text className='text-base'>Thay đổi mật khẩu của bạn</Text>
-            </View>
+            <Text className='text-base'>Thay đổi mật khẩu của bạn</Text>
             <AntDesign name='right' size={16} color='black' />
           </Pressable>
         </View>
