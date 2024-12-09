@@ -14,6 +14,7 @@ import LoadingScreen from '../loading-screen';
 import NoProduct from '../no-product';
 import { router } from 'expo-router';
 import CustomButton from '@/components/CustomButton';
+import RectangleButton from '@/components/RectangleButton';
 
 const cart = () => {
   const cartQuantity = useSelector(
@@ -134,7 +135,7 @@ const cart = () => {
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
       >
-        <View className='bg-pink-100 py-2 px-3 mb-2'>
+        <View className='bg-pink-100 p-2 mb-2'>
           <View className='flex-row items-center' style={{ gap: 4 }}>
             <View className='w-5'>
               <FontAwesome6 name='cart-shopping' size={16} color={P_PINK} />
@@ -176,7 +177,7 @@ const cart = () => {
           </View>
         </View>
 
-        <View className='mb-2 py-2 px-3 bg-white'>
+        <View className='mb-2 p-2 bg-white'>
           <View className='flex-row justify-between'>
             <View className='flex-row items-center' style={{ gap: 4 }}>
               <View className='w-5'>
@@ -248,7 +249,7 @@ const cart = () => {
           </View>
         </View>
 
-        <View className='py-2 px-3 mb-2 bg-white'>
+        <View className='p-2 mb-2 bg-white'>
           <View className='flex-row items-center' style={{ gap: 4 }}>
             <View className='w-5'>
               <FontAwesome6 name='money-bill-1' size={16} color={P_PINK} />
@@ -289,7 +290,7 @@ const cart = () => {
         </View>
       </ScrollView>
 
-      <View className='pt-2 py-2 px-3 bg-white'>
+      <View className='mt-2 p-2 bg-white'>
         <View className='flex-row justify-between items-center my-2'>
           <Text className='text-[18px]'>Tổng thanh toán: </Text>
           <Text className='text-primary-pink font-bold text-[20px]'>
@@ -313,25 +314,18 @@ const cart = () => {
         )}
 
         <View className='flex-row justify-between bg-white' style={{ gap: 8 }}>
-          <TouchableOpacity
-            className='border-primary-pink border-2 rounded-lg flex-1 h-[60px] items-center justify-center'
+          <RectangleButton
             onPress={() => router.push('/(root)/(tabs)/home')}
-          >
-            <Text className='text-primary-pink text-[18px]'>
-              Tiếp tục mua sắm
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
+            title='Tiếp tục mua sắm'
+            textVariant='primary'
+            bgVariant='outline'
+          />
+          <RectangleButton
             onPress={handlePlaceOrder}
-            className='bg-primary-pink rounded-lg flex-1 items-center h-[60px] justify-center'
             disabled={orderLoading}
-          >
-            {orderLoading ? (
-              <ActivityIndicator color={'#fff'} />
-            ) : (
-              <Text className='text-white text-[18px] '>Đặt hàng</Text>
-            )}
-          </TouchableOpacity>
+            loading={orderLoading}
+            title='Đặt hàng'
+          />
         </View>
       </View>
     </SafeAreaView>

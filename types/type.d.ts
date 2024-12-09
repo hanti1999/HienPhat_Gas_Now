@@ -89,7 +89,7 @@ declare interface User {
 
 declare interface ButtonProps extends TouchableOpacityProps {
   title?: string;
-  bgVariant?: 'primary' | 'secondary' | 'danger' | 'outline' | 'success';
+  bgVariant?: 'primary' | 'outline-blue' | 'danger' | 'outline' | 'success';
   textVariant?: 'primary' | 'default' | 'secondary' | 'danger' | 'success';
   IconLeft?: React.ComponentType<any>;
   IconRight?: React.ComponentType<any>;

@@ -14,6 +14,7 @@ import { FontAwesome } from '@expo/vector-icons';
 import openLink from '@/utils/openLink';
 import { Product } from '@/types/type';
 import LoadingScreen from './loading-screen';
+import RectangleButton from '@/components/RectangleButton';
 
 const ProductInfo = () => {
   const { token, itemId } = useLocalSearchParams();
@@ -256,27 +257,22 @@ const ProductInfo = () => {
         </View>
       </ScrollView>
 
-      <View className='flex-row justify-evenly bg-white py-4'>
-        <TouchableOpacity
-          className='border-[#0068ff] border-2 rounded-lg flex-1 mx-2 h-[60px] items-center justify-center'
+      <View
+        className='flex-row justify-evenly bg-white py-4 px-2'
+        style={{ gap: 8 }}
+      >
+        <RectangleButton
           onPress={() => openLink('https://zalo.me/0975841582')}
-        >
-          <Text className='text-[#0068ff] text-[18px]'>
-            Tư vấn
-            <Text className='font-bold'> Zalo</Text>
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
+          bgVariant='outline-blue'
+          textVariant='secondary'
+          title='Tư vấn Zalo'
+        />
+        <RectangleButton
           onPress={addItemToCart}
-          className='bg-primary-pink rounded-lg flex-1 mx-2 items-center h-[60px] justify-center'
           disabled={isLoading}
-        >
-          {isLoading ? (
-            <ActivityIndicator color={'#fff'} />
-          ) : (
-            <Text className='text-white text-[18px] '>Mua ngay</Text>
-          )}
-        </TouchableOpacity>
+          loading={isLoading}
+          title='Mua ngay'
+        />
       </View>
     </SafeAreaView>
   );
