@@ -1,5 +1,5 @@
-import { router, useLocalSearchParams } from 'expo-router';
 import { View, Text, SafeAreaView, Pressable, ScrollView } from 'react-native';
+import { useLocalSearchParams } from 'expo-router';
 import React from 'react';
 import ScreenHeader from '@/components/ScreenHeader';
 import { AntDesign } from '@expo/vector-icons';

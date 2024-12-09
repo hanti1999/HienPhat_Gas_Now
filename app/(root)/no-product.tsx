@@ -2,8 +2,8 @@ import { Text, SafeAreaView } from 'react-native';
 import { Image, View } from 'react-native';
 import { router } from 'expo-router';
 import ScreenHeader from '@/components/ScreenHeader';
-import img from '@/assets/images/cart.png';
 import CustomButton from '@/components/CustomButton';
+import img from '@/assets/images/cart.png';
 
 const NoProduct = ({ text }: { text: string }) => {
   return (
