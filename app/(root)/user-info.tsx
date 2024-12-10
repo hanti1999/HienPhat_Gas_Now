@@ -26,7 +26,15 @@ const UserInfo = () => {
             </View>
           </Pressable>
 
-          <Pressable className='flex-row items-center justify-between py-3'>
+          <Pressable
+            onPress={() =>
+              router.push({
+                pathname: '/(root)/update-name',
+                params: { token, user_fullname },
+              })
+            }
+            className='flex-row items-center justify-between py-3'
+          >
             <Text className='text-base'>Tên</Text>
             <View style={{ gap: 8 }} className='flex-row items-center'>
               <Text className='text-[#999]'>{user_fullname}</Text>

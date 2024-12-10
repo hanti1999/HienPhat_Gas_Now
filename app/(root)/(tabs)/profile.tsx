@@ -36,6 +36,7 @@ const Profile = () => {
         },
       };
       const res = await axios.get(url, config);
+      console.log(res.status); // test
       if (res.status === 200) {
         setUser(res.data);
       } else {

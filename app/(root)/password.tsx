@@ -33,7 +33,7 @@ const Password = () => {
     // lấy access token từ node server
     try {
       setLoading(true);
-      const url = `${process.env.EXPO_PUBLIC_API}/zalo-tokens/b0455d2d-d138-46ad-b6c7-42aab30acf4b`;
+      const url = `${process.env.EXPO_PUBLIC_API}/zalo-tokens/031d43fe-b157-413d-8cf1-7f51d8c8bcd0`;
       const res = await axios.get(url);
       if (res.status === 200) {
         setToken({
@@ -84,8 +84,8 @@ const Password = () => {
   const getNewToken = async () => {
     // dùng refresh token để lấy access token mới từ server zalo
     setLoading(true);
-    const zaloAppIdSecretKey = process.env.ZALO_APP_SECRET_KEY;
-    const zaloAppId = process.env.ZALO_APP_ID as string;
+    const zaloAppIdSecretKey = process.env.EXPO_PUBLIC_ZALO_APP_SECRET_KEY;
+    const zaloAppId = process.env.EXPO_PUBLIC_ZALO_APP_ID as string;
     const url = 'https://oauth.zaloapp.com/v4/oa/access_token';
     const data = new URLSearchParams();
     data.append('refresh_token', zaloToken.refresh_token);
@@ -113,7 +113,7 @@ const Password = () => {
     try {
       setLoading(true);
       // Lưu access token lên node server cho người dùng sau
-      const url = `/zalo-tokens/b0455d2d-d138-46ad-b6c7-42aab30acf4b`;
+      const url = `${process.env.EXPO_PUBLIC_API}/zalo-tokens/031d43fe-b157-413d-8cf1-7f51d8c8bcd0`;
       const data = {
         accessToken: props.access_token,
         refreshToken: props.refresh_token,
@@ -167,7 +167,7 @@ const Password = () => {
       const res = await axios.put(url, data, config);
 
       if (res.status === 200) {
-        Toast.show({ text1: 'Đổi mậ khẩu thành công' });
+        Toast.show({ text1: 'Đổi mật khẩu thành công' });
         nav.goBack();
       } else {
         Toast.show({ type: 'error', text1: res.data });
@@ -191,7 +191,7 @@ const Password = () => {
     <SafeAreaView className='flex-1 bg-white'>
       <ScrollView stickyHeaderIndices={[0]} className='bg-gray-100 flex-1'>
         <ScreenHeader text='Thay đổi mật khẩu' />
-        <View className='py-2 px-3 mt-2 bg-white'>
+        <View className='p-3 bg-white'>
           <InputField
             onChangeText={(text) => setCurrentPass(text)}
             value={currentPass}
