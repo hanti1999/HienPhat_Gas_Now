@@ -5,6 +5,7 @@ const Layout = () => {
     <Stack>
       <Stack.Screen name='product-by-brand' options={{ headerShown: false }} />
       <Stack.Screen name='loading-screen' options={{ headerShown: false }} />
+      <Stack.Screen name='update-address' options={{ headerShown: false }} />
       <Stack.Screen name='search-result' options={{ headerShown: false }} />
       <Stack.Screen name='product-info' options={{ headerShown: false }} />
       <Stack.Screen name='no-product' options={{ headerShown: false }} />

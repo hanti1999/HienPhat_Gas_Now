@@ -2,14 +2,15 @@ import { ScrollView, RefreshControl, TouchableOpacity } from 'react-native';
 import { Text, View, SafeAreaView, Pressable, Image } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { Modal, StatusBar } from 'react-native';
+import Toast from 'react-native-toast-message';
 import { useEffect, useState } from 'react';
 import { Link, router } from 'expo-router';
 import axios from 'axios';
 import { FontAwesome, AntDesign } from '@expo/vector-icons';
 import { Ionicons, Foundation } from '@expo/vector-icons';
 import ScreenHeader from '@/components/ScreenHeader';
-import CustomButton from '@/components/CustomButton';
 import { logout } from '@/redux/slices/authSlice';
+import { ProfileType } from '@/types/type';
 import { RootState } from '@/redux/store';
 import openLink from '@/utils/openLink';
 import LoadingScreen from '../loading-screen';
@@ -18,7 +19,7 @@ const Profile = () => {
   const token = useSelector((state: RootState) => state?.auth.accessToken);
   const [refreshing, setRefreshing] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
-  const [currentUser, setCurrentUser] = useState<any>();
+  const [user, setUser] = useState<ProfileType>();
 
   const onRefresh = async () => {
     setRefreshing(true);
@@ -28,8 +29,7 @@ const Profile = () => {
 
   const fetchUserProfile = async () => {
     try {
-      // need replace
-      const url = `${process.env.EXPO_PUBLIC_API}/account`;
+      const url = `${process.env.EXPO_PUBLIC_API}/user`;
       const config = {
         headers: {
           Authorization: ` Bearer ${token}`,
@@ -37,10 +37,9 @@ const Profile = () => {
       };
       const res = await axios.get(url, config);
       if (res.status === 200) {
-        const user = res.data.user;
-        setCurrentUser(user);
+        setUser(res.data);
       } else {
-        console.error('Fetch thông tin người dùng không thành công');
+        Toast.show({ type: 'error', text1: res.data?.message });
       }
     } catch (error) {
       console.error('Lỗi (catch ProfileScreen): ', error);
@@ -49,13 +48,13 @@ const Profile = () => {
     }
   };
 
-  // useEffect(() => {
-  //   fetchUserProfile();
-  // }, []);
+  useEffect(() => {
+    fetchUserProfile();
+  }, []);
 
-  // if (loading) {
-  //   return <LoadingScreen />;
-  // }
+  if (loading) {
+    return <LoadingScreen />;
+  }
 
   return (
     <SafeAreaView className='flex-1 bg-white'>
@@ -70,12 +69,12 @@ const Profile = () => {
         <ScreenHeader text={'Tài khoản'} />
         <View
           style={{ gap: 12 }}
-          className='py-2 px-3 flex-row items-center bg-white'
+          className='p-3 flex-row items-center bg-white'
         >
-          {currentUser?.image != '' ? (
+          {user?.user?.user_img_url != null ? (
             <Image
               className='w-20 h-20 rounded-full border border-primary-pink'
-              source={{ uri: currentUser?.image }}
+              source={{ uri: user?.user?.user_img_url }}
             />
           ) : (
             <View className='bg-primary-pink flex justify-center items-center w-20 h-20 rounded-full'>
@@ -84,28 +83,28 @@ const Profile = () => {
           )}
           <View>
             <Text className='text-xl font-semibold'>
-              {currentUser?.user_fullname}
+              {user?.user?.user_fullname}
             </Text>
-            <Text className='font-semibold'>
-              {currentUser?.points?.toLocaleString()} điểm
-            </Text>
+            {/* <Text className='font-semibold'>
+              {user?.points?.toLocaleString()} điểm
+            </Text> */}
             <Text className='text-gray-500'>
-              {currentUser?.account_phonenumber}
+              {user?.account?.account_phonenumber}
             </Text>
           </View>
         </View>
 
-        <View className='py-2 px-3 mt-2 bg-white'>
+        <View className='p-3 mt-2 bg-white'>
           <Pressable
             onPress={() =>
               router.push({
                 pathname: '/(root)/account',
                 params: {
                   token: token,
-                  account_phonenumber: currentUser?.account_phonenumber,
-                  user_fullname: currentUser?.user_fullname,
-                  address_detail: currentUser?.address_detail,
-                  account_email: currentUser?.account_email,
+                  account_phonenumber: user?.account?.account_phonenumber,
+                  user_fullname: user?.user?.user_fullname,
+                  address_full: user?.address?.address_full,
+                  account_email: user?.account?.account_email,
                 },
               })
             }
@@ -157,7 +156,7 @@ const Profile = () => {
           </Pressable>
         </View>
 
-        <View className='py-2 px-3 mt-2 bg-white'>
+        <View className='p-3 mt-2 bg-white'>
           <Pressable
             onPress={() => router.push('/(root)/about')}
             className='flex-row items-center justify-between py-3'
@@ -200,7 +199,7 @@ const Profile = () => {
           </Pressable>
         </View>
 
-        <View className='py-2 px-3 bg-white mt-2'>
+        <View className='p-3 bg-white mt-2'>
           <LogoutButton />
         </View>
 

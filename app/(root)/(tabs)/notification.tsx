@@ -71,7 +71,7 @@ const Notification = () => {
 
 const RenderItem = ({ item, index }: { item: any; index: number }) => {
   return (
-    <View className='bg-white py-2 px-3 mb-2' key={index}>
+    <View className='bg-white p-3 mb-2' key={index}>
       <Text className='font-semibold uppercase text-[16px]'>{item?.title}</Text>
       <Text className='text-[15px]'>
         Vào phần <Text className='underline'>Tài khoản</Text>

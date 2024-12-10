@@ -19,8 +19,8 @@ const Layout = () => {
         tabBarInactiveTintColor: '#333',
         tabBarStyle: {
           shadowColor: '#333',
-          shadowOpacity: 0.2,
-          shadowRadius: 4,
+          shadowOpacity: 0.1,
+          shadowRadius: 5,
         },
       }}
     >

@@ -1,20 +1,19 @@
 import { Text, View, SafeAreaView, ScrollView, Switch } from 'react-native';
 import { Dimensions, TouchableOpacity, RefreshControl } from 'react-native';
-import { Image, TextInput, Alert, ActivityIndicator } from 'react-native';
+import { Image, TextInput, Alert } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
+import { router } from 'expo-router';
 import axios from 'axios';
 import { removeFromCart, clearCart } from '@/redux/slices/cartSlice';
 import { MaterialIcons, Fontisto } from '@expo/vector-icons';
 import { FontAwesome6, AntDesign } from '@expo/vector-icons';
+import RectangleButton from '@/components/RectangleButton';
 import ScreenHeader from '@/components/ScreenHeader';
 import tulip from '@/assets/images/tulip.png';
 import { RootState } from '@/redux/store';
 import LoadingScreen from '../loading-screen';
 import NoProduct from '../no-product';
-import { router } from 'expo-router';
-import CustomButton from '@/components/CustomButton';
-import RectangleButton from '@/components/RectangleButton';
 
 const cart = () => {
   const cartQuantity = useSelector(
@@ -42,19 +41,24 @@ const cart = () => {
 
   const fetchUser = async () => {
     try {
-      const url = `${process.env.EXPO_PUBLIC_API}/my-url`;
-      const res = await axios.get(url);
+      const url = `${process.env.EXPO_PUBLIC_API}/user`;
+      const config = {
+        headers: {
+          Authorization: ` Bearer ${token}`,
+        },
+      };
+      const res = await axios.get(url, config);
       if (res.status === 200) {
-        const user = res.data.user;
-        setAddress(user?.address);
-        setName(user?.name);
-        setPhoneNumber(user?.phoneNumber);
-        setUserPoints(user?.points);
+        const data = res.data;
+        setAddress(data?.address?.address_full);
+        setName(data?.user?.user_fullname);
+        setPhoneNumber(data?.account?.account_phonenumber);
+        // setUserPoints(data?.points);
       } else {
-        console.log('Fetch thông tin người dùng không thành công');
+        console.error(res.data.message);
       }
     } catch (error) {
-      console.log('Lỗi (catch CartScreen): ', error);
+      console.error('Lỗi (catch CartScreen): ', error);
     } finally {
       setLoading(false);
     }
@@ -66,9 +70,9 @@ const cart = () => {
     setRefreshing(false);
   };
 
-  // useEffect(() => {
-  //   fetchUser();
-  // }, []);
+  useEffect(() => {
+    fetchUser();
+  }, []);
 
   useEffect(() => {
     setTotalAmount(cartAmount);
@@ -135,7 +139,7 @@ const cart = () => {
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
       >
-        <View className='bg-pink-100 p-2 mb-2'>
+        <View className='bg-pink-100 p-3 mb-2'>
           <View className='flex-row items-center' style={{ gap: 4 }}>
             <View className='w-5'>
               <FontAwesome6 name='cart-shopping' size={16} color={P_PINK} />
@@ -172,12 +176,13 @@ const cart = () => {
             <Switch
               trackColor={{ false: '#767577', true: P_PINK }}
               onValueChange={toggleSwitch}
+              disabled={userPoints === 0}
               value={usePoint}
             />
           </View>
         </View>
 
-        <View className='mb-2 p-2 bg-white'>
+        <View className='mb-2 p-3 bg-white'>
           <View className='flex-row justify-between'>
             <View className='flex-row items-center' style={{ gap: 4 }}>
               <View className='w-5'>
@@ -249,7 +254,7 @@ const cart = () => {
           </View>
         </View>
 
-        <View className='p-2 mb-2 bg-white'>
+        <View className='p-3 mb-2 bg-white'>
           <View className='flex-row items-center' style={{ gap: 4 }}>
             <View className='w-5'>
               <FontAwesome6 name='money-bill-1' size={16} color={P_PINK} />
@@ -290,7 +295,7 @@ const cart = () => {
         </View>
       </ScrollView>
 
-      <View className='mt-2 p-2 bg-white'>
+      <View className='mt-2 p-3 bg-white'>
         <View className='flex-row justify-between items-center my-2'>
           <Text className='text-[18px]'>Tổng thanh toán: </Text>
           <Text className='text-primary-pink font-bold text-[20px]'>
@@ -313,7 +318,7 @@ const cart = () => {
           <></>
         )}
 
-        <View className='flex-row justify-between bg-white' style={{ gap: 8 }}>
+        <View className='flex-row justify-between bg-white' style={{ gap: 12 }}>
           <RectangleButton
             onPress={() => router.push('/(root)/(tabs)/home')}
             title='Tiếp tục mua sắm'

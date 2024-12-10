@@ -5,7 +5,12 @@ import React from 'react';
 import { Entypo, Ionicons } from '@expo/vector-icons';
 import { RootState } from '@/redux/store';
 
-const ScreenHeader = ({ text }: { text: string }) => {
+interface IProps {
+  text: string;
+  showCart?: boolean;
+}
+
+const ScreenHeader = ({ text, showCart = true }: IProps) => {
   const cartQuantity = useSelector(
     (state: RootState) => state.cart.totalQuantity
   );
@@ -25,7 +30,7 @@ const ScreenHeader = ({ text }: { text: string }) => {
         <Text className='font-bold text-[20px]'>{text}</Text>
       </View>
       <Pressable
-        className='relative px-3 py-2.5'
+        className={`relative px-3 py-2.5 ${showCart ? '' : 'hidden'}`}
         onPress={() => router.push('/(root)/(tabs)/cart')}
       >
         <Ionicons name='cart-outline' size={30} />

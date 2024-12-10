@@ -1,5 +1,20 @@
 import { TextInputProps, TouchableOpacityProps } from 'react-native';
 
+declare interface ProfileType {
+  account: {
+    account_id: string;
+    account_phonenumber: string;
+    account_email: string;
+  };
+  user: {
+    user_fullname: string;
+    user_img_url: string;
+  };
+  address: {
+    address_full: string;
+  };
+}
+
 declare interface ZaloToken {
   access_token: string;
   refresh_token: string;
