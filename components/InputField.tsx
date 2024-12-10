@@ -39,7 +39,7 @@ const InputField = ({
               />
             )}
             <TextInput
-              className={`p-4 font-RobotoMedium text-[16px] flex-1 text-left ${inputStyle}`}
+              className={`p-4 text-[16px] flex-1 text-left ${inputStyle}`}
               secureTextEntry={secureTextEntry}
               placeholderTextColor={'#999'}
               {...props}

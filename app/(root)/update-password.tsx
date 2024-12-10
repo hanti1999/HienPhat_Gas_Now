@@ -12,7 +12,7 @@ import InputField from '@/components/InputField';
 import { Ionicons } from '@expo/vector-icons';
 import { ZaloToken } from '@/types/type';
 
-const Password = () => {
+const UpdatePassword = () => {
   const { token, account_phonenumber } = useLocalSearchParams();
   const nav = useNavigation();
   const [zaloToken, setToken] = useState<ZaloToken>({
@@ -23,6 +23,8 @@ const Password = () => {
   const [confirmPass, setConfirmPass] = useState<string>('');
   const [newPass, setNewPass] = useState<string>('');
   const [code, setCode] = useState<string>('');
+  const [otp, setOtp] = useState<string>('');
+  const [otpCountdown, setOtpCountdown] = useState<number>(0);
   const [confirmLoading, setConfirmLoading] = useState<boolean>(false);
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [modalVisible, setModalVisible] = useState<boolean>(false);
@@ -53,6 +55,7 @@ const Password = () => {
   const getOtp = async () => {
     // Lấy OTP từ Zalo
     const otp = generateOTP();
+    setOtp(otp);
     const formatedPhone = (account_phonenumber as string).replace('0', '84');
     const url = 'https://business.openapi.zalo.me/message/template';
     const data = {
@@ -67,6 +70,7 @@ const Password = () => {
     if (res.data.error === 0) {
       setLoading(false);
       setModalVisible(true);
+      setOtpCountdown(30);
     } else if (res.data.error === -124) {
       console.error('Access token hết hạn', res.data);
       Toast.show({ type: 'info', text1: 'Vui lòng chờ trong giây lát' });
@@ -152,6 +156,11 @@ const Password = () => {
   };
 
   const handleConfirm = async () => {
+    if (code != otp) {
+      Toast.show({ type: 'error', text1: 'Mã OTP không chính xác!' });
+      return;
+    }
+
     try {
       setConfirmLoading(true);
       const url = `${process.env.EXPO_PUBLIC_API}/account/change-password`;
@@ -187,6 +196,20 @@ const Password = () => {
     getAccessToken();
   }, []);
 
+  useEffect(() => {
+    let interval: any;
+
+    if (otpCountdown > 0) {
+      interval = setInterval(() => {
+        setOtpCountdown(otpCountdown - 1);
+      }, 1000);
+    } else {
+      clearInterval(interval);
+    }
+
+    return () => clearInterval(interval);
+  }, [otpCountdown]);
+
   return (
     <SafeAreaView className='flex-1 bg-white'>
       <ScrollView stickyHeaderIndices={[0]} className='bg-gray-100 flex-1'>
@@ -194,10 +217,12 @@ const Password = () => {
         <View className='p-3 bg-white'>
           <InputField
             onChangeText={(text) => setCurrentPass(text)}
-            value={currentPass}
+            placeholder='Nhập mật khẩu hiện tại'
             secureTextEntry={!showPassword}
             textContentType='password'
             label='Mật khẩu hiện tại'
+            value={currentPass}
+            icon='lock'
             children={
               <Ionicons
                 name={showPassword ? 'eye-off' : 'eye'}
@@ -211,11 +236,13 @@ const Password = () => {
             <Text className='text-blue-500 text-base'>Quên mật khẩu?</Text>
           </Link>
           <InputField
-            onChangeText={(text) => setNewPass(text)}
-            value={newPass}
             secureTextEntry={!showPassword}
+            placeholder='Nhập mật khẩu mới'
             textContentType='password'
+            onChangeText={setNewPass}
             label='Mật khẩu mới'
+            value={newPass}
+            icon='lock'
             children={
               <Ionicons
                 name={showPassword ? 'eye-off' : 'eye'}
@@ -226,11 +253,13 @@ const Password = () => {
             }
           />
           <InputField
-            onChangeText={(text) => setConfirmPass(text)}
-            value={confirmPass}
             secureTextEntry={!showPassword}
+            placeholder='Xác nhận mật khẩu'
+            onChangeText={setConfirmPass}
             textContentType='password'
             label='Xác nhận mật khẩu'
+            value={confirmPass}
+            icon='lock'
             children={
               <Ionicons
                 name={showPassword ? 'eye-off' : 'eye'}
@@ -310,20 +339,24 @@ const Password = () => {
             </View>
           </Modal>
 
-          <CustomButton
-            onPress={handleChangePass}
-            title='Đổi mật khẩu'
-            disabled={loading}
-            loading={loading}
-            className='my-5'
-          />
+          {otpCountdown > 0 ? (
+            <Text className='my-5'>Gửi lại sau {otpCountdown}s</Text>
+          ) : (
+            <CustomButton
+              onPress={handleChangePass}
+              title='Đổi mật khẩu'
+              disabled={loading}
+              loading={loading}
+              className='my-5'
+            />
+          )}
         </View>
       </ScrollView>
     </SafeAreaView>
   );
 };
 
-export default Password;
+export default UpdatePassword;
 
 const styles = StyleSheet.create({
   codeInputFieldStyle: {

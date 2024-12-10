@@ -1,11 +1,12 @@
-import { View, ScrollView, SafeAreaView, TextInput } from 'react-native';
 import { TouchableWithoutFeedback, Keyboard, Text } from 'react-native';
 import { useLocalSearchParams, useNavigation } from 'expo-router';
+import { View, ScrollView, SafeAreaView } from 'react-native';
 import React, { useState } from 'react';
 import axios from 'axios';
-import RectangleButton from '@/components/RectangleButton';
 import ScreenHeader from '@/components/ScreenHeader';
+import CustomButton from '@/components/CustomButton';
 import Toast from 'react-native-toast-message';
+import InputField from '@/components/InputField';
 
 const UpdateAddress = () => {
   const { token, address_full } = useLocalSearchParams();
@@ -50,18 +51,15 @@ const UpdateAddress = () => {
         <ScreenHeader text='Chỉnh sửa địa chỉ' showCart={false} />
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <View className='p-3 bg-white'>
-            <Text className='font-semibold mb-3 text-base'>Hiện tại</Text>
+            <Text className='font-semibold mb-3 text-lg'>Hiện tại</Text>
             <Text>{address_full}</Text>
-
-            <Text className='font-semibold my-3 text-base'>Địa chỉ mới</Text>
-            <TextInput
-              className='p-3 border border-gray-300 rounded-lg'
-              placeholderTextColor={'#999'}
+            <InputField
+              placeholder='Nhập địa chỉ mới...'
               onChangeText={setAddress}
+              label='Địa chỉ mới'
               value={address}
-              multiline
             />
-            <RectangleButton
+            <CustomButton
               onPress={handleUpdateAddress}
               disabled={loading}
               loading={loading}

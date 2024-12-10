@@ -4,6 +4,7 @@ const Layout = () => {
   return (
     <Stack>
       <Stack.Screen name='product-by-brand' options={{ headerShown: false }} />
+      <Stack.Screen name='update-password' options={{ headerShown: false }} />
       <Stack.Screen name='loading-screen' options={{ headerShown: false }} />
       <Stack.Screen name='update-address' options={{ headerShown: false }} />
       <Stack.Screen name='search-result' options={{ headerShown: false }} />
@@ -12,7 +13,6 @@ const Layout = () => {
       <Stack.Screen name='no-product' options={{ headerShown: false }} />
       <Stack.Screen name='user-info' options={{ headerShown: false }} />
       <Stack.Screen name='wishlist' options={{ headerShown: false }} />
-      <Stack.Screen name='password' options={{ headerShown: false }} />
       <Stack.Screen name='account' options={{ headerShown: false }} />
       <Stack.Screen name='review' options={{ headerShown: false }} />
       <Stack.Screen name='(tabs)' options={{ headerShown: false }} />

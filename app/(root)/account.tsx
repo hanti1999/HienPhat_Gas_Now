@@ -40,7 +40,7 @@ const Account = () => {
           <Pressable
             onPress={() =>
               router.push({
-                pathname: '/(root)/password',
+                pathname: '/(root)/update-password',
                 params: { token, account_phonenumber },
               })
             }

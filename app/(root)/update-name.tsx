@@ -1,11 +1,12 @@
-import { SafeAreaView, Keyboard, TextInput, ScrollView } from 'react-native';
 import { TouchableWithoutFeedback, View, Text } from 'react-native';
+import { SafeAreaView, Keyboard, ScrollView } from 'react-native';
 import { useLocalSearchParams, useNavigation } from 'expo-router';
 import Toast from 'react-native-toast-message';
 import React, { useState } from 'react';
 import axios from 'axios';
-import RectangleButton from '@/components/RectangleButton';
 import ScreenHeader from '@/components/ScreenHeader';
+import CustomButton from '@/components/CustomButton';
+import InputField from '@/components/InputField';
 
 const UpdateName = () => {
   const { token, user_fullname } = useLocalSearchParams();
@@ -49,18 +50,15 @@ const UpdateName = () => {
         <ScreenHeader text='Cập nhật tên' showCart={false} />
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <View className='p-3 bg-white'>
-            <Text className='font-semibold text-base mb-3'>Tên hiện tại</Text>
+            <Text className='font-semibold text-lg mb-3'>Tên hiện tại</Text>
             <Text>{user_fullname}</Text>
-
-            <Text className='font-semibold my-3 text-base'>Tên mới</Text>
-            <TextInput
-              value={name}
+            <InputField
+              placeholder='Nhập tên mới...'
               onChangeText={setName}
-              placeholder='Nhập tên của bạn...'
-              placeholderTextColor={'#999'}
-              className='p-3 border border-gray-300 rounded-lg'
+              label='Tên mới'
+              value={name}
             />
-            <RectangleButton
+            <CustomButton
               onPress={handleUpdateName}
               disabled={loading}
               loading={loading}
