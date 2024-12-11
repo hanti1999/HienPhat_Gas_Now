@@ -1,13 +1,69 @@
+import { SafeAreaView, FlatList, RefreshControl } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
-import { View, Text } from 'react-native';
-import React from 'react';
+import React, { useState } from 'react';
+import axios from 'axios';
+import LoadingScreen from './loading-screen';
+import NoProduct from './no-product';
+import ScreenHeader from '@/components/ScreenHeader';
+import ProductCard from '@/components/ProductCard';
 
 const Wishlist = () => {
   const { token } = useLocalSearchParams();
+  const [refreshing, setRefreshing] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [wishlist, setWishlist] = useState<any>([]);
+
+  const fetchWishlist = async () => {
+    try {
+      const url = `${process.env.EXPO_PUBLIC_API}`;
+      const res = await axios.get(url);
+      const wishlist = res.data?.wishlist.reverse();
+      if (res.status === 200) {
+        setWishlist(wishlist);
+      } else {
+        console.error(res.data?.message);
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const onRefresh = async () => {
+    setRefreshing(true);
+    await fetchWishlist();
+    setRefreshing(false);
+  };
+
+  // useEffect(() => {
+  //   fetchWishlist();
+  // }, []);
+
+  if (loading) {
+    return <LoadingScreen />;
+  }
+
+  if (wishlist.length === 0) {
+    return <NoProduct text={'Nơi này trống!'} />;
+  }
+
   return (
-    <View>
-      <Text>Wishlist</Text>
-    </View>
+    <SafeAreaView className='flex-1 bg-white'>
+      <ScreenHeader text={'Danh sách yêu thích'} />
+      <FlatList
+        keyExtractor={(item) => item?._id}
+        style={{ height: '100%' }}
+        data={wishlist}
+        numColumns={2}
+        renderItem={({ item }) => (
+          <ProductCard item={item} token={token} size={0.5} />
+        )}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
+      />
+    </SafeAreaView>
   );
 };
 
