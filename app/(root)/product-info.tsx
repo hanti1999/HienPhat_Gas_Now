@@ -8,13 +8,13 @@ import { useDispatch } from 'react-redux';
 import Swiper from 'react-native-swiper';
 import moment from 'moment';
 import axios from 'axios';
+import RectangleButton from '@/components/RectangleButton';
 import { addToCart } from '@/redux/slices/cartSlice';
 import ScreenHeader from '@/components/ScreenHeader';
 import { FontAwesome } from '@expo/vector-icons';
 import openLink from '@/utils/openLink';
 import { Product } from '@/types/type';
 import LoadingScreen from './loading-screen';
-import RectangleButton from '@/components/RectangleButton';
 
 const ProductInfo = () => {
   const { token, itemId } = useLocalSearchParams();

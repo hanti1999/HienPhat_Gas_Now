@@ -121,7 +121,6 @@ const UpdatePassword = () => {
       const data = {
         accessToken: props.access_token,
         refreshToken: props.refresh_token,
-        updateAt: Date.now(),
       };
       const res = await axios.put(url, data);
       if (res.status === 200) {
@@ -216,9 +215,9 @@ const UpdatePassword = () => {
         <ScreenHeader text='Thay đổi mật khẩu' />
         <View className='p-3 bg-white'>
           <InputField
-            onChangeText={(text) => setCurrentPass(text)}
             placeholder='Nhập mật khẩu hiện tại'
             secureTextEntry={!showPassword}
+            onChangeText={setCurrentPass}
             textContentType='password'
             label='Mật khẩu hiện tại'
             value={currentPass}
@@ -270,8 +269,8 @@ const UpdatePassword = () => {
             }
           />
           <PasswordValidate
-            newPassword={newPass}
             confirmPassword={confirmPass}
+            newPassword={newPass}
             validationRules={[
               {
                 key: 'MIN_LENGTH',
@@ -290,9 +289,9 @@ const UpdatePassword = () => {
             }
           />
           <Modal
+            visible={modalVisible}
             animationType='fade'
             transparent={true}
-            visible={modalVisible}
             onRequestClose={() => {
               setModalVisible(!modalVisible);
             }}
@@ -309,8 +308,8 @@ const UpdatePassword = () => {
                   codeInputHighlightStyle={{ borderColor: '#fb77c5' }}
                   codeInputFieldStyle={styles.codeInputFieldStyle}
                   onCodeChanged={(code) => setCode(code)}
-                  autoFocusOnLoad={false}
                   style={{ height: 100, width: '80%' }}
+                  autoFocusOnLoad={false}
                   pinCount={6}
                   code={code}
                 />

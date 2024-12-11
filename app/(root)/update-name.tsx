@@ -20,7 +20,7 @@ const UpdateName = () => {
       const url = `${process.env.EXPO_PUBLIC_API}/user`;
       const config = {
         headers: {
-          Authorization: ` Bearer ${token}`,
+          Authorization: `Bearer ${token}`,
         },
       };
       const data = {

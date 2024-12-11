@@ -47,13 +47,13 @@ const SearchResult = () => {
       <StatusBar />
       <ScreenHeader text={'Kết quả tìm kiếm'} />
       <FlatList
-        data={products}
         keyExtractor={(item) => item._id}
+        style={{ height: '100%' }}
+        data={products}
+        numColumns={2}
         renderItem={({ item }) => (
           <ProductCard token={token} item={item} size={0.5} />
         )}
-        numColumns={2}
-        style={{ height: '100%' }}
       />
     </SafeAreaView>
   );

@@ -111,15 +111,15 @@ const Review = () => {
           </View>
         </View>
         <TextInput
-          value={comment}
-          onChangeText={setComment}
-          multiline
-          placeholder='Chia sẻ trải nghiệm của bạn'
           className='bg-white rounded-lg p-2 border border-gray-300 mt-2 min-h-[70px]'
+          placeholder='Chia sẻ trải nghiệm của bạn'
+          onChangeText={setComment}
+          value={comment}
+          multiline
         />
         <TouchableOpacity
-          onPress={handleSendReview}
           className='h-[42px] mt-6 rounded-full bg-blue-500 flex justify-center items-center'
+          onPress={handleSendReview}
           disabled={loading}
         >
           {loading ? (

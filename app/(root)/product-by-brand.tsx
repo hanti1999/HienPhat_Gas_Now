@@ -4,7 +4,7 @@ import { useLocalSearchParams } from 'expo-router';
 
 const ProductByBrand = () => {
   const { brandId, token } = useLocalSearchParams();
-  console.log(token);
+
   return (
     <SafeAreaView>
       <Text>ProductByBrand</Text>

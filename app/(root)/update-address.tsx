@@ -1,11 +1,11 @@
 import { TouchableWithoutFeedback, Keyboard, Text } from 'react-native';
 import { useLocalSearchParams, useNavigation } from 'expo-router';
 import { View, ScrollView, SafeAreaView } from 'react-native';
+import Toast from 'react-native-toast-message';
 import React, { useState } from 'react';
 import axios from 'axios';
 import ScreenHeader from '@/components/ScreenHeader';
 import CustomButton from '@/components/CustomButton';
-import Toast from 'react-native-toast-message';
 import InputField from '@/components/InputField';
 
 const UpdateAddress = () => {
@@ -20,7 +20,7 @@ const UpdateAddress = () => {
       const url = `${process.env.EXPO_PUBLIC_API}/shipping/update-address`;
       const config = {
         headers: {
-          Authorization: ` Bearer ${token}`,
+          Authorization: `Bearer ${token}`,
         },
       };
       const data = {
