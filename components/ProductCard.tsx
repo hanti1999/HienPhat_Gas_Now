@@ -16,15 +16,15 @@ interface IProductCard {
 const ProductCard = ({ item, token, size }: IProductCard) => {
   const [isLoading, setLoading] = useState<boolean>(false);
   const dispatch = useDispatch();
-  const actualPrice = item?.price * (1 - item.discount / 100);
+  const actualPrice = item?.product_price * (1 - item?.product_discount / 100);
   const width = Dimensions.get('window').width;
 
   const addItemToCart = (item: Product) => {
     dispatch(
       addToCart({
-        id: item?._id,
-        title: item?.title,
-        productImg: item?.image,
+        id: item?.product_id,
+        title: item?.product_name,
+        productImg: item?.product_image_url,
         price: actualPrice,
       })
     );
@@ -42,7 +42,7 @@ const ProductCard = ({ item, token, size }: IProductCard) => {
   const navToInfo = () => {
     router.push({
       pathname: '/(root)/product-info',
-      params: { token: token, itemId: item._id },
+      params: { token: token, itemId: item?.product_id },
     });
   };
 
@@ -52,29 +52,32 @@ const ProductCard = ({ item, token, size }: IProductCard) => {
       style={{ width: width * size - 8 }}
     >
       <Pressable onPress={navToInfo}>
-        <Image className='aspect-square' source={{ uri: item?.image }} />
+        <Image
+          className='aspect-square'
+          source={{ uri: item?.product_image_url }}
+        />
         <View className='p-1.5 h-[120px] justify-between bg-pink-100'>
-          <Text numberOfLines={2}>{item?.title}</Text>
+          <Text numberOfLines={2}>{item?.product_name}</Text>
           <View
             className={`flex-row items-center ${
-              item?.discount == 0 ? 'none' : 'auto'
+              item?.product_discount == 0 ? 'none' : 'auto'
             }`}
             style={{
               gap: 4,
             }}
           >
             <View className='p-px rounded bg-red-500'>
-              <Text className='text-white '>-{item?.discount}%</Text>
+              <Text className='text-white '>-{item?.product_discount}%</Text>
             </View>
             <Text className='line-through text-gray-500'>
-              {item?.price?.toLocaleString()}
+              {item?.product_price?.toLocaleString()}
             </Text>
           </View>
           <Text className='font-semibold text-red-500 text-[18px]'>
             {actualPrice?.toLocaleString()}đ
           </Text>
           <Text className='text-gray-500 text-[12px]'>
-            Đã bán: {item?.sold}
+            Đã bán: {item?.product_sold}
           </Text>
         </View>
 

@@ -1,6 +1,11 @@
 import { Tabs } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
-import { ITabIcon } from '@/types/type';
+
+interface ITabIcon {
+  icon1: any;
+  icon2: any;
+  focused: boolean;
+}
 
 const TabIcon = ({ icon1, icon2, focused }: ITabIcon) => (
   <Ionicons

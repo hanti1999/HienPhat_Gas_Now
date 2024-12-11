@@ -16,17 +16,21 @@ const SearchResult = () => {
   useEffect(() => {
     const searchProduct = async () => {
       try {
-        // need replace
-        const url = `https://hien-phat-expoapp-api.onrender.com/product/search?q=${input}`;
-        const res = await axios.get(url);
+        const url = `${process.env.EXPO_PUBLIC_API}/product/search?search=${input}`;
+        const config = {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        };
+        const res = await axios.get(url, config);
         if (res.status === 200) {
-          const data = res?.data?.products;
+          const data = res?.data;
           setProducts(data);
         } else {
-          console.log('Tìm kiếm không thành công!');
+          console.error(res.data.message);
         }
       } catch (error) {
-        console.log('Tìm kiếm không thành công!', error);
+        console.error('Tìm kiếm không thành công!', error);
       } finally {
         setLoading(false);
       }
@@ -38,7 +42,7 @@ const SearchResult = () => {
     return <LoadingScreen />;
   }
 
-  if (products.length === 0) {
+  if (products?.length === 0) {
     return <NoProduct text={'Không tìm thấy sản phẩm'} />;
   }
 
@@ -47,7 +51,7 @@ const SearchResult = () => {
       <StatusBar />
       <ScreenHeader text={'Kết quả tìm kiếm'} />
       <FlatList
-        keyExtractor={(item) => item._id}
+        keyExtractor={(item) => item.product_id}
         style={{ height: '100%' }}
         data={products}
         numColumns={2}

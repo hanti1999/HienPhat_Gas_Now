@@ -6,19 +6,20 @@ import LoadingScreen from './loading-screen';
 import NoProduct from './no-product';
 import ScreenHeader from '@/components/ScreenHeader';
 import ProductCard from '@/components/ProductCard';
+import { Product } from '@/types/type';
 
 const Wishlist = () => {
   const { token } = useLocalSearchParams();
   const [refreshing, setRefreshing] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
-  const [wishlist, setWishlist] = useState<any>([]);
+  const [wishlist, setWishlist] = useState<Product[]>([]);
 
   const fetchWishlist = async () => {
     try {
       const url = `${process.env.EXPO_PUBLIC_API}`;
       const res = await axios.get(url);
-      const wishlist = res.data?.wishlist.reverse();
       if (res.status === 200) {
+        const wishlist = res.data.reverse();
         setWishlist(wishlist);
       } else {
         console.error(res.data?.message);
@@ -52,7 +53,7 @@ const Wishlist = () => {
     <SafeAreaView className='flex-1 bg-white'>
       <ScreenHeader text={'Danh sách yêu thích'} />
       <FlatList
-        keyExtractor={(item) => item?._id}
+        keyExtractor={(item) => item?.product_id}
         style={{ height: '100%' }}
         data={wishlist}
         numColumns={2}

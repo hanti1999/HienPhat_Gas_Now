@@ -16,41 +16,56 @@ import openLink from '@/utils/openLink';
 import { Product } from '@/types/type';
 import LoadingScreen from './loading-screen';
 
+interface IDes {
+  description: string;
+  description_id: string;
+  product_id: string;
+  title: string;
+}
+
+interface ICarousel {
+  image_id: string;
+  product_id: string;
+  image_url: string;
+}
+
 const ProductInfo = () => {
   const { token, itemId } = useLocalSearchParams();
-  const [inWishlist, setIsInWishlist] = useState<boolean>(false);
+  // const [inWishlist, setIsInWishlist] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
   const [averageRating, setAverageRating] = useState<number>();
   const [actualPrice, setActualPrice] = useState<number>();
   const [totalRating, setTotalRating] = useState<number>();
+  const [description, setDescription] = useState<IDes[]>([]);
+  const [carousel, setCarousel] = useState<ICarousel[]>([]);
   const [data, setData] = useState<Product>();
   const width = Dimensions.get('window').width;
   const dispatch = useDispatch();
 
-  const checkWishlist = async () => {
-    try {
-      // need replace
-      const url = `check-wishlist-url`;
-      const res = await axios.get(url);
-      if (res.status === 200) {
-        const result = res.data.isProductInWishlist;
-        setIsInWishlist(result);
-      } else {
-        console.log('Lỗi check wishlist');
-      }
-    } catch (error) {
-      console.log('Lỗi check wishlist', error);
-    }
-  };
+  // const checkWishlist = async () => {
+  //   try {
+  //     // need replace
+  //     const url = `${process.env.EXPO_PUBLIC_API}`;
+  //     const res = await axios.get(url);
+  //     if (res.status === 200) {
+  //       const result = res.data.isProductInWishlist;
+  //       setIsInWishlist(result);
+  //     } else {
+  //       console.log('Lỗi check wishlist');
+  //     }
+  //   } catch (error) {
+  //     console.log('Lỗi check wishlist', error);
+  //   }
+  // };
 
   const addItemToCart = () => {
     dispatch(
       addToCart({
-        id: data?._id,
-        title: data?.title,
-        productImg: data?.image,
-        price: data?.price,
+        id: data?.product_id,
+        title: data?.product_name,
+        productImg: data?.product_image_url,
+        price: actualPrice,
       })
     );
     setIsLoading(true);
@@ -64,81 +79,83 @@ const ProductInfo = () => {
     };
   };
 
-  const addWishlist = async () => {
-    try {
-      setLoading(true);
-      // need replace
-      const url = `add-wishlist-url`;
-      const res = await axios.post(url);
-      if (res.status === 200) {
-        Toast.show({ text1: 'Đã thêm vào sản phẩm yêu thích' });
-        checkWishlist();
-      } else {
-        Toast.show({ type: 'error', text1: 'Thêm không thành công' });
-      }
-    } catch (error) {
-      console.log('Lỗi không thêm được wishlist', error);
-      Toast.show({ type: 'error', text1: 'Thêm không thành công' });
-    } finally {
-      setLoading(false);
-    }
-  };
+  // const addWishlist = async () => {
+  //   try {
+  //     setLoading(true);
+  //     // need replace
+  //     const url = `${process.env.EXPO_PUBLIC_API}`;
+  //     const res = await axios.post(url);
+  //     if (res.status === 200) {
+  //       Toast.show({ text1: 'Đã thêm vào sản phẩm yêu thích' });
+  //       checkWishlist();
+  //     } else {
+  //       Toast.show({ type: 'error', text1: 'Thêm không thành công' });
+  //     }
+  //   } catch (error) {
+  //     console.log('Lỗi không thêm được wishlist', error);
+  //     Toast.show({ type: 'error', text1: 'Thêm không thành công' });
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
 
-  const removeWishlist = async () => {
-    try {
-      setLoading(true);
-      // need replace
-      const url = `delete-wishlist-url`;
-      const res = await axios.delete(url);
-      if (res.status === 200) {
-        checkWishlist();
-        Toast.show({ text1: 'Đã xóa khỏi sản phẩm yêu thích' });
-      } else {
-        Toast.show({ type: 'error', text1: 'Xoá không thành công' });
-      }
-    } catch (error) {
-      console.log('Lỗi không xóa được wishlist', error);
-      Toast.show({ type: 'error', text1: 'Xoá không thành công' });
-    } finally {
-      setLoading(false);
-    }
-  };
+  // const removeWishlist = async () => {
+  //   try {
+  //     setLoading(true);
+  //     // need replace
+  //     const url = `${process.env.EXPO_PUBLIC_API}`;
+  //     const res = await axios.delete(url);
+  //     if (res.status === 200) {
+  //       checkWishlist();
+  //       Toast.show({ text1: 'Đã xóa khỏi sản phẩm yêu thích' });
+  //     } else {
+  //       Toast.show({ type: 'error', text1: 'Xoá không thành công' });
+  //     }
+  //   } catch (error) {
+  //     console.log('Lỗi không xóa được wishlist', error);
+  //     Toast.show({ type: 'error', text1: 'Xoá không thành công' });
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
 
   useEffect(() => {
-    if (data?.price != undefined) {
-      setActualPrice(data?.price * (1 - data.discount / 100));
-      setTotalRating(
-        data?.reviews.reduce((acc, data) => acc + data?.rating, 0)
-      );
-      setAverageRating(totalRating && totalRating / data?.reviews.length);
+    if (data?.product_price != undefined) {
+      setActualPrice(data?.product_price * (1 - data.product_discount / 100));
+      // setTotalRating(
+      //   data?.reviews.reduce((acc, data) => acc + data?.rating, 0)
+      // );
+      // setAverageRating(totalRating && totalRating / data?.reviews?.length);
     }
   }, [data]);
 
   useEffect(() => {
-    const getProductInfo = async () => {
+    const getData = async () => {
       try {
-        // need replace
-        const url = `https://hien-phat-expoapp-api.onrender.com/product/${itemId}`;
-        const res = await axios.get(url);
-        if (res.status === 200) {
-          setData(res?.data?.product);
-        } else {
-          Toast.show({
-            type: 'error',
-            text1: 'Lấy thông tin sản phẩm không thành công',
-          });
-        }
+        setLoading(true);
+        const url1 = `${process.env.EXPO_PUBLIC_API}/product/${itemId}`;
+        const url2 = `${process.env.EXPO_PUBLIC_API}/carousel/${itemId}`;
+        const url3 = `${process.env.EXPO_PUBLIC_API}/description/${itemId}`;
+        const config = {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        };
+        const [response1, response2, response3] = await Promise.all([
+          axios.get(url1, config),
+          axios.get(url2, config),
+          axios.get(url3, config),
+        ]);
+        setData(response1?.data);
+        setCarousel(response2?.data);
+        setDescription(response3?.data);
       } catch (error) {
-        Toast.show({
-          type: 'error',
-          text1: 'Lấy thông tin sản phẩm không thành công',
-        });
-        console.log(error);
+        console.error(error);
       } finally {
         setLoading(false);
       }
     };
-    getProductInfo();
+    getData();
   }, []);
 
   // useEffect(()=> {
@@ -169,10 +186,10 @@ const ProductInfo = () => {
           height={width}
           width={width}
         >
-          {data?.carouselImages?.map((item, index) => (
+          {carousel?.map((item, index) => (
             <Image
               key={index}
-              source={{ uri: item }}
+              source={{ uri: item?.image_url }}
               style={{ height: width }}
             />
           ))}
@@ -180,19 +197,21 @@ const ProductInfo = () => {
 
         <View className='py-2 px-3 mb-2 bg-pink-100'>
           <Text numberOfLines={2} className='font-semibold text-[18px]'>
-            {data?.title}
+            {data?.product_name}
           </Text>
           <View className='flex-row items-center py-2' style={{ gap: 8 }}>
             <Text className='text-[24px] font-bold'>
               {actualPrice?.toLocaleString()}đ
             </Text>
-            {data!.discount > 0 && (
+            {data!.product_discount > 0 && (
               <>
                 <Text className='line-through text-[16px] text-gray-500'>
-                  {data?.price.toLocaleString()}đ
+                  {data?.product_price.toLocaleString()}đ
                 </Text>
                 <View className='px-1 py-0.5 rounded-lg bg-red-500'>
-                  <Text className='text-white '>-{data?.discount}%</Text>
+                  <Text className='text-white '>
+                    -{data?.product_discount}%
+                  </Text>
                 </View>
               </>
             )}
@@ -201,11 +220,11 @@ const ProductInfo = () => {
             <View className='flex-row items-center' style={{ gap: 4 }}>
               <Text>{averageRating}</Text>
               <FontAwesome name='star' size={14} color='#faa935' />
-              <Text>({data?.reviews.length} đánh giá)</Text>
+              <Text>({data?.reviews?.length} đánh giá)</Text>
               <Text className='text-gray-400'>|</Text>
-              <Text>Đã bán: {data?.sold}</Text>
+              <Text>Đã bán: {data?.product_sold}</Text>
             </View>
-            {inWishlist ? (
+            {/* {inWishlist ? (
               <TouchableOpacity onPress={removeWishlist} disabled={loading}>
                 {loading ? (
                   <ActivityIndicator />
@@ -221,7 +240,7 @@ const ProductInfo = () => {
                   <FontAwesome name='heart-o' size={24} color='#fb77c5' />
                 )}
               </TouchableOpacity>
-            )}
+            )} */}
           </View>
         </View>
 
@@ -230,9 +249,9 @@ const ProductInfo = () => {
             Đặc điểm nổi bật
           </Text>
           <View>
-            {data?.features?.map((item, index) => (
+            {description?.map((item, index) => (
               <Text className='pt-0.5' key={index}>
-                o {item}
+                o {item?.description}
               </Text>
             ))}
           </View>
@@ -245,7 +264,7 @@ const ProductInfo = () => {
             onPress={() =>
               router.push({
                 pathname: '/(root)/review',
-                params: { productId: data?._id, token: token },
+                params: { productId: data?.product_id, token: token },
               })
             }
             className='bg-white w-[200px] rounded-full p-2 mt-2'
@@ -279,7 +298,7 @@ const ProductInfo = () => {
 };
 
 const Reviews = ({ reviews }: { reviews: any }) => {
-  if (reviews.length === 0) {
+  if (reviews?.length === 0) {
     return <Text>Chưa có đánh giá!</Text>;
   }
 

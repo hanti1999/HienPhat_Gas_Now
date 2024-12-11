@@ -12,7 +12,7 @@ import ProductTitle from '@/components/ProductTitle';
 import ProductCard from '@/components/ProductCard';
 import SeeMoreCard from '@/components/SeeMoreCard';
 import SearchBar from '@/components/SearchBar';
-import daisy from '@/assets/images/daisy.png';
+// import daisy from '@/assets/images/daisy.png';
 import { RootState } from '@/redux/store';
 import { Product } from '@/types/type';
 import { slider } from '@/constants';
@@ -22,7 +22,12 @@ const Home = () => {
   const token = useSelector((state: RootState) => state.auth.accessToken);
   const [refreshing, setRefreshing] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
-  const [products, setProduct] = useState<Product[]>([]);
+  // const [products, setProduct] = useState<Product[]>([]);
+  const [electricStove, setElectricStove] = useState<Product[]>([]);
+  const [kitchenAppli, setKitchenAppli] = useState<Product[]>([]);
+  const [accessories, setAccessories] = useState<Product[]>([]);
+  const [gasStove, setGasStove] = useState<Product[]>([]);
+
   const width = Dimensions.get('window').width;
 
   const onRefresh = async () => {
@@ -33,39 +38,35 @@ const Home = () => {
 
   const fetchProducts = async () => {
     try {
-      // need replace
-      const api = `https://hien-phat-expoapp-api.onrender.com/product`;
-      const res = await axios.get(api);
-      if (res.status === 200) {
-        const data = res?.data?.products;
-        setProduct(data);
-      } else {
-        console.error('Lỗi!, không fetch được sản phẩm');
-      }
+      setLoading(true);
+      const url1 = `${process.env.EXPO_PUBLIC_API}/product/category/90ebec20-4240-446c-a6ef-856b0c7fc730`;
+      // url2 need replace
+      const url2 = `${process.env.EXPO_PUBLIC_API}/product/category/553cfa8a-5bb6-4b48-a253-a9460a5c8922`;
+      const url3 = `${process.env.EXPO_PUBLIC_API}/product/category/553cfa8a-5bb6-4b48-a253-a9460a5c8922`;
+      // url4 need replace
+      const url4 = `${process.env.EXPO_PUBLIC_API}/product/category/553cfa8a-5bb6-4b48-a253-a9460a5c8922`;
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+      const [response1, response2, response3, response4] = await Promise.all([
+        axios.get(url1, config),
+        axios.get(url2, config),
+        axios.get(url3, config),
+        axios.get(url4, config),
+      ]);
+
+      setGasStove(response1.data);
+      setElectricStove(response2.data);
+      setKitchenAppli(response3.data);
+      setAccessories(response4.data);
     } catch (error) {
-      console.error('Lỗi HomeScreen - fet Products', error);
+      console.error('Lỗi fetch sản phẩm', error);
     } finally {
       setLoading(false);
     }
   };
-
-  const bepGas = products?.filter(
-    (product) => product.category.name === 'Bếp gas'
-  );
-
-  let bepDien = products?.filter(
-    (product) => product.category.name === 'Bếp điện'
-  );
-
-  let giaDung = products?.filter(
-    (product) => product.category.name === 'Gia dụng'
-  );
-
-  let phuKien = products?.filter(
-    (product) => product.category.name === 'Phụ kiện'
-  );
-
-  let sale = products?.filter((product) => product?.discount > 10);
 
   useEffect(() => {
     fetchProducts();
@@ -92,16 +93,16 @@ const Home = () => {
           activeDot={
             <View className='w-1 h-1 mx-1 bg-primary-pink rounded-full' />
           }
-          loop={true}
-          autoplay={true}
-          autoplayTimeout={5}
           height={0.5625 * width}
+          autoplayTimeout={5}
+          autoplay={true}
           width={width}
+          loop={true}
         >
           {slider.map((item, index) => (
             <Image
-              key={index}
               source={item}
+              key={index}
               style={{
                 height: 0.5625 * width,
                 aspectRatio: '16/9',
@@ -111,7 +112,7 @@ const Home = () => {
           ))}
         </Swiper>
 
-        <View className='flex-row items-center justify-between bg-white py-1'>
+        {/* <View className='flex-row items-center justify-between bg-white py-1'>
           <Image className='w-12 h-12' source={daisy} />
           <Text className='font-bold text-2xl text-red-500 '>
             Ưu đãi quá trời!
@@ -125,16 +126,16 @@ const Home = () => {
           renderItem={({ item }) => (
             <ProductCard token={token} item={item} size={0.45} />
           )}
-          keyExtractor={(item) => item?._id}
+          keyExtractor={(item) => item?.product_id}
           showsHorizontalScrollIndicator={false}
           horizontal
-        />
+        /> */}
 
         <View className='border-t-2 border-primary-pink mt-5 relative bg-white'>
           <ProductTitle text={'Bếp gas'} />
 
           <FlatList
-            data={bepGas?.slice(0, 6)}
+            data={gasStove?.slice(0, 6)}
             style={{
               backgroundColor: 'white',
               paddingHorizontal: 4,
@@ -143,13 +144,13 @@ const Home = () => {
             renderItem={({ item }) => (
               <ProductCard token={token} item={item} size={0.45} />
             )}
-            keyExtractor={(item) => item?._id}
+            keyExtractor={(item) => item?.product_id}
             showsHorizontalScrollIndicator={false}
             horizontal
           />
           <SeeMoreCard
             token={token}
-            categoryId={'6666d75349ada55e0903d7ec'}
+            categoryId={'90ebec20-4240-446c-a6ef-856b0c7fc730'}
             extraText={'Bếp gas'}
           />
         </View>
@@ -168,15 +169,15 @@ const Home = () => {
             renderItem={({ item }) => (
               <ProductCard token={token} item={item} size={0.45} />
             )}
-            keyExtractor={(item) => item?._id}
-            data={bepDien?.slice(0, 6)}
+            keyExtractor={(item) => item?.product_id}
+            data={electricStove?.slice(0, 6)}
             showsHorizontalScrollIndicator={false}
             horizontal
           />
 
           <SeeMoreCard
             token={token}
-            categoryId={'6667cd3d026b92076ff622a5'}
+            categoryId={'553cfa8a-5bb6-4b48-a253-a9460a5c8922'}
             extraText={'Bếp điện'}
           />
         </View>
@@ -195,15 +196,15 @@ const Home = () => {
             renderItem={({ item }) => (
               <ProductCard token={token} item={item} size={0.45} />
             )}
-            keyExtractor={(item) => item?._id}
-            data={giaDung?.slice(0, 6)}
+            keyExtractor={(item) => item?.product_id}
+            data={kitchenAppli?.slice(0, 6)}
             showsHorizontalScrollIndicator={false}
             horizontal
           />
 
           <SeeMoreCard
             token={token}
-            categoryId={'6667cd99026b92076ff622a7'}
+            categoryId={'553cfa8a-5bb6-4b48-a253-a9460a5c8922'}
             extraText={'Gia dụng'}
           />
         </View>
@@ -220,15 +221,15 @@ const Home = () => {
             renderItem={({ item }) => (
               <ProductCard token={token} item={item} size={0.45} />
             )}
-            keyExtractor={(item) => item?._id}
-            data={phuKien?.slice(0, 6)}
+            keyExtractor={(item) => item?.product_id}
+            data={accessories?.slice(0, 6)}
             showsHorizontalScrollIndicator={false}
             horizontal
           />
 
           <SeeMoreCard
             token={token}
-            categoryId={'6667cdc6026b92076ff622ab'}
+            categoryId={'553cfa8a-5bb6-4b48-a253-a9460a5c8922'}
             extraText={'Phụ kiện'}
           />
         </View>
@@ -247,23 +248,28 @@ const Home = () => {
 };
 
 const HorizontalCategory = ({ token }: { token: string | null }) => {
-  const [catList, setCatList] = useState();
-  const [loading, setLoading] = useState(true);
+  const [catList, setCatList] = useState<any>();
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     const fetchCategory = async () => {
       try {
-        const url = `https://hien-phat-expoapp-api.onrender.com/category`;
-        const res = await axios.get(url);
+        const url = `${process.env.EXPO_PUBLIC_API}/category`;
+        const config = {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        };
+        const res = await axios.get(url, config);
 
         if (res.status === 200) {
-          const cat = res.data.category;
+          const cat = res.data;
           setCatList(cat);
         } else {
-          console.log('Lỗi, fetch category không thành công');
+          console.error(res.data?.message);
         }
       } catch (error) {
-        console.log('Lỗi Horizontal category', error);
+        console.error('Lỗi Horizontal category', error);
       } finally {
         setLoading(false);
       }
@@ -286,8 +292,12 @@ const HorizontalCategory = ({ token }: { token: string | null }) => {
         <Pressable
           onPress={() =>
             router.push({
-              pathname: '/(root)/product-by-category',
-              params: { categoryId: item?._id, token: token },
+              pathname: '/(root)/product-filter',
+              params: {
+                id: item?.category_id,
+                token: token,
+                type: 'category',
+              },
             })
           }
           className='m-1'
@@ -295,14 +305,14 @@ const HorizontalCategory = ({ token }: { token: string | null }) => {
           <Image
             resizeMode='contain'
             className='w-20 h-20'
-            source={{ uri: item?.image }}
+            source={{ uri: item?.category_img_url }}
           />
-          <Text className='text-center font-medium'>{item?.name}</Text>
+          <Text className='text-center font-medium'>{item?.category_name}</Text>
         </Pressable>
       )}
       showsHorizontalScrollIndicator={false}
       data={catList}
-      keyExtractor={(item) => item?._id}
+      keyExtractor={(item) => item?.category_id}
       horizontal
       style={{ backgroundColor: 'white' }}
     />
@@ -310,21 +320,26 @@ const HorizontalCategory = ({ token }: { token: string | null }) => {
 };
 
 const HorizontalBrand = ({ token }: { token: string | null }) => {
-  const [brandList, setBrandList] = useState();
-  const [loading, setLoading] = useState(true);
+  const [brandList, setBrandList] = useState<any>();
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     const fetchBrand = async () => {
       try {
-        const url = `https://hien-phat-expoapp-api.onrender.com/brand`;
-        const res = await axios.get(url);
+        const url = `${process.env.EXPO_PUBLIC_API}/brand`;
+        const config = {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        };
+        const res = await axios.get(url, config);
         if (res.status === 200) {
-          setBrandList(res?.data.brand.reverse());
+          setBrandList(res?.data.reverse());
         } else {
-          console.log('Fetch brand không thành công (HomeScreen)');
+          console.error(res.data?.message);
         }
       } catch (error) {
-        console.log('Fetch brand không thành công (HomeScreen)');
+        console.error('Lỗi Horizontal brand ', error);
       } finally {
         setLoading(false);
       }
@@ -347,8 +362,8 @@ const HorizontalBrand = ({ token }: { token: string | null }) => {
         <Pressable
           onPress={() =>
             router.push({
-              pathname: '/(root)/product-by-brand',
-              params: { brandId: item?._id, token: token },
+              pathname: '/(root)/product-filter',
+              params: { id: item?.brand_id, token: token, type: 'brand' },
             })
           }
           className='m-1'
@@ -356,14 +371,14 @@ const HorizontalBrand = ({ token }: { token: string | null }) => {
           <Image
             resizeMode='contain'
             className='w-20 h-20'
-            source={{ uri: item?.image }}
+            source={{ uri: item?.brand_img_url }}
           />
-          <Text className='text-center font-medium'>{item?.name}</Text>
+          <Text className='text-center font-medium'>{item?.brand_name}</Text>
         </Pressable>
       )}
       showsHorizontalScrollIndicator={false}
       data={brandList}
-      keyExtractor={(item) => item?._id}
+      keyExtractor={(item) => item?.brand_id}
       horizontal
     />
   );

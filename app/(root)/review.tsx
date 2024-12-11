@@ -29,7 +29,7 @@ const Review = () => {
         serviceRating: defaultServiceRating,
       };
       // need replace
-      const url = `review api`;
+      const url = `${process.env.EXPO_PUBLIC_API}`;
       const res = await axios.post(url, data);
       if (res.status === 200) {
         Toast.show({ text1: 'Gửi đánh giá thành công' });

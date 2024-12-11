@@ -8,10 +8,18 @@ import axios from 'axios';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import PasswordValidate from '@/components/PasswordValidate';
 import CustomButton from '@/components/CustomButton';
-import { ZaloToken, SignupData } from '@/types/type';
 import HeaderImage from '@/components/HeaderImage';
 import InputField from '@/components/InputField';
 import { Ionicons } from '@expo/vector-icons';
+import { ZaloToken } from '@/types/type';
+
+interface SignupData {
+  user_fullname: string;
+  phonenumber: string;
+  address_detail: string;
+  password: string;
+  confirmPass: string;
+}
 
 const SignUp = () => {
   const [form, setForm] = useState<SignupData>({

@@ -19,7 +19,7 @@ const Orders = () => {
 
   const fetchOrders = async () => {
     try {
-      const url = `api`;
+      const url = `${process.env.EXPO_PUBLIC_API}`;
       const res = await axios.get(url);
       const orders = res.data?.orders.reverse();
       if (res.status === 200) {

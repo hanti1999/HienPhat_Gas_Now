@@ -8,37 +8,41 @@ import { Product } from '@/types/type';
 import LoadingScreen from './loading-screen';
 import NoProduct from './no-product';
 
-const ProductByCategory = () => {
-  const { categoryId, token } = useLocalSearchParams();
+const ProductFilter = () => {
+  const { id, token, type } = useLocalSearchParams();
   const [products, setProducts] = useState<Product[]>([]);
   const [refreshing, setRefreshing] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
 
-  const fetchProductByCat = async () => {
+  const fetchProductByBrand = async () => {
     try {
-      const url = `${process.env.EXPO_PUBLIC_API}`;
-      const res = await axios.get(url);
-
+      const url = `${process.env.EXPO_PUBLIC_API}/product/${type}/${id}`;
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+      const res = await axios.get(url, config);
       if (res.status === 200) {
-        const data = res?.data.products;
+        const data = res?.data;
         setProducts(data);
       } else {
-        console.log('Fetch sản phẩm không thành công');
+        console.error(res.data.message);
       }
     } catch (error) {
-      console.log('Lỗi (ProductByCategorySceen)', error);
+      console.error('Lỗi (ProductByCategorySceen)', error);
     } finally {
       setLoading(false);
     }
   };
 
-  // useEffect(() => {
-  //   fetchProductByCat();
-  // }, []);
+  useEffect(() => {
+    fetchProductByBrand();
+  }, []);
 
   const onRefresh = async () => {
     setRefreshing(true);
-    await fetchProductByCat();
+    await fetchProductByBrand();
     setRefreshing(false);
   };
 
@@ -54,7 +58,7 @@ const ProductByCategory = () => {
     <SafeAreaView style={{ backgroundColor: '#fff' }}>
       <ScreenHeader text={'Sản phẩm'} />
       <FlatList
-        keyExtractor={(item) => item?._id}
+        keyExtractor={(item) => item?.product_id}
         style={{ height: '100%' }}
         data={products}
         numColumns={2}
@@ -69,4 +73,4 @@ const ProductByCategory = () => {
   );
 };
 
-export default ProductByCategory;
+export default ProductFilter;

@@ -14,8 +14,8 @@ const SeeMoreCard = ({ categoryId, token, extraText }: IProps) => {
     <TouchableOpacity
       onPress={() =>
         router.push({
-          pathname: '/(root)/product-by-category',
-          params: { categoryId: categoryId, token: token },
+          pathname: '/(root)/product-filter',
+          params: { id: categoryId, token: token, type: 'category' },
         })
       }
       className='flex-row items-center justify-center py-2'

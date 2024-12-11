@@ -10,7 +10,11 @@ import CustomButton from '@/components/CustomButton';
 import HeaderImage from '@/components/HeaderImage';
 import InputField from '@/components/InputField';
 import { Ionicons } from '@expo/vector-icons';
-import { SigninData } from '@/types/type';
+
+interface SigninData {
+  phonenumber: string;
+  password: string;
+}
 
 const SignIn = () => {
   const [form, setForm] = useState<SigninData>({

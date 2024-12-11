@@ -32,11 +32,10 @@ const Profile = () => {
       const url = `${process.env.EXPO_PUBLIC_API}/user`;
       const config = {
         headers: {
-          Authorization: ` Bearer ${token}`,
+          Authorization: `Bearer ${token}`,
         },
       };
       const res = await axios.get(url, config);
-      console.log(res.status); // test
       if (res.status === 200) {
         setUser(res.data);
       } else {

@@ -20,19 +20,6 @@ declare interface ZaloToken {
   refresh_token: string;
 }
 
-declare interface SigninData {
-  phonenumber: string;
-  password: string;
-}
-
-declare interface SignupData {
-  user_fullname: string;
-  phonenumber: string;
-  address_detail: string;
-  password: string;
-  confirmPass: string;
-}
-
 declare interface CartType {
   cartItems: Array<{
     id: string;
@@ -53,35 +40,16 @@ declare interface AuthType {
   refreshTokenExpiry: string | null;
 }
 
-declare interface ITabIcon {
-  icon1: any;
-  icon2: any;
-  focused: boolean;
-}
-
 declare interface Product {
-  _id: string;
-  title: string;
-  image: string;
-  discount: number;
-  price: number;
-  sold: number;
-  brand: {
-    _id: string;
-    name: string;
-    description: string;
-    image: string;
-  };
-  category: {
-    _id: string;
-    name: string;
-    description: string;
-    image: string;
-  };
-  carouselImages: string[];
-  features: string[];
-  description: string[];
-  inStock: boolean;
+  product_id: string;
+  product_name: string;
+  product_price: number;
+  product_image_url: string;
+  product_instock: true;
+  product_sold: number;
+  product_discount: number;
+  category_id: string;
+  brand_id: string;
   reviews: [
     {
       _id: string;
