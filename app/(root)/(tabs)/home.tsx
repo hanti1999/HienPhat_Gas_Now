@@ -22,7 +22,7 @@ const Home = () => {
   const token = useSelector((state: RootState) => state.auth.accessToken);
   const [refreshing, setRefreshing] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
-  // const [products, setProduct] = useState<Product[]>([]);
+  // const [sale, setSale] = useState<Product[]>([]);
   const [electricStove, setElectricStove] = useState<Product[]>([]);
   const [kitchenAppli, setKitchenAppli] = useState<Product[]>([]);
   const [accessories, setAccessories] = useState<Product[]>([]);
@@ -50,17 +50,17 @@ const Home = () => {
           Authorization: `Bearer ${token}`,
         },
       };
-      const [response1, response2, response3, response4] = await Promise.all([
+      const [res1, res2, res3, res4] = await Promise.all([
         axios.get(url1, config),
         axios.get(url2, config),
         axios.get(url3, config),
         axios.get(url4, config),
       ]);
 
-      setGasStove(response1.data);
-      setElectricStove(response2.data);
-      setKitchenAppli(response3.data);
-      setAccessories(response4.data);
+      setGasStove(res1.data);
+      setElectricStove(res2.data);
+      setKitchenAppli(res3.data);
+      setAccessories(res4.data);
     } catch (error) {
       console.error('Lỗi fetch sản phẩm', error);
     } finally {

@@ -23,12 +23,10 @@ const InputField = ({
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View className='my-2 w-full'>
           {label && (
-            <Text className={`text-lg font-medium mb-1.5 ${labelStyle}`}>
-              {label}
-            </Text>
+            <Text className={`font-medium mb-1.5 ${labelStyle}`}>{label}</Text>
           )}
           <View
-            className={`flex flex-row px-4 justify-start items-center border bg-gray-50 rounded-full border-gray-200 focus:border-primary-pink ${containerStyle}`}
+            className={`flex flex-row px-3 justify-start items-center border rounded-lg border-gray-500 focus:border-primary-pink ${containerStyle}`}
           >
             {icon && (
               <AntDesign
@@ -39,7 +37,7 @@ const InputField = ({
               />
             )}
             <TextInput
-              className={`p-4 text-[16px] flex-1 text-left ${inputStyle}`}
+              className={`p-2 text-[16px] flex-1 text-left ${inputStyle}`}
               secureTextEntry={secureTextEntry}
               placeholderTextColor={'#999'}
               {...props}

@@ -174,7 +174,7 @@ const ProductInfo = () => {
         showsVerticalScrollIndicator={false}
         className='bg-gray-100'
       >
-        <ScreenHeader text={'Chi tiết sản phẩm'} />
+        <ScreenHeader text={'Chi tiết sản phẩm'} showCart={true} />
         <Swiper
           dot={<View className='w-1 h-1 mx-1 bg-gray-200 rounded-full' />}
           activeDot={

@@ -51,7 +51,7 @@ const Wishlist = () => {
 
   return (
     <SafeAreaView className='flex-1 bg-white'>
-      <ScreenHeader text={'Danh sách yêu thích'} />
+      <ScreenHeader text={'Danh sách yêu thích'} showCart={true} />
       <FlatList
         keyExtractor={(item) => item?.product_id}
         style={{ height: '100%' }}

@@ -1,9 +1,14 @@
-import { ScrollView, RefreshControl, TouchableOpacity } from 'react-native';
+import {
+  ScrollView,
+  RefreshControl,
+  TouchableOpacity,
+  Dimensions,
+} from 'react-native';
 import { Text, View, SafeAreaView, Pressable, Image } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
+import React, { useEffect, useState } from 'react';
 import { Modal, StatusBar } from 'react-native';
 import Toast from 'react-native-toast-message';
-import { useEffect, useState } from 'react';
 import { Link, router } from 'expo-router';
 import axios from 'axios';
 import { FontAwesome, AntDesign } from '@expo/vector-icons';
@@ -14,6 +19,7 @@ import { ProfileType } from '@/types/type';
 import { RootState } from '@/redux/store';
 import openLink from '@/utils/openLink';
 import LoadingScreen from '../loading-screen';
+import RectangleButton from '@/components/RectangleButton';
 
 const Profile = () => {
   const token = useSelector((state: RootState) => state?.auth.accessToken);
@@ -103,7 +109,6 @@ const Profile = () => {
                   token: token,
                   account_phonenumber: user?.account?.account_phonenumber,
                   user_fullname: user?.user?.user_fullname,
-                  address_full: user?.address?.address_full,
                   account_email: user?.account?.account_email,
                 },
               })
@@ -231,6 +236,7 @@ const Profile = () => {
 const LogoutButton = () => {
   const dispatch = useDispatch();
   const [modalVisible, setModalVisible] = useState<boolean>(false);
+  const width = Dimensions.get('window').width;
 
   const handleLogout = () => {
     dispatch(logout());
@@ -251,25 +257,21 @@ const LogoutButton = () => {
           style={{ backgroundColor: 'rgba( 0, 0, 0, 0.3)' }}
           className='flex-1 items-center justify-center'
         >
-          <View className='p-2 rounded-xl bg-white shadow-lg'>
-            <Text className='text-center my-4 text-[16px]'>
+          <View
+            className='p-2 rounded-xl bg-white shadow-lg'
+            style={{ width: width * 0.8 - 8 }}
+          >
+            <Text className='text-center my-4 text-lg'>
               Bạn muốn đăng xuất?
             </Text>
             <View style={{ gap: 8 }} className='flex-row items-center'>
-              <TouchableOpacity
-                className='rounded-full w-32 h-10 justify-center border-primary-pink border'
+              <RectangleButton
+                title='Hủy'
+                bgVariant='outline'
+                textVariant='primary'
                 onPress={() => setModalVisible(!modalVisible)}
-              >
-                <Text className='text-center text-[16px]'>Hủy</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                className='rounded-full w-32 h-10 justify-center bg-primary-pink border-primary-pink border'
-                onPress={handleLogout}
-              >
-                <Text className='text-center text-[16px] text-white'>
-                  Đồng ý
-                </Text>
-              </TouchableOpacity>
+              />
+              <RectangleButton title='Đồng ý' onPress={handleLogout} />
             </View>
           </View>
         </View>

@@ -2,7 +2,7 @@ import { Text, View, SafeAreaView, ScrollView, Switch } from 'react-native';
 import { Dimensions, TouchableOpacity, RefreshControl } from 'react-native';
 import { Image, TextInput, Alert } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { router } from 'expo-router';
 import axios from 'axios';
 import { removeFromCart, clearCart } from '@/redux/slices/cartSlice';

@@ -5,13 +5,8 @@ import ScreenHeader from '@/components/ScreenHeader';
 import { AntDesign } from '@expo/vector-icons';
 
 const Account = () => {
-  const {
-    token,
-    account_phonenumber,
-    user_fullname,
-    address_full,
-    account_email,
-  } = useLocalSearchParams();
+  const { token, account_phonenumber, user_fullname, account_email } =
+    useLocalSearchParams();
 
   return (
     <SafeAreaView className='flex-1 bg-white'>
@@ -26,7 +21,6 @@ const Account = () => {
                   token,
                   account_phonenumber,
                   user_fullname,
-                  address_full,
                   account_email,
                 },
               })

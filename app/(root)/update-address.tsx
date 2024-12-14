@@ -9,7 +9,7 @@ import CustomButton from '@/components/CustomButton';
 import InputField from '@/components/InputField';
 
 const UpdateAddress = () => {
-  const { token, address_full } = useLocalSearchParams();
+  const { token, currentAddress } = useLocalSearchParams();
   const [address, setAddress] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
   const nav = useNavigation();
@@ -52,7 +52,7 @@ const UpdateAddress = () => {
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <View className='p-3 bg-white'>
             <Text className='font-semibold mb-3 text-lg'>Hiện tại</Text>
-            <Text>{address_full}</Text>
+            <Text>{currentAddress}</Text>
             <InputField
               placeholder='Nhập địa chỉ mới...'
               onChangeText={setAddress}

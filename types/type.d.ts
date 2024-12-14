@@ -10,9 +10,6 @@ declare interface ProfileType {
     user_fullname: string;
     user_img_url: string;
   };
-  address: {
-    address_full: string;
-  };
 }
 
 declare interface ZaloToken {
@@ -72,10 +69,16 @@ declare interface User {
 
 declare interface ButtonProps extends TouchableOpacityProps {
   title?: string;
-  bgVariant?: 'primary' | 'outline-blue' | 'danger' | 'outline' | 'success';
+  bgVariant?:
+    | 'primary'
+    | 'secondary'
+    | 'outline-blue'
+    | 'danger'
+    | 'outline'
+    | 'success';
   textVariant?: 'primary' | 'default' | 'secondary' | 'danger' | 'success';
-  IconLeft?: React.ComponentType<any>;
-  IconRight?: React.ComponentType<any>;
+  IconLeft?: any;
+  IconRight?: any;
   className?: string;
   loading?: boolean;
 }

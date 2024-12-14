@@ -10,7 +10,7 @@ interface IProps {
   showCart?: boolean;
 }
 
-const ScreenHeader = ({ text, showCart = true }: IProps) => {
+const ScreenHeader = ({ text, showCart = false }: IProps) => {
   const cartQuantity = useSelector(
     (state: RootState) => state.cart.totalQuantity
   );
