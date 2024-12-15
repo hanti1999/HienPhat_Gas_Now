@@ -101,7 +101,7 @@ const AddAddress = () => {
             }
           />
           <RectangleInput
-            label='Số nhà (không bắt buộc)'
+            label='Số nhà'
             value={data.address?.address_home}
             onChangeText={(text) =>
               setData((prevState) => ({

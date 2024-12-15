@@ -1,7 +1,7 @@
+import { router, useFocusEffect, useLocalSearchParams } from 'expo-router';
 import { ScrollView, Pressable, RefreshControl } from 'react-native';
-import { router, useLocalSearchParams } from 'expo-router';
 import { View, Text, SafeAreaView } from 'react-native';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import Toast from 'react-native-toast-message';
 import axios from 'axios';
 import RectangleButton from '@/components/RectangleButton';
@@ -48,6 +48,13 @@ const Address = () => {
     fetchAddress();
   }, []);
 
+  // Lấy lại danh sách địa chỉ khi router.back()
+  useFocusEffect(
+    useCallback(() => {
+      fetchAddress();
+    }, [])
+  );
+
   if (loading) {
     return <LoadingScreen />;
   }
@@ -60,7 +67,7 @@ const Address = () => {
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
       >
-        <ScreenHeader text='Sổ địa chỉ' />
+        <ScreenHeader text='Địa chỉ nhận hàng' />
         <View className='p-3 bg-white'>
           <RectangleButton
             title='Thêm địa chỉ mới'

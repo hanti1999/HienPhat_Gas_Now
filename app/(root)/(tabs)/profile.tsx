@@ -214,7 +214,7 @@ const Profile = () => {
             <Text className='mt-2 text-gray-500'>
               Thiết kế và phát triển bởi:
             </Text>
-            <Text className='text-gray-500'>Tú Nhi (Manager | Tester)</Text>
+            <Text className='text-primary-pink'>Tú Nhi (Manager | Tester)</Text>
             <Link href={'https://github.com/hanti1999'}>
               <Text className=' text-blue-400 underline'>
                 Hoàng Anh (Front-end | Media)

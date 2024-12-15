@@ -1,6 +1,6 @@
 import { Text, Pressable, View } from 'react-native';
-import { router, useNavigation } from 'expo-router';
 import { useSelector } from 'react-redux';
+import { router } from 'expo-router';
 import React from 'react';
 import { Entypo, Ionicons } from '@expo/vector-icons';
 import { RootState } from '@/redux/store';
@@ -14,13 +14,12 @@ const ScreenHeader = ({ text, showCart = false }: IProps) => {
   const cartQuantity = useSelector(
     (state: RootState) => state.cart.totalQuantity
   );
-  const navigation = useNavigation();
   const displayValue = cartQuantity > 9 ? '9+' : cartQuantity;
 
   return (
     <View className='flex-row justify-between items-center bg-white border-b border-gray-300'>
       <View className='flex-row items-center'>
-        <Pressable onPress={() => navigation.goBack()}>
+        <Pressable onPress={() => router.back()}>
           <Entypo
             name='chevron-thin-left'
             size={24}
