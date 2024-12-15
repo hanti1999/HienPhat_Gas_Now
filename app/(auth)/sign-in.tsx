@@ -49,7 +49,7 @@ const SignIn = () => {
         router.replace('/(root)/(tabs)/home');
       } else {
         if (res.status === 401) {
-          Toast.show({ type: 'error', text1: 'Đăng nhập không thành công' });
+          Toast.show({ type: 'error', text1: 'Tài khoản hoặc mật khẩu sai' });
           console.log(res);
         } else {
           Toast.show({ type: 'error', text1: 'Lỗi máy chủ' });

@@ -10,9 +10,9 @@ const UserInfo = () => {
 
   return (
     <SafeAreaView className='flex-1 bg-white'>
-      <ScrollView stickyHeaderIndices={[0]} className='bg-gray-100 flex-1'>
-        <ScreenHeader text={'Thông tin người dùng'} showCart={false} />
-        <View className='p-3 bg-white'>
+      <ScrollView stickyHeaderIndices={[0]}>
+        <ScreenHeader text={'Thông tin người dùng'} />
+        <View className='p-3'>
           <View className='flex-row items-center justify-between py-3'>
             <Text className='text-base'>Số điện thoại</Text>
             <Text className='text-[#999]'>{account_phonenumber}</Text>

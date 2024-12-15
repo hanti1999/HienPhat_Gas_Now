@@ -16,16 +16,15 @@ interface IProductCard {
 const ProductCard = ({ item, token, size }: IProductCard) => {
   const [isLoading, setLoading] = useState<boolean>(false);
   const dispatch = useDispatch();
-  const actualPrice = item?.product_price * (1 - item?.product_discount / 100);
   const width = Dimensions.get('window').width;
 
-  const addItemToCart = (item: Product) => {
+  const addItemToCart = () => {
     dispatch(
       addToCart({
         id: item?.product_id,
         title: item?.product_name,
         productImg: item?.product_image_url,
-        price: actualPrice,
+        price: item?.final_price,
       })
     );
     setLoading(true);
@@ -74,7 +73,7 @@ const ProductCard = ({ item, token, size }: IProductCard) => {
             </Text>
           </View>
           <Text className='font-semibold text-red-500 text-[18px]'>
-            {actualPrice?.toLocaleString()}đ
+            {item?.final_price.toLocaleString()}đ
           </Text>
           <Text className='text-gray-500 text-[12px]'>
             Đã bán: {item?.product_sold}
@@ -82,7 +81,7 @@ const ProductCard = ({ item, token, size }: IProductCard) => {
         </View>
 
         <TouchableOpacity
-          onPress={() => addItemToCart(item)}
+          onPress={() => addItemToCart()}
           disabled={isLoading}
           className=' bg-primary-pink h-[48px] flex items-center rounded-bl-md rounded-br-md justify-center'
         >

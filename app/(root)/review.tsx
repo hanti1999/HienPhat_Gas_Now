@@ -1,5 +1,5 @@
 import { Text, View, TextInput, TouchableOpacity } from 'react-native';
-import { useLocalSearchParams, useNavigation } from 'expo-router';
+import { useLocalSearchParams, router } from 'expo-router';
 import { SafeAreaView, ActivityIndicator } from 'react-native';
 import Toast from 'react-native-toast-message';
 import React, { useState } from 'react';
@@ -17,7 +17,6 @@ const Review = () => {
   const [serviceRating, setServiceRating] = useState<number[]>([1, 2, 3, 4, 5]);
   const [loading, setLoading] = useState<boolean>(false);
   const [comment, setComment] = useState<string>('');
-  const nav = useNavigation();
 
   const handleSendReview = async () => {
     try {
@@ -33,7 +32,7 @@ const Review = () => {
       const res = await axios.post(url, data);
       if (res.status === 200) {
         Toast.show({ text1: 'Gửi đánh giá thành công' });
-        nav.goBack();
+        router.back();
       } else {
         console.error('Gửi đánh giá không thành công');
         Toast.show({ type: 'error', text1: 'Gửi đánh giá không thành công' });

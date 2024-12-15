@@ -1,5 +1,5 @@
-import { useLocalSearchParams, useNavigation } from 'expo-router';
 import { View, ScrollView, SafeAreaView } from 'react-native';
+import { router, useLocalSearchParams } from 'expo-router';
 import Toast from 'react-native-toast-message';
 import { Text, Switch } from 'react-native';
 import React, { useState } from 'react';
@@ -25,7 +25,6 @@ const UpdateAddress = () => {
   });
   const [loading, setLoading] = useState<boolean>(false);
   const [delLoading, setDelLoading] = useState<boolean>(false);
-  const nav = useNavigation();
 
   const toggleSwitch = () => {
     setData((prevState) => ({
@@ -47,7 +46,7 @@ const UpdateAddress = () => {
 
       if (res.status === 200) {
         Toast.show({ type: 'success', text1: 'Cập nhật địa chỉ thành công' });
-        nav.goBack();
+        router.back();
       } else {
         Toast.show({
           type: 'error',
@@ -75,7 +74,7 @@ const UpdateAddress = () => {
 
       if (res.status === 200) {
         Toast.show({ type: 'success', text1: 'Xóa thành công' });
-        nav.goBack();
+        router.back();
       } else {
         Toast.show({
           type: 'error',

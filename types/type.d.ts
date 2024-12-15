@@ -48,17 +48,17 @@ declare interface AuthType {
   accessTokenExpiry: string | null;
   refreshTokenExpiry: string | null;
 }
-
 declare interface Product {
+  brand_id: string;
+  category_id: string;
+  final_price: number;
+  product_discount: number;
   product_id: string;
-  product_name: string;
-  product_price: number;
   product_image_url: string;
   product_instock: true;
+  product_name: string;
+  product_price: number;
   product_sold: number;
-  product_discount: number;
-  category_id: string;
-  brand_id: string;
   reviews: [
     {
       _id: string;

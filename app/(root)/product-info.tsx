@@ -35,7 +35,6 @@ const ProductInfo = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
   const [averageRating, setAverageRating] = useState<number>();
-  const [actualPrice, setActualPrice] = useState<number>();
   const [totalRating, setTotalRating] = useState<number>();
   const [description, setDescription] = useState<IDes[]>([]);
   const [carousel, setCarousel] = useState<ICarousel[]>([]);
@@ -65,7 +64,7 @@ const ProductInfo = () => {
         id: data?.product_id,
         title: data?.product_name,
         productImg: data?.product_image_url,
-        price: actualPrice,
+        price: data?.final_price,
       })
     );
     setIsLoading(true);
@@ -118,16 +117,6 @@ const ProductInfo = () => {
   //     setLoading(false);
   //   }
   // };
-
-  useEffect(() => {
-    if (data?.product_price != undefined) {
-      setActualPrice(data?.product_price * (1 - data.product_discount / 100));
-      // setTotalRating(
-      //   data?.reviews.reduce((acc, data) => acc + data?.rating, 0)
-      // );
-      // setAverageRating(totalRating && totalRating / data?.reviews?.length);
-    }
-  }, [data]);
 
   useEffect(() => {
     const getData = async () => {
@@ -201,7 +190,7 @@ const ProductInfo = () => {
           </Text>
           <View className='flex-row items-center py-2' style={{ gap: 8 }}>
             <Text className='text-[24px] font-bold'>
-              {actualPrice?.toLocaleString()}đ
+              {data?.final_price.toLocaleString()}đ
             </Text>
             {data!.product_discount > 0 && (
               <>

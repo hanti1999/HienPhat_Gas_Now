@@ -10,9 +10,9 @@ const Account = () => {
 
   return (
     <SafeAreaView className='flex-1 bg-white'>
-      <ScrollView stickyHeaderIndices={[0]} className='bg-gray-100 flex-1'>
-        <ScreenHeader text={'Tài khoản'} showCart={false} />
-        <View className='p-3 bg-white'>
+      <ScrollView stickyHeaderIndices={[0]}>
+        <ScreenHeader text={'Tài khoản'} />
+        <View className='p-3'>
           <Pressable
             onPress={() =>
               router.push({

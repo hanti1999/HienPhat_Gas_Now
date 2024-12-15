@@ -1,4 +1,4 @@
-import { useLocalSearchParams, useNavigation } from 'expo-router';
+import { useLocalSearchParams, router } from 'expo-router';
 import { ScrollView, Switch, Text } from 'react-native';
 import { View, SafeAreaView } from 'react-native';
 import Toast from 'react-native-toast-message';
@@ -11,7 +11,6 @@ import { IAddress } from '@/types/type';
 
 const AddAddress = () => {
   const { token } = useLocalSearchParams();
-  const nav = useNavigation();
   const [loading, setLoading] = useState<boolean>(false);
   const [data, setData] = useState<IAddress>({
     address: {
@@ -43,7 +42,7 @@ const AddAddress = () => {
       const res = await axios.post(url, data, config);
       if (res.status === 201) {
         Toast.show({ text1: 'Thêm địa chỉ thành công' });
-        nav.goBack();
+        router.back();
       } else {
         Toast.show({ type: 'error', text1: res.data.message });
         console.log(res.data.message);

@@ -1,6 +1,6 @@
 import { StyleSheet, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { View, Text, SafeAreaView, ScrollView, Modal } from 'react-native';
-import { Link, useLocalSearchParams, useNavigation } from 'expo-router';
+import { Link, router, useLocalSearchParams } from 'expo-router';
 import React, { useState, useEffect } from 'react';
 import Toast from 'react-native-toast-message';
 import axios from 'axios';
@@ -14,7 +14,6 @@ import { ZaloToken } from '@/types/type';
 
 const UpdatePassword = () => {
   const { token, account_phonenumber } = useLocalSearchParams();
-  const nav = useNavigation();
   const [zaloToken, setToken] = useState<ZaloToken>({
     access_token: '',
     refresh_token: '',
@@ -176,7 +175,7 @@ const UpdatePassword = () => {
 
       if (res.status === 200) {
         Toast.show({ text1: 'Đổi mật khẩu thành công' });
-        nav.goBack();
+        router.back();
       } else {
         Toast.show({ type: 'error', text1: res.data });
       }
@@ -211,9 +210,9 @@ const UpdatePassword = () => {
 
   return (
     <SafeAreaView className='flex-1 bg-white'>
-      <ScrollView stickyHeaderIndices={[0]} className='bg-gray-100 flex-1'>
+      <ScrollView stickyHeaderIndices={[0]}>
         <ScreenHeader text='Thay đổi mật khẩu' />
-        <View className='p-3 bg-white'>
+        <View className='p-3'>
           <InputField
             placeholder='Nhập mật khẩu hiện tại'
             secureTextEntry={!showPassword}

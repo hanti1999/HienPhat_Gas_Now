@@ -1,4 +1,4 @@
-import { SafeAreaView, Text, View } from 'react-native';
+import { SafeAreaView, StatusBar, Text, View } from 'react-native';
 import { RefreshControl, FlatList } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
@@ -53,8 +53,8 @@ const Notification = () => {
 
   return (
     <SafeAreaView className='flex-1 bg-white'>
+      <StatusBar barStyle={'dark-content'} />
       <ScreenHeader text={'Thông báo'} />
-
       <FlatList
         data={notification}
         renderItem={({ item, index }) => (

@@ -1,6 +1,6 @@
-import { Text, View, SafeAreaView, ScrollView, Switch } from 'react-native';
 import { Dimensions, TouchableOpacity, RefreshControl } from 'react-native';
-import { Image, TextInput, Alert } from 'react-native';
+import { SafeAreaView, ScrollView, Switch, StatusBar } from 'react-native';
+import { Image, TextInput, Text, View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import React, { useEffect, useState } from 'react';
 import { router } from 'expo-router';
@@ -14,6 +14,7 @@ import tulip from '@/assets/images/tulip.png';
 import { RootState } from '@/redux/store';
 import LoadingScreen from '../loading-screen';
 import NoProduct from '../no-product';
+import { IAddress } from '@/types/type';
 
 const cart = () => {
   const cartQuantity = useSelector(
@@ -24,41 +25,35 @@ const cart = () => {
   const token = useSelector((state: RootState) => state.auth.accessToken);
   const dispatch = useDispatch();
   const [paymentMethod, setPaymentMethod] = useState<string>('cash');
-  const [phoneNumber, setPhoneNumber] = useState<string>('');
-  const [address, setAddress] = useState<string>('');
+  const [address, setAddress] = useState<IAddress>();
   const [note, setNote] = useState<string>('');
-  const [name, setName] = useState<string>('');
   const [totalAmount, setTotalAmount] = useState<number>(cartAmount);
   const [userPoints, setUserPoints] = useState<number>(0);
   const [orderLoading, setOrderLoading] = useState<boolean>(false);
   const [refreshing, setRefreshing] = useState<boolean>(false);
-  const [isVisible, setIsVisible] = useState<boolean>(false);
   const [usePoint, setUsePoint] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   let cartPoints = Math.round((totalAmount * 0.8) / 100);
   let voucher = 0;
   const P_PINK = '#fb77c5';
 
-  const fetchUser = async () => {
+  const fetchAddress = async () => {
     try {
-      const url = `${process.env.EXPO_PUBLIC_API}/user`;
+      setLoading(true);
+      const url = `${process.env.EXPO_PUBLIC_API}/shipping`;
       const config = {
         headers: {
-          Authorization: ` Bearer ${token}`,
+          Authorization: `Bearer ${token}`,
         },
       };
       const res = await axios.get(url, config);
       if (res.status === 200) {
-        const data = res.data;
-        setAddress(data?.address?.address_full);
-        setName(data?.user?.user_fullname);
-        setPhoneNumber(data?.account?.account_phonenumber);
-        // setUserPoints(data?.points);
+        setAddress(res?.data[0]);
       } else {
-        console.error(res.data.message);
+        console.log(res.data?.message);
       }
     } catch (error) {
-      console.error('Lỗi (catch CartScreen): ', error);
+      console.log('Lỗi fetch địa chỉ: ' + error);
     } finally {
       setLoading(false);
     }
@@ -66,12 +61,12 @@ const cart = () => {
 
   const onRefresh = async () => {
     setRefreshing(true);
-    await fetchUser();
+    await fetchAddress();
     setRefreshing(false);
   };
 
   useEffect(() => {
-    fetchUser();
+    fetchAddress();
   }, []);
 
   useEffect(() => {
@@ -80,21 +75,15 @@ const cart = () => {
 
   const handlePlaceOrder = async () => {
     setOrderLoading(true);
-    if (phoneNumber === '') {
-      Alert.alert('Thông báo', 'Vui lòng điền số điện thoại!');
-      setIsVisible(true);
-      setOrderLoading(false);
-      return;
-    }
     try {
       const data = {
         userId: token,
-        name: name,
-        phoneNumber: phoneNumber,
+        name: address?.address?.address_recipient_name,
+        phoneNumber: address?.address?.address_recipient_phonenumber,
         note: note,
         cartItems: cartItems,
         totalPrice: totalAmount,
-        shippingAddress: address,
+        shippingAddress: address?.address?.address_full,
         paymentMethod: paymentMethod,
         cartPoints: cartPoints,
         usePoint: usePoint,
@@ -131,6 +120,7 @@ const cart = () => {
 
   return (
     <SafeAreaView className='flex-1 bg-white'>
+      <StatusBar barStyle={'dark-content'} />
       <ScreenHeader text={'Giỏ hàng'} />
       <ScrollView
         className='bg-gray-100'
@@ -139,7 +129,49 @@ const cart = () => {
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
       >
-        <View className='bg-pink-100 p-3 mb-2'>
+        <View className='mb-3 p-3 bg-white'>
+          <View className='flex-row justify-between'>
+            <View className='flex-row items-center' style={{ gap: 4 }}>
+              <View className='w-5'>
+                <FontAwesome6 name='location-dot' size={18} color={P_PINK} />
+              </View>
+              <Text className='uppercase font-bold text-[18px]'>
+                Giao hàng tới
+              </Text>
+            </View>
+
+            <TouchableOpacity>
+              <View className='flex-row items-center' style={{ gap: 4 }}>
+                <Text style={{ color: 'blue', fontSize: 16 }}>
+                  Chọn địa chỉ khác
+                </Text>
+              </View>
+            </TouchableOpacity>
+          </View>
+
+          <View className='mt-2'>
+            <View className='flex-row items-center' style={{ gap: 8 }}>
+              <Text className='font-bold text-lg'>
+                {address?.address.address_recipient_name}
+              </Text>
+              <Text>{address?.address.address_recipient_phonenumber}</Text>
+            </View>
+            <Text>{address?.address.address_full}</Text>
+          </View>
+
+          <View className='flex-row items-center' style={{ gap: 8 }}>
+            <Text className='w-[60px]'>Ghi chú:</Text>
+            <TextInput
+              value={note}
+              onChangeText={setNote}
+              multiline
+              placeholder='(Không bắt buộc)'
+              className='p-2 border-b border-gray-300 flex-1'
+            />
+          </View>
+        </View>
+
+        <View className='bg-pink-100 p-3 mb-3'>
           <View className='flex-row items-center' style={{ gap: 4 }}>
             <View className='w-5'>
               <FontAwesome6 name='cart-shopping' size={16} color={P_PINK} />
@@ -178,78 +210,6 @@ const cart = () => {
               onValueChange={toggleSwitch}
               disabled={userPoints === 0}
               value={usePoint}
-            />
-          </View>
-        </View>
-
-        <View className='mb-2 p-3 bg-white'>
-          <View className='flex-row justify-between'>
-            <View className='flex-row items-center' style={{ gap: 4 }}>
-              <View className='w-5'>
-                <FontAwesome6 name='location-dot' size={18} color={P_PINK} />
-              </View>
-              <Text className='uppercase font-bold text-[18px]'>
-                Giao hàng tới
-              </Text>
-            </View>
-
-            <TouchableOpacity onPress={() => setIsVisible(!isVisible)}>
-              <View className='flex-row items-center' style={{ gap: 4 }}>
-                <Text style={{ color: 'blue', fontSize: 16 }}>
-                  Sửa thông tin
-                </Text>
-                <FontAwesome6 name='pencil' size={16} color='blue' />
-              </View>
-            </TouchableOpacity>
-          </View>
-          {isVisible ? (
-            <View>
-              <View className='flex-row items-center' style={{ gap: 8 }}>
-                <Text className='w-[60px]'>Tên:</Text>
-                <TextInput
-                  value={name}
-                  onChangeText={setName}
-                  placeholder='Nhập tên...'
-                  className='p-2 border-b border-gray-300 flex-1'
-                />
-              </View>
-              <View className='flex-row items-center' style={{ gap: 8 }}>
-                <Text className='w-[60px]'>SĐT:</Text>
-                <TextInput
-                  value={phoneNumber}
-                  onChangeText={setPhoneNumber}
-                  keyboardType='numeric'
-                  placeholder='Nhập số điện thoại...'
-                  className='p-2 border-b border-gray-300 flex-1'
-                />
-              </View>
-              <View className='flex-row items-center' style={{ gap: 8 }}>
-                <Text className='w-[60px]'>Địa chỉ:</Text>
-                <TextInput
-                  value={address}
-                  multiline
-                  onChangeText={setAddress}
-                  placeholder='Nhập địa chỉ...'
-                  className='p-2 border-b border-gray-300 flex-1'
-                />
-              </View>
-            </View>
-          ) : (
-            <View className='mt-2'>
-              <Text>{name}</Text>
-              <Text>{phoneNumber}</Text>
-              <Text>{address}</Text>
-            </View>
-          )}
-
-          <View className='flex-row items-center' style={{ gap: 8 }}>
-            <Text className='w-[60px]'>Ghi chú:</Text>
-            <TextInput
-              value={note}
-              onChangeText={setNote}
-              multiline
-              placeholder='(Không bắt buộc)'
-              className='p-2 border-b border-gray-300 flex-1'
             />
           </View>
         </View>
@@ -295,41 +255,41 @@ const cart = () => {
         </View>
       </ScrollView>
 
-      <View className='mt-2 p-3 bg-white'>
-        <View className='flex-row justify-between items-center my-2'>
-          <Text className='text-[18px]'>Tổng thanh toán: </Text>
-          <Text className='text-primary-pink font-bold text-[20px]'>
-            {totalAmount.toLocaleString()}đ
-          </Text>
-        </View>
-        {cartAmount > totalAmount ? (
-          <View className='flex-row justify-between items-center mb-2'>
-            <Text className='text-primary-pink'>
-              Quý khách tiết kiệm được{' '}
-              {(cartAmount - totalAmount).toLocaleString()}
-              đ
-              <Image className='w-5 h-5' source={tulip} />
-            </Text>
-            <Text className=' line-through'>
-              {cartAmount.toLocaleString()}đ
+      <View
+        className='mt-2 p-3 bg-white flex-row justify-end'
+        style={{ gap: 8 }}
+      >
+        <View>
+          <View className='flex-row justify-between items-center my-2'>
+            <Text>Tổng thanh toán: </Text>
+            <Text className='text-primary-pink font-bold text-[16px]'>
+              {totalAmount.toLocaleString()}đ
             </Text>
           </View>
-        ) : (
-          <></>
-        )}
+          {cartAmount > totalAmount ? (
+            <View className='flex-row justify-between items-center mb-2'>
+              <Text className='text-primary-pink'>
+                Quý khách tiết kiệm được{' '}
+                {(cartAmount - totalAmount).toLocaleString()}
+                đ
+                <Image className='w-5 h-5' source={tulip} />
+              </Text>
+              <Text className=' line-through'>
+                {cartAmount.toLocaleString()}đ
+              </Text>
+            </View>
+          ) : (
+            <></>
+          )}
+        </View>
 
-        <View className='flex-row justify-between bg-white' style={{ gap: 12 }}>
-          <RectangleButton
-            onPress={() => router.push('/(root)/(tabs)/home')}
-            title='Tiếp tục mua sắm'
-            textVariant='primary'
-            bgVariant='outline'
-          />
+        <View className='w-[120px] h-[40px]'>
           <RectangleButton
             onPress={handlePlaceOrder}
             disabled={orderLoading}
             loading={orderLoading}
             title='Đặt hàng'
+            className=''
           />
         </View>
       </View>

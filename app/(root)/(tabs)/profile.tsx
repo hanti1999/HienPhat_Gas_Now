@@ -64,7 +64,7 @@ const Profile = () => {
 
   return (
     <SafeAreaView className='flex-1 bg-white'>
-      <StatusBar />
+      <StatusBar barStyle={'dark-content'} />
       <ScrollView
         stickyHeaderIndices={[0]}
         className='bg-gray-100 flex-1'
