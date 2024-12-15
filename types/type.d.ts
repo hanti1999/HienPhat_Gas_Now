@@ -1,5 +1,17 @@
 import { TextInputProps, TouchableOpacityProps } from 'react-native';
 
+declare interface IAddress {
+  address: {
+    address_full: string;
+    address_home: string;
+    address_id?: string;
+    address_note: string;
+    address_recipient_name: string;
+    address_recipient_phonenumber: string;
+  };
+  is_default?: boolean;
+}
+
 declare interface ProfileType {
   account: {
     account_id: string;
