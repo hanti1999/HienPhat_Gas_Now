@@ -1,7 +1,7 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import * as SecureStore from 'expo-secure-store';
 import { Redirect } from 'expo-router';
 // import { getValueFor } from '@/utils/sercureStore';
-import * as SecureStore from 'expo-secure-store';
 
 const Page = () => {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);

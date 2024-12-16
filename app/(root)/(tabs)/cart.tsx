@@ -64,11 +64,6 @@ const Cart = () => {
     }
   };
 
-  const handleSelectAddress = (item: any) => {
-    setSelectedAddress(item);
-    setModalVisible(!modalVisible);
-  };
-
   const onRefresh = async () => {
     setRefreshing(true);
     await fetchAddress();
@@ -145,15 +140,16 @@ const Cart = () => {
 
   return (
     <SafeAreaView className='flex-1 bg-white'>
-      <StatusBar barStyle={'dark-content'} />
-      <ScreenHeader text={'Giỏ hàng'} />
+      <StatusBar barStyle='dark-content' />
+      <ScreenHeader text='Giỏ hàng' />
       <ScrollView
-        className='bg-gray-100'
         showsVerticalScrollIndicator={false}
+        className='bg-gray-100'
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
       >
+        {/* Địa chỉ giao hàng */}
         <View className='mb-3 p-3 bg-white'>
           <View className='flex-row justify-between'>
             <View className='flex-row items-center' style={{ gap: 4 }}>
@@ -191,6 +187,7 @@ const Cart = () => {
             <TextInput
               className='p-2 border-b border-gray-300 flex-1'
               placeholder='(Không bắt buộc)'
+              placeholderTextColor={'#999'}
               onChangeText={setNote}
               value={note}
               multiline
@@ -198,6 +195,7 @@ const Cart = () => {
           </View>
         </View>
 
+        {/* Chi tiết đơn hàng */}
         <View className='bg-white p-3 mb-3'>
           <View className='flex-row items-center' style={{ gap: 4 }}>
             <View className='w-5'>
@@ -240,7 +238,7 @@ const Cart = () => {
             />
           </View>
         </View>
-
+        {/* Phương thức thanh toán */}
         <View className='p-3 mb-2 bg-white'>
           <View className='flex-row items-center' style={{ gap: 4 }}>
             <View className='w-5'>
@@ -252,9 +250,9 @@ const Cart = () => {
           </View>
           <View>
             <TouchableOpacity
+              className='flex-row border border-gray-300 rounded-xl p-2 items-center mt-2'
               onPress={() => setPaymentMethod('cash')}
               style={{ gap: 8 }}
-              className='flex-row border border-gray-300 rounded-xl p-2 items-center mt-2'
             >
               {paymentMethod === 'cash' ? (
                 <AntDesign name='checkcircle' size={20} color={P_PINK} />
@@ -280,7 +278,7 @@ const Cart = () => {
             </TouchableOpacity>
           </View>
         </View>
-
+        {/* Modal chọn địa chỉ */}
         <Modal
           visible={modalVisible}
           animationType='slide'
@@ -293,7 +291,7 @@ const Cart = () => {
             style={{ backgroundColor: 'rgba( 0, 0, 0, 0.3)' }}
             className='flex-1 items-center justify-end'
           >
-            <View className='p-2 mb-2 shadow-lg w-full bg-pink-100 rounded-lg'>
+            <View className='p-2 mb-3.5 shadow-lg w-full bg-pink-100 rounded-lg'>
               <View className='flex-row justify-between items-center'>
                 <Text className='text-left font-bold mb-2 mr-1 text-lg'>
                   Chọn địa chỉ
@@ -308,7 +306,10 @@ const Cart = () => {
                   <Pressable
                     key={index}
                     className='w-36 h-36 p-3 border rounded-lg mr-1 bg-white'
-                    onPress={() => handleSelectAddress(item)}
+                    onPress={() => {
+                      setSelectedAddress(item);
+                      setModalVisible(!modalVisible);
+                    }}
                   >
                     <View className='flex-row items-center justify-between'>
                       <Text className='font-bold pr-1'>
@@ -318,8 +319,8 @@ const Cart = () => {
                         name={
                           selectedAddress === item ? 'check-circle' : 'circle-o'
                         }
-                        size={20}
                         color={selectedAddress === item ? '#fb77c5' : 'black'}
+                        size={20}
                       />
                     </View>
                     <Text className='mt-1'>
@@ -349,7 +350,7 @@ const Cart = () => {
       </ScrollView>
 
       <View
-        className='p-3 bg-white flex-row border-t border-gray-300 justify-end'
+        className='p-3 bg-white flex-row border-t border-gray-200 justify-end'
         style={{ gap: 8 }}
       >
         <View>
@@ -380,7 +381,6 @@ const Cart = () => {
             disabled={orderLoading}
             loading={orderLoading}
             title='Đặt hàng'
-            className=''
           />
         </View>
       </View>
@@ -401,23 +401,18 @@ const RenderItemToCart = ({ item, dispatch }: IProp) => {
   const P_PINK = '#fb77c5';
 
   return (
-    <View
-      style={{ gap: 8 }}
-      className='flex-row border-b border-gray-400 items-center py-2'
-    >
-      <View style={{ width: width / 2 }}>
+    <View style={{ gap: 8 }} className='flex-row border-b border-gray-200 py-2'>
+      <View style={{ width: width * 0.4 }}>
         <Image
-          className=' w-full rounded-lg'
-          style={{ width: width / 2, height: width / 2.5 }}
+          className='w-full rounded-lg border border-gray-200'
+          style={{ width: width * 0.4, height: width * 0.4 }}
           source={{ uri: item?.productImg }}
         />
       </View>
-      <View style={{ width: width / 2, overflow: 'hidden' }}>
-        <View className='border-b-2 border-gray-300'>
-          <Text className='font-semibold text-[18px]' numberOfLines={3}>
-            {item?.title}
-          </Text>
-        </View>
+      <View style={{ width: width * 0.6, overflow: 'hidden' }}>
+        <Text className='font-semibold text-[18px]' numberOfLines={3}>
+          {item?.title}
+        </Text>
         <Text className='mb-2 mt-4 text-[16px]'>
           Số lượng: <Text className='font-bold'>{item?.quantity}</Text> x{' '}
           {item?.price?.toLocaleString()}đ
@@ -426,8 +421,8 @@ const RenderItemToCart = ({ item, dispatch }: IProp) => {
           = {(item?.quantity * item?.price)?.toLocaleString()}đ
         </Text>
         <TouchableOpacity
-          onPress={handleProduct}
           className='flex-row items-center'
+          onPress={handleProduct}
           style={{ gap: 4 }}
         >
           <FontAwesome name='trash' size={20} color={P_PINK} />

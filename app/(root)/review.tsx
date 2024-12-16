@@ -47,7 +47,7 @@ const Review = () => {
 
   return (
     <SafeAreaView className='bg-white flex-1'>
-      <ScreenHeader text={'Trở lại'} />
+      <ScreenHeader text='Trở lại' />
       <View className='py-2 px-3'>
         <View className='my-4 flex-row'>
           <View className='w-1/2'>

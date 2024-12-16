@@ -30,7 +30,7 @@ const ProductFilter = () => {
         console.error(res.data.message);
       }
     } catch (error) {
-      console.error('Lỗi (ProductByCategorySceen)', error);
+      console.error('Lỗi (Product-filter)', error);
     } finally {
       setLoading(false);
     }

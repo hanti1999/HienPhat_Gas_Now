@@ -20,9 +20,14 @@ const Orders = () => {
   const fetchOrders = async () => {
     try {
       const url = `${process.env.EXPO_PUBLIC_API}`;
-      const res = await axios.get(url);
-      const orders = res.data?.orders.reverse();
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+      const res = await axios.get(url, config);
       if (res.status === 200) {
+        const orders = res.data?.reverse();
         setOrders(orders);
       } else {
         console.error(res.data?.message);

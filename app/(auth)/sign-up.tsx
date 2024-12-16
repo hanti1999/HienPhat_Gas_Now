@@ -95,8 +95,8 @@ const SignUp = () => {
   const getNewToken = async () => {
     // dùng refresh token để lấy access token mới từ server zalo
     setLoading(true);
-    const zaloAppIdSecretKey = process.env.ZALO_APP_SECRET_KEY;
-    const zaloAppId = process.env.ZALO_APP_ID as string;
+    const zaloAppIdSecretKey = process.env.EXPO_PUBLIC_ZALO_APP_SECRET_KEY;
+    const zaloAppId = process.env.EXPO_PUBLIC_ZALO_APP_ID as string;
     const url = 'https://oauth.zaloapp.com/v4/oa/access_token';
     const data = new URLSearchParams();
     data.append('refresh_token', token.refresh_token);
