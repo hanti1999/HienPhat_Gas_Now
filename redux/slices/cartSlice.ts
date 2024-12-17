@@ -1,9 +1,24 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { CartType } from '@/types/type';
+
+interface CartType {
+  cartItems: Array<{
+    id: string;
+    title: string;
+    productImg: string;
+    price: number;
+    oldPrice: number;
+    quantity: number;
+    totalPrice: number;
+  }>;
+  totalAmount: number;
+  totalDiscount: number;
+  totalQuantity: number;
+}
 
 const initialState: CartType = {
   cartItems: [],
   totalAmount: 0,
+  totalDiscount: 0,
   totalQuantity: 0,
 };
 
@@ -24,6 +39,7 @@ export const CartSlice = createSlice({
           title: newItem.title,
           productImg: newItem.productImg,
           price: newItem.price,
+          oldPrice: newItem.oldPrice,
           quantity: 1,
           totalPrice: newItem.price,
         });
@@ -35,6 +51,11 @@ export const CartSlice = createSlice({
 
       state.totalAmount = state.cartItems.reduce(
         (total, item) => total + Number(item.price) * Number(item.quantity),
+        0
+      );
+
+      state.totalDiscount = state.cartItems.reduce(
+        (total, item) => total + (item.oldPrice - item?.price) * item.quantity,
         0
       );
     },
@@ -51,11 +72,17 @@ export const CartSlice = createSlice({
         (total, item) => total + Number(item.price) * Number(item.quantity),
         0
       );
+
+      state.totalDiscount = state.cartItems.reduce(
+        (total, item) => total + (item.oldPrice - item?.price) * item.quantity,
+        0
+      );
     },
     clearCart: (state) => {
       state.cartItems = [];
       state.totalQuantity = 0;
       state.totalAmount = 0;
+      state.totalDiscount = 0;
     },
   },
 });

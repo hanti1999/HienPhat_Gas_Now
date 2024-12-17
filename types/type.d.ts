@@ -29,19 +29,6 @@ declare interface ZaloToken {
   refresh_token: string;
 }
 
-declare interface CartType {
-  cartItems: Array<{
-    id: string;
-    title: string;
-    productImg: string;
-    price: number;
-    quantity: number;
-    totalPrice: number;
-  }>;
-  totalAmount: number;
-  totalQuantity: number;
-}
-
 declare interface AuthType {
   accessToken: string | null;
   refreshToken: string | null;
@@ -55,7 +42,7 @@ declare interface Product {
   product_discount: number;
   product_id: string;
   product_image_url: string;
-  product_instock: true;
+  product_instock: boolean;
   product_name: string;
   product_price: number;
   product_sold: number;

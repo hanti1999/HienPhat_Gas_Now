@@ -16,7 +16,7 @@ const Wishlist = () => {
 
   const fetchWishlist = async () => {
     try {
-      const url = `${process.env.EXPO_PUBLIC_API}`;
+      const url = `${process.env.EXPO_PUBLIC_API}/`;
       const res = await axios.get(url);
       if (res.status === 200) {
         const wishlist = res.data.reverse();

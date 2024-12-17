@@ -18,28 +18,32 @@ import { RootState } from '@/redux/store';
 import { IAddress } from '@/types/type';
 import LoadingScreen from '../loading-screen';
 import NoProduct from '../no-product';
+import RectangleInput from '@/components/RectangleInput';
 
 const Cart = () => {
   const cartQuantity = useSelector(
     (state: RootState) => state.cart.totalQuantity
+  );
+  const totalDiscount = useSelector(
+    (state: RootState) => state.cart.totalDiscount
   );
   const cartAmount = useSelector((state: RootState) => state.cart.totalAmount);
   const cartItems = useSelector((state: RootState) => state.cart.cartItems);
   const token = useSelector((state: RootState) => state.auth.accessToken);
   const dispatch = useDispatch();
   const [paymentMethod, setPaymentMethod] = useState<string>('cash');
+  const [voucher, setVoucher] = useState<string>('');
   const [note, setNote] = useState<string>('');
   const [selectedAddress, setSelectedAddress] = useState<IAddress>();
   const [address, setAddress] = useState<IAddress[]>([]);
   const [totalAmount, setTotalAmount] = useState<number>(cartAmount);
+  const [voucherAmount, setVoucherAmount] = useState<number>(0);
   const [userPoints, setUserPoints] = useState<number>(0);
   const [orderLoading, setOrderLoading] = useState<boolean>(false);
   const [modalVisible, setModalVisible] = useState<boolean>(false);
   const [refreshing, setRefreshing] = useState<boolean>(false);
   const [usePoint, setUsePoint] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
-  let cartPoints = Math.round((totalAmount * 0.8) / 100);
-  let voucher = 0;
   const P_PINK = '#fb77c5';
 
   const fetchAddress = async () => {
@@ -55,19 +59,63 @@ const Cart = () => {
       if (res.status === 200) {
         setAddress(res?.data);
       } else {
-        console.log(res.data?.message);
+        console.error(res.data?.message);
       }
     } catch (error) {
-      console.log('Lỗi fetch địa chỉ: ' + error);
+      console.error('Lỗi fetch địa chỉ: ' + error);
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleUseVoucher = async () => {
+    Toast.show({ type: 'error', text1: `Voucher ${voucher} không hợp lệ` });
+    setVoucher('');
   };
 
   const onRefresh = async () => {
     setRefreshing(true);
     await fetchAddress();
     setRefreshing(false);
+  };
+
+  const handlePlaceOrder = async () => {
+    setOrderLoading(true);
+    try {
+      const data = {
+        token: token,
+        address_id: selectedAddress?.address?.address_id,
+        note: note,
+        cartItems: cartItems,
+        paymentMethod: paymentMethod,
+        point: {
+          usePoint: usePoint,
+          usedPoints: usePoint === true ? userPoints : 0,
+        },
+        voucher: voucher,
+      };
+      const url = `${process.env.EXPO_PUBLIC_API}/my-url`;
+      const res = await axios.post(url, data);
+      if (res.status === 200) {
+        dispatch(clearCart());
+        router.push({ pathname: '/(root)/orders', params: { token } });
+      } else {
+        Toast.show({ type: 'error', text1: res.data?.message });
+        console.error('Tạo đơn hàng không thành công');
+      }
+    } catch (error) {
+      Toast.show({ type: 'error', text1: 'Tạo đơn hàng không thành công' });
+      console.error('Lỗi (CartScreen): ', error);
+    } finally {
+      setOrderLoading(false);
+    }
+  };
+
+  const toggleSwitch = () => {
+    setUsePoint(!usePoint);
+    setTotalAmount(
+      usePoint ? totalAmount + userPoints : totalAmount - userPoints
+    );
   };
 
   useEffect(() => {
@@ -89,46 +137,6 @@ const Cart = () => {
       fetchAddress();
     }, [])
   );
-
-  const handlePlaceOrder = async () => {
-    setOrderLoading(true);
-    try {
-      const data = {
-        userId: token,
-        name: selectedAddress?.address?.address_recipient_name,
-        phoneNumber: selectedAddress?.address?.address_recipient_phonenumber,
-        note: note,
-        cartItems: cartItems,
-        totalPrice: totalAmount,
-        shippingAddress: selectedAddress?.address?.address_full,
-        paymentMethod: paymentMethod,
-        cartPoints: cartPoints,
-        usePoint: usePoint,
-        usedPoints: usePoint === true ? userPoints : 0,
-      };
-      const url = `${process.env.EXPO_PUBLIC_API}/my-url`;
-      const res = await axios.post(url, data);
-      if (res.status === 200) {
-        dispatch(clearCart());
-        router.push({ pathname: '/(root)/orders', params: { token } });
-      } else {
-        Toast.show({ type: 'error', text1: res.data?.message });
-        console.log('Tạo đơn hàng không thành công');
-      }
-    } catch (error) {
-      Toast.show({ type: 'error', text1: 'Tạo đơn hàng không thành công' });
-      console.log('Lỗi (CartScreen): ', error);
-    } finally {
-      setOrderLoading(false);
-    }
-  };
-
-  const toggleSwitch = () => {
-    setUsePoint(!usePoint);
-    setTotalAmount(
-      usePoint ? totalAmount + userPoints : totalAmount - userPoints
-    );
-  };
 
   if (cartQuantity === 0) {
     return <NoProduct text={'Giỏ hàng trống!'} />;
@@ -201,7 +209,7 @@ const Cart = () => {
             <View className='w-5'>
               <FontAwesome6 name='cart-shopping' size={16} color={P_PINK} />
             </View>
-            <Text className='uppercase font-bold text-[18px]'>
+            <Text className='uppercase font-bold text-[16px]'>
               Chi tiết đơn hàng
             </Text>
           </View>
@@ -209,20 +217,13 @@ const Cart = () => {
             <RenderItemToCart item={item} key={index} dispatch={dispatch} />
           ))}
           <View className='flex-row justify-between items-center mt-2'>
-            <Text className='text-right text-[18px]'>Tổng tạm tính</Text>
-            <Text className='text-primary-pink font-semibold text-[18px]'>
+            <Text className='text-right text-[16px]'>
+              Tổng tạm tính ({cartQuantity} sản phẩm)
+            </Text>
+            <Text className='text-primary-pink font-semibold text-[16px]'>
               {cartAmount?.toLocaleString()}đ
             </Text>
           </View>
-          {voucher != 0 && (
-            <View className='flex-row justify-between items-center mt-2'>
-              <View className='flex-row items-center' style={{ gap: 4 }}>
-                <Fontisto name='ticket-alt' size={24} color='pink' />
-                <Text className='text-right text-[16px]'>Ưu đãi giảm</Text>
-              </View>
-              <Text className='text-primary-pink text-[18px]'>0đ</Text>
-            </View>
-          )}
           <View className='flex-row justify-between items-center mt-2'>
             <View className='flex-row items-center' style={{ gap: 4 }}>
               <MaterialIcons name='wallet' size={24} color='pink' />
@@ -236,6 +237,24 @@ const Cart = () => {
               disabled={userPoints === 0}
               value={usePoint}
             />
+          </View>
+
+          <View className='flex-row items-center' style={{ gap: 8 }}>
+            <View className='flex-1'>
+              <RectangleInput
+                placeholder='nhập mã giảm giá...'
+                containerStyle='border-gray-200'
+                onChangeText={setVoucher}
+                value={voucher}
+              />
+            </View>
+            <View className='h-[40px] w-[120px]'>
+              <RectangleButton
+                onPress={handleUseVoucher}
+                disabled={voucher === ''}
+                title='Áp dụng'
+              />
+            </View>
           </View>
         </View>
         {/* Phương thức thanh toán */}
@@ -354,33 +373,30 @@ const Cart = () => {
         style={{ gap: 8 }}
       >
         <View>
-          <View className='flex-row justify-between items-center my-2'>
-            <Text>Tổng thanh toán: </Text>
-            <Text className='text-primary-pink font-bold text-[16px]'>
-              {totalAmount.toLocaleString()}đ
+          <Text className='text-right'>
+            Tổng thanh toán:{' '}
+            <Text className='text-primary-pink text-[16px]'>
+              {(totalAmount - voucherAmount).toLocaleString()}đ
             </Text>
-          </View>
-          {cartAmount > totalAmount && (
-            <View className='flex-row justify-between items-center mb-2'>
-              <Text className='text-primary-pink'>
-                Quý khách tiết kiệm được{' '}
-                {(cartAmount - totalAmount).toLocaleString()}
-                đ
-                <Image className='w-5 h-5' source={tulip} />
-              </Text>
-              <Text className=' line-through'>
-                {cartAmount.toLocaleString()}đ
-              </Text>
-            </View>
-          )}
+          </Text>
+          <Text className='text-right'>
+            Tiết kiệm:{' '}
+            <Text className='text-primary-pink'>
+              {usePoint
+                ? (totalDiscount + userPoints + voucherAmount).toLocaleString()
+                : (totalDiscount + voucherAmount).toLocaleString()}
+              đ
+            </Text>
+          </Text>
         </View>
 
         <View className='w-[120px] h-[40px]'>
           <RectangleButton
             onPress={handlePlaceOrder}
-            disabled={orderLoading}
+            // disabled={orderLoading}
             loading={orderLoading}
             title='Đặt hàng'
+            disabled={true}
           />
         </View>
       </View>
@@ -398,7 +414,6 @@ const RenderItemToCart = ({ item, dispatch }: IProp) => {
   const handleProduct = () => {
     dispatch(removeFromCart(item?.id));
   };
-  const P_PINK = '#fb77c5';
 
   return (
     <View style={{ gap: 8 }} className='flex-row border-b border-gray-200 py-2'>
@@ -414,8 +429,10 @@ const RenderItemToCart = ({ item, dispatch }: IProp) => {
           {item?.title}
         </Text>
         <Text className='mb-2 mt-4 text-[16px]'>
-          Số lượng: <Text className='font-bold'>{item?.quantity}</Text> x{' '}
-          {item?.price?.toLocaleString()}đ
+          {item?.quantity}x {item?.price?.toLocaleString()}đ{' '}
+          <Text className='line-through text-gray-500 text-xs'>
+            {item?.oldPrice.toLocaleString()}đ
+          </Text>
         </Text>
         <Text className='font-bold text-[16px] mb-2'>
           = {(item?.quantity * item?.price)?.toLocaleString()}đ
@@ -425,7 +442,7 @@ const RenderItemToCart = ({ item, dispatch }: IProp) => {
           onPress={handleProduct}
           style={{ gap: 4 }}
         >
-          <FontAwesome name='trash' size={20} color={P_PINK} />
+          <FontAwesome name='trash' size={20} color={'#fb77c5'} />
           <Text className='text-primary-pink text-[16px]'>Xoá sản phẩm</Text>
         </TouchableOpacity>
       </View>

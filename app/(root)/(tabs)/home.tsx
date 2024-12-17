@@ -40,11 +40,9 @@ const Home = () => {
     try {
       setLoading(true);
       const url1 = `${process.env.EXPO_PUBLIC_API}/product/category/90ebec20-4240-446c-a6ef-856b0c7fc730`;
-      // url2 need replace
-      const url2 = `${process.env.EXPO_PUBLIC_API}/product/category/553cfa8a-5bb6-4b48-a253-a9460a5c8922`;
+      const url2 = `${process.env.EXPO_PUBLIC_API}/product/category/17c6fd3b-ab50-4d21-a94e-0269495f0937`;
       const url3 = `${process.env.EXPO_PUBLIC_API}/product/category/553cfa8a-5bb6-4b48-a253-a9460a5c8922`;
-      // url4 need replace
-      const url4 = `${process.env.EXPO_PUBLIC_API}/product/category/553cfa8a-5bb6-4b48-a253-a9460a5c8922`;
+      const url4 = `${process.env.EXPO_PUBLIC_API}/product/category/1f967d66-4955-4542-ad89-37458d8e1365`;
       const config = {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -177,7 +175,7 @@ const Home = () => {
 
           <SeeMoreCard
             token={token}
-            categoryId={'553cfa8a-5bb6-4b48-a253-a9460a5c8922'}
+            categoryId={'17c6fd3b-ab50-4d21-a94e-0269495f0937'}
             extraText={'Bếp điện'}
           />
         </View>
@@ -229,7 +227,7 @@ const Home = () => {
 
           <SeeMoreCard
             token={token}
-            categoryId={'553cfa8a-5bb6-4b48-a253-a9460a5c8922'}
+            categoryId={'1f967d66-4955-4542-ad89-37458d8e1365'}
             extraText={'Phụ kiện'}
           />
         </View>

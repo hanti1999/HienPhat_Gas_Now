@@ -25,6 +25,7 @@ const ProductCard = ({ item, token, size }: IProductCard) => {
         title: item?.product_name,
         productImg: item?.product_image_url,
         price: item?.final_price,
+        oldPrice: item?.product_price,
       })
     );
     setLoading(true);

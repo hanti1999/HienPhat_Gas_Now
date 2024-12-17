@@ -1,7 +1,7 @@
 import { router, useFocusEffect, useLocalSearchParams } from 'expo-router';
-import { ScrollView, Pressable, RefreshControl } from 'react-native';
-import { View, Text, SafeAreaView } from 'react-native';
 import React, { useCallback, useEffect, useState } from 'react';
+import { View, Text, SafeAreaView } from 'react-native';
+import { ScrollView, Pressable } from 'react-native';
 import Toast from 'react-native-toast-message';
 import axios from 'axios';
 import RectangleButton from '@/components/RectangleButton';
@@ -13,7 +13,6 @@ const Address = () => {
   const { token } = useLocalSearchParams();
   const [loading, setLoading] = useState<boolean>(false);
   const [address, setAddress] = useState<IAddress[]>([]);
-  const [refreshing, setRefreshing] = useState<boolean>(false);
 
   const fetchAddress = async () => {
     try {
@@ -38,12 +37,6 @@ const Address = () => {
     }
   };
 
-  const onRefresh = async () => {
-    setRefreshing(true);
-    await fetchAddress();
-    setRefreshing(false);
-  };
-
   useEffect(() => {
     fetchAddress();
   }, []);
@@ -61,12 +54,7 @@ const Address = () => {
 
   return (
     <SafeAreaView className='flex-1 bg-white'>
-      <ScrollView
-        stickyHeaderIndices={[0]}
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-        }
-      >
+      <ScrollView stickyHeaderIndices={[0]}>
         <ScreenHeader text='Địa chỉ nhận hàng' />
         <View className='p-3 bg-white'>
           <RectangleButton

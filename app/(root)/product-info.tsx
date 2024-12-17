@@ -31,7 +31,7 @@ interface ICarousel {
 
 const ProductInfo = () => {
   const { token, itemId } = useLocalSearchParams();
-  // const [inWishlist, setIsInWishlist] = useState<boolean>(false);
+  const [inWishlist, setIsInWishlist] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
   const [averageRating, setAverageRating] = useState<number>();
@@ -42,21 +42,21 @@ const ProductInfo = () => {
   const width = Dimensions.get('window').width;
   const dispatch = useDispatch();
 
-  // const checkWishlist = async () => {
-  //   try {
-  //     // need replace
-  //     const url = `${process.env.EXPO_PUBLIC_API}`;
-  //     const res = await axios.get(url);
-  //     if (res.status === 200) {
-  //       const result = res.data.isProductInWishlist;
-  //       setIsInWishlist(result);
-  //     } else {
-  //       console.log('Lỗi check wishlist');
-  //     }
-  //   } catch (error) {
-  //     console.log('Lỗi check wishlist', error);
-  //   }
-  // };
+  const checkWishlist = async () => {
+    try {
+      // need replace
+      const url = `${process.env.EXPO_PUBLIC_API}`;
+      const res = await axios.get(url);
+      if (res.status === 200) {
+        const result = res.data.isProductInWishlist;
+        setIsInWishlist(result);
+      } else {
+        console.log('Lỗi check wishlist');
+      }
+    } catch (error) {
+      console.log('Lỗi check wishlist', error);
+    }
+  };
 
   const addItemToCart = () => {
     dispatch(
@@ -65,6 +65,7 @@ const ProductInfo = () => {
         title: data?.product_name,
         productImg: data?.product_image_url,
         price: data?.final_price,
+        oldPrice: data?.product_price,
       })
     );
     setIsLoading(true);
@@ -78,45 +79,45 @@ const ProductInfo = () => {
     };
   };
 
-  // const addWishlist = async () => {
-  //   try {
-  //     setLoading(true);
-  //     // need replace
-  //     const url = `${process.env.EXPO_PUBLIC_API}`;
-  //     const res = await axios.post(url);
-  //     if (res.status === 200) {
-  //       Toast.show({ text1: 'Đã thêm vào sản phẩm yêu thích' });
-  //       checkWishlist();
-  //     } else {
-  //       Toast.show({ type: 'error', text1: 'Thêm không thành công' });
-  //     }
-  //   } catch (error) {
-  //     console.log('Lỗi không thêm được wishlist', error);
-  //     Toast.show({ type: 'error', text1: 'Thêm không thành công' });
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
+  const addWishlist = async () => {
+    try {
+      setLoading(true);
+      // need replace
+      const url = `${process.env.EXPO_PUBLIC_API}`;
+      const res = await axios.post(url);
+      if (res.status === 200) {
+        Toast.show({ text1: 'Đã thêm vào sản phẩm yêu thích' });
+        checkWishlist();
+      } else {
+        Toast.show({ type: 'error', text1: 'Thêm không thành công' });
+      }
+    } catch (error) {
+      console.log('Lỗi không thêm được wishlist', error);
+      Toast.show({ type: 'error', text1: 'Thêm không thành công' });
+    } finally {
+      setLoading(false);
+    }
+  };
 
-  // const removeWishlist = async () => {
-  //   try {
-  //     setLoading(true);
-  //     // need replace
-  //     const url = `${process.env.EXPO_PUBLIC_API}`;
-  //     const res = await axios.delete(url);
-  //     if (res.status === 200) {
-  //       checkWishlist();
-  //       Toast.show({ text1: 'Đã xóa khỏi sản phẩm yêu thích' });
-  //     } else {
-  //       Toast.show({ type: 'error', text1: 'Xoá không thành công' });
-  //     }
-  //   } catch (error) {
-  //     console.log('Lỗi không xóa được wishlist', error);
-  //     Toast.show({ type: 'error', text1: 'Xoá không thành công' });
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
+  const removeWishlist = async () => {
+    try {
+      setLoading(true);
+      // need replace
+      const url = `${process.env.EXPO_PUBLIC_API}`;
+      const res = await axios.delete(url);
+      if (res.status === 200) {
+        checkWishlist();
+        Toast.show({ text1: 'Đã xóa khỏi sản phẩm yêu thích' });
+      } else {
+        Toast.show({ type: 'error', text1: 'Xoá không thành công' });
+      }
+    } catch (error) {
+      console.log('Lỗi không xóa được wishlist', error);
+      Toast.show({ type: 'error', text1: 'Xoá không thành công' });
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
     const getData = async () => {
@@ -213,7 +214,7 @@ const ProductInfo = () => {
               <Text className='text-gray-400'>|</Text>
               <Text>Đã bán: {data?.product_sold}</Text>
             </View>
-            {/* {inWishlist ? (
+            {inWishlist ? (
               <TouchableOpacity onPress={removeWishlist} disabled={loading}>
                 {loading ? (
                   <ActivityIndicator />
@@ -229,7 +230,7 @@ const ProductInfo = () => {
                   <FontAwesome name='heart-o' size={24} color='#fb77c5' />
                 )}
               </TouchableOpacity>
-            )} */}
+            )}
           </View>
         </View>
 

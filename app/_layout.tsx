@@ -49,17 +49,18 @@ export default function RootLayout() {
           <Stack.Screen name='+not-found' options={{ headerShown: false }} />
         </Stack>
       </Provider>
-      <FloatButton />
+      <ChatButton />
+      <CallButton />
       <Toast visibilityTime={2000} topOffset={60} />
     </>
   );
 }
 
-const FloatButton = () => {
+const ChatButton = () => {
   return (
-    <View style={styles.floatButtonContainer}>
+    <View style={styles.chatButtonContainer}>
       <TouchableOpacity
-        onPress={() => openLink(`https://zalo.me/1224689593861452828`)}
+        onPress={() => openLink(`https://zalo.me/0975841582`)}
         className='w-full h-full rounded-full flex items-center justify-center'
       >
         <AntDesign name='message1' size={20} color='white' />
@@ -68,10 +69,32 @@ const FloatButton = () => {
   );
 };
 
+const CallButton = () => {
+  return (
+    <View style={styles.callButtonContainer}>
+      <TouchableOpacity
+        onPress={() => openLink(`tel:0986573072`)}
+        className='w-full h-full rounded-full flex items-center justify-center'
+      >
+        <AntDesign name='phone' size={20} color='white' />
+      </TouchableOpacity>
+    </View>
+  );
+};
+
 const styles = StyleSheet.create({
-  floatButtonContainer: {
+  chatButtonContainer: {
     position: 'absolute',
-    bottom: Platform.OS == 'android' ? 82 : 135,
+    bottom: Platform.OS == 'android' ? 100 : 135,
+    right: 8,
+    width: 45,
+    height: 45,
+    borderRadius: 9999,
+    backgroundColor: 'rgba( 255, 0, 0, 0.6)',
+  },
+  callButtonContainer: {
+    position: 'absolute',
+    bottom: Platform.OS == 'android' ? 150 : 185,
     right: 8,
     width: 45,
     height: 45,

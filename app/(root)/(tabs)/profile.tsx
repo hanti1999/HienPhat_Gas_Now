@@ -100,7 +100,7 @@ const Profile = () => {
           </View>
         </View>
 
-        <View className='p-3 mt-2 bg-white'>
+        <View className='p-3 mt-3 bg-white'>
           <Pressable
             onPress={() =>
               router.push({
@@ -161,7 +161,7 @@ const Profile = () => {
           </Pressable>
         </View>
 
-        <View className='p-3 mt-2 bg-white'>
+        <View className='p-3 mt-3 bg-white'>
           <Pressable
             onPress={() => router.push('/(root)/about')}
             className='flex-row items-center justify-between py-3'
@@ -204,11 +204,11 @@ const Profile = () => {
           </Pressable>
         </View>
 
-        <View className='p-3 bg-white mt-2'>
+        <View className='p-3 bg-white mt-3'>
           <LogoutButton />
         </View>
 
-        <View className='mt-10'>
+        <View className='mt-5'>
           <View className='flex items-center'>
             <Text className='text-gray-500'>Gas Hiền Phát - v{'0.12.24'}</Text>
             <Text className='mt-2 text-gray-500'>
