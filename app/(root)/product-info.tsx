@@ -33,6 +33,7 @@ const ProductInfo = () => {
   const { token, itemId } = useLocalSearchParams();
   const [inWishlist, setIsInWishlist] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [wlLoading, setWlLoading] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
   const [averageRating, setAverageRating] = useState<number>();
   const [totalRating, setTotalRating] = useState<number>();
@@ -44,12 +45,17 @@ const ProductInfo = () => {
 
   const checkWishlist = async () => {
     try {
-      // need replace
-      const url = `${process.env.EXPO_PUBLIC_API}`;
-      const res = await axios.get(url);
+      const url = `${process.env.EXPO_PUBLIC_API}/wishlist`;
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+      const res = await axios.get(url, config);
       if (res.status === 200) {
-        const result = res.data.isProductInWishlist;
-        setIsInWishlist(result);
+        const wishlist = res.data.wishlist;
+        const isInWishlist = wishlist.includes(itemId);
+        setIsInWishlist(isInWishlist);
       } else {
         console.log('Lỗi check wishlist');
       }
@@ -81,41 +87,52 @@ const ProductInfo = () => {
 
   const addWishlist = async () => {
     try {
-      setLoading(true);
-      // need replace
-      const url = `${process.env.EXPO_PUBLIC_API}`;
-      const res = await axios.post(url);
-      if (res.status === 200) {
+      setWlLoading(true);
+      const url = `${process.env.EXPO_PUBLIC_API}/wishlist`;
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+      const data = {
+        product_id: itemId,
+      };
+      const res = await axios.post(url, data, config);
+      if (res.status === 201) {
         Toast.show({ text1: 'Đã thêm vào sản phẩm yêu thích' });
         checkWishlist();
       } else {
-        Toast.show({ type: 'error', text1: 'Thêm không thành công' });
+        Toast.show({ type: 'error', text1: res.data?.message });
       }
     } catch (error) {
       console.log('Lỗi không thêm được wishlist', error);
       Toast.show({ type: 'error', text1: 'Thêm không thành công' });
     } finally {
-      setLoading(false);
+      setWlLoading(false);
     }
   };
 
   const removeWishlist = async () => {
     try {
-      setLoading(true);
-      // need replace
-      const url = `${process.env.EXPO_PUBLIC_API}`;
-      const res = await axios.delete(url);
+      setWlLoading(true);
+      const url = `${process.env.EXPO_PUBLIC_API}/wishlist/${itemId}`;
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+      const res = await axios.delete(url, config);
       if (res.status === 200) {
         checkWishlist();
         Toast.show({ text1: 'Đã xóa khỏi sản phẩm yêu thích' });
       } else {
-        Toast.show({ type: 'error', text1: 'Xoá không thành công' });
+        Toast.show({ type: 'error', text1: res.data?.message });
       }
     } catch (error) {
       console.log('Lỗi không xóa được wishlist', error);
       Toast.show({ type: 'error', text1: 'Xoá không thành công' });
     } finally {
-      setLoading(false);
+      setWlLoading(false);
     }
   };
 
@@ -148,9 +165,9 @@ const ProductInfo = () => {
     getData();
   }, []);
 
-  // useEffect(()=> {
-  //   checkWishlist()
-  // }, [])
+  useEffect(() => {
+    checkWishlist();
+  }, []);
 
   if (loading) {
     return <LoadingScreen />;
@@ -185,7 +202,7 @@ const ProductInfo = () => {
           ))}
         </Swiper>
 
-        <View className='py-2 px-3 mb-2 bg-pink-100'>
+        <View className='py-2 px-3 mb-3 bg-pink-100'>
           <Text numberOfLines={2} className='font-semibold text-[18px]'>
             {data?.product_name}
           </Text>
@@ -215,16 +232,16 @@ const ProductInfo = () => {
               <Text>Đã bán: {data?.product_sold}</Text>
             </View>
             {inWishlist ? (
-              <TouchableOpacity onPress={removeWishlist} disabled={loading}>
-                {loading ? (
+              <TouchableOpacity onPress={removeWishlist} disabled={wlLoading}>
+                {wlLoading ? (
                   <ActivityIndicator />
                 ) : (
                   <FontAwesome name='heart' size={24} color='#fb77c5' />
                 )}
               </TouchableOpacity>
             ) : (
-              <TouchableOpacity onPress={addWishlist} disabled={loading}>
-                {loading ? (
+              <TouchableOpacity onPress={addWishlist} disabled={wlLoading}>
+                {wlLoading ? (
                   <ActivityIndicator />
                 ) : (
                   <FontAwesome name='heart-o' size={24} color='#fb77c5' />
@@ -234,7 +251,7 @@ const ProductInfo = () => {
           </View>
         </View>
 
-        <View className='py-2 px-3 mb-2 bg-pink-200'>
+        <View className='py-2 px-3 mb-3 bg-pink-200'>
           <Text className='text-[16px] font-semibold mb-2'>
             Đặc điểm nổi bật
           </Text>
@@ -247,7 +264,7 @@ const ProductInfo = () => {
           </View>
         </View>
 
-        <View className='py-2 px-3 mb-2 bg-pink-300'>
+        <View className='py-2 px-3 mb-3 bg-pink-300'>
           <Text className='text-[16px] font-semibold mb-2'>Bài đánh giá</Text>
           <Reviews reviews={data?.reviews} />
           <TouchableOpacity
