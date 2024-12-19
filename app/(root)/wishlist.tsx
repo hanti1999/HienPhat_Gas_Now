@@ -1,5 +1,6 @@
 import { SafeAreaView, FlatList, RefreshControl } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
+import Toast from 'react-native-toast-message';
 import React, { useState } from 'react';
 import axios from 'axios';
 import LoadingScreen from './loading-screen';
@@ -16,16 +17,22 @@ const Wishlist = () => {
 
   const fetchWishlist = async () => {
     try {
-      const url = `${process.env.EXPO_PUBLIC_API}/`;
-      const res = await axios.get(url);
+      const url = `${process.env.EXPO_PUBLIC_API}/wishlist`;
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+      const res = await axios.get(url, config);
       if (res.status === 200) {
-        const wishlist = res.data.reverse();
+        const wishlist = res.data.wishlist;
         setWishlist(wishlist);
       } else {
-        console.error(res.data?.message);
+        Toast.show({ type: 'error', text1: res.data?.message });
       }
     } catch (error) {
       console.error(error);
+      Toast.show({ type: 'error', text1: 'Lấy danh sách không thành công' });
     } finally {
       setLoading(false);
     }

@@ -51,7 +51,7 @@ export default function RootLayout() {
       </Provider>
       <ChatButton />
       <CallButton />
-      <Toast visibilityTime={2000} topOffset={60} />
+      <Toast />
     </>
   );
 }
