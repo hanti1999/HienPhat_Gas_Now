@@ -42,7 +42,6 @@ const SignUp = () => {
   const [wards, setWards] = useState<Ward[]>([]);
   const [selectedProvince, setSelectedProvince] = useState<string>('');
   const [selectedDistrict, setSelectedDistrict] = useState<string>('');
-  const VN_PROVINCE_URL = 'https://provinces.open-api.vn/api';
 
   const getAccessToken = async () => {
     // lấy access token từ node server
@@ -153,7 +152,7 @@ const SignUp = () => {
     }
   };
 
-  const hanldeSignUp = async () => {
+  const handleSignUp = async () => {
     if (!validated) {
       Toast.show({ type: 'error', text1: 'Mật khẩu hợp lệ' });
       return;
@@ -202,19 +201,21 @@ const SignUp = () => {
   };
 
   const fetchProvinces = async () => {
-    const res = await axios.get(`${VN_PROVINCE_URL}/p/`);
+    const res = await axios.get(`${process.env.EXPO_PUBLIC_PROVINCE_API}/p/`);
     setProvinces(res.data);
   };
 
   const fetchDistrict = async (provinceCode: number, name: string) => {
-    const res = await axios.get(`${VN_PROVINCE_URL}/p/${provinceCode}?depth=2`);
+    const url = `${process.env.EXPO_PUBLIC_PROVINCE_API}/p/${provinceCode}?depth=2`;
+    const res = await axios.get(url);
     setProvinces([]);
     setSelectedProvince(name);
     setDistricts(res.data?.districts);
   };
 
   const fetchWard = async (districtCode: number, name: string) => {
-    const res = await axios.get(`${VN_PROVINCE_URL}/d/${districtCode}?depth=2`);
+    const url = `${process.env.EXPO_PUBLIC_PROVINCE_API}/d/${districtCode}?depth=2`;
+    const res = await axios.get(url);
     setDistricts([]);
     setSelectedDistrict(name);
     setWards(res.data?.wards);
@@ -400,8 +401,8 @@ const SignUp = () => {
             }
           />
           <CustomButton
+            onPress={handleSignUp}
             disabled={loading}
-            onPress={hanldeSignUp}
             loading={loading}
             className='mt-5'
             title='Đăng ký'

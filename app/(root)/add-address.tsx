@@ -21,7 +21,6 @@ const AddAddress = () => {
   const [wards, setWards] = useState<Ward[]>([]);
   const [selectedProvince, setSelectedProvince] = useState<string>('');
   const [selectedDistrict, setSelectedDistrict] = useState<string>('');
-  const VN_PROVINCE_URL = 'https://provinces.open-api.vn/api';
   const [data, setData] = useState<IAddress>({
     address: {
       address_full: '',
@@ -66,19 +65,21 @@ const AddAddress = () => {
   };
 
   const fetchProvinces = async () => {
-    const res = await axios.get(`${VN_PROVINCE_URL}/p/`);
+    const res = await axios.get(`${process.env.EXPO_PUBLIC_PROVINCE_API}/p/`);
     setProvinces(res.data);
   };
 
   const fetchDistrict = async (provinceCode: number, name: string) => {
-    const res = await axios.get(`${VN_PROVINCE_URL}/p/${provinceCode}?depth=2`);
+    const url = `${process.env.EXPO_PUBLIC_PROVINCE_API}/p/${provinceCode}?depth=2`;
+    const res = await axios.get(url);
     setProvinces([]);
     setSelectedProvince(name);
     setDistricts(res.data?.districts);
   };
 
   const fetchWard = async (districtCode: number, name: string) => {
-    const res = await axios.get(`${VN_PROVINCE_URL}/d/${districtCode}?depth=2`);
+    const url = `${process.env.EXPO_PUBLIC_PROVINCE_API}/d/${districtCode}?depth=2`;
+    const res = await axios.get(url);
     setDistricts([]);
     setSelectedDistrict(name);
     setWards(res.data?.wards);
