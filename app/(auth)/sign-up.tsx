@@ -1,14 +1,15 @@
 import { Text, ScrollView, View, Modal } from 'react-native';
 import { TouchableOpacity, StatusBar } from 'react-native';
-import React, { useEffect, useState } from 'react';
 import Toast from 'react-native-toast-message';
 import { Link, router } from 'expo-router';
-import * as Location from 'expo-location';
+import React, { useState } from 'react';
 import axios from 'axios';
 import { District, Province, Ward, ZaloToken } from '@/types/type';
-import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import GetLocationButton from '@/components/GetLocationButton';
 import PasswordValidate from '@/components/PasswordValidate';
+import useGetZaloToken from '@/customHooks/useGetZaloToken';
 import { AntDesign, Ionicons } from '@expo/vector-icons';
+import { handleGetLocation } from '@/utils/getLocation';
 import CustomButton from '@/components/CustomButton';
 import HeaderImage from '@/components/HeaderImage';
 import InputField from '@/components/InputField';
@@ -29,10 +30,6 @@ const SignUp = () => {
     password: '88888888',
     confirmPass: '88888888',
   });
-  const [token, setToken] = useState<ZaloToken>({
-    access_token: '',
-    refresh_token: '',
-  });
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [modalVisible, setModalVisible] = useState<boolean>(false);
   const [validated, setValidated] = useState<boolean>(false);
@@ -43,26 +40,9 @@ const SignUp = () => {
   const [selectedProvince, setSelectedProvince] = useState<string>('');
   const [selectedDistrict, setSelectedDistrict] = useState<string>('');
 
-  const getAccessToken = async () => {
-    // lấy access token từ node server
-    try {
-      setLoading(true);
-      const url = `${process.env.EXPO_PUBLIC_API}/zalo-tokens/b0455d2d-d138-46ad-b6c7-42aab30acf4b`;
-      const res = await axios.get(url);
-      if (res.status === 200) {
-        setToken({
-          access_token: res.data.ztk_access_token,
-          refresh_token: res.data.ztk_refresh_token,
-        });
-      } else {
-        Toast.show({ type: 'error', text1: 'Lấy token không thành công' });
-      }
-    } catch (error) {
-      console.error('Lấy token không thành công: ', error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const { zaloToken, refetch } = useGetZaloToken(
+    `${process.env.EXPO_PUBLIC_API}/zalo-tokens/b0455d2d-d138-46ad-b6c7-42aab30acf4b`
+  );
 
   const getOtp = async () => {
     // Lấy OTP từ Zalo
@@ -75,7 +55,7 @@ const SignUp = () => {
       template_data: { otp: otp },
     };
     const config = {
-      headers: { access_token: token.access_token },
+      headers: { access_token: zaloToken.access_token },
     };
     const res = await axios.post(url, data, config);
     if (res.data.error === 0) {
@@ -105,7 +85,7 @@ const SignUp = () => {
     const zaloAppId = process.env.EXPO_PUBLIC_ZALO_APP_ID as string;
     const url = 'https://oauth.zaloapp.com/v4/oa/access_token';
     const data = new URLSearchParams();
-    data.append('refresh_token', token.refresh_token);
+    data.append('refresh_token', zaloToken.refresh_token);
     data.append('app_id', zaloAppId);
     data.append('grant_type', 'refresh_token');
     const config = {
@@ -130,7 +110,7 @@ const SignUp = () => {
     try {
       setLoading(true);
       // Lưu access token lên node server cho người dùng sau
-      const url = `/zalo-tokens/b0455d2d-d138-46ad-b6c7-42aab30acf4b`;
+      const url = `${process.env.EXPO_PUBLIC_API}/zalo-tokens/b0455d2d-d138-46ad-b6c7-42aab30acf4b`;
       const data = {
         accessToken: props.access_token,
         refreshToken: props.refresh_token,
@@ -138,7 +118,7 @@ const SignUp = () => {
       };
       const res = await axios.put(url, data);
       if (res.status === 200) {
-        getAccessToken();
+        refetch();
         Toast.show({ text1: 'Vui lòng thử lại lần nữa' });
       } else {
         console.error('Cập nhật token mới không thành công');
@@ -172,31 +152,16 @@ const SignUp = () => {
     }
   };
 
-  const handleGetLocation = async () => {
-    let { status } = await Location.requestForegroundPermissionsAsync();
-
-    if (status !== 'granted') {
-      Toast.show({ type: 'info', text1: 'Quyền truy cập vị trí bị từ chối' });
-      return;
-    }
-
-    let currentLocation = await Location.getCurrentPositionAsync({});
-
-    let reverseGeocode = await Location.reverseGeocodeAsync({
-      longitude: currentLocation.coords.longitude,
-      latitude: currentLocation.coords.latitude,
-    });
-
-    if (reverseGeocode[0]?.formattedAddress === undefined) {
+  const handleGetLocationPress = async () => {
+    try {
+      const res = await handleGetLocation();
       setForm({
         ...form,
-        address_detail: `${reverseGeocode[0]?.name}, ${reverseGeocode[0]?.street}, ${reverseGeocode[0]?.subregion}, ${reverseGeocode[0]?.region}`,
+        address_detail: res,
       });
-    } else {
-      setForm({
-        ...form,
-        address_detail: `${reverseGeocode[0]?.formattedAddress}`,
-      });
+    } catch (error) {
+      console.error('Lỗi lấy vị trí:', error);
+      Toast.show({ type: 'error', text1: 'Không thể lấy vị trí' });
     }
   };
 
@@ -237,10 +202,6 @@ const SignUp = () => {
     setWards([]);
   };
 
-  useEffect(() => {
-    getAccessToken();
-  }, []);
-
   return (
     <ScrollView className='flex-1 bg-white'>
       <StatusBar />
@@ -275,15 +236,7 @@ const SignUp = () => {
             }}
             multiline
             icon='home'
-            children={
-              <TouchableOpacity
-                className='border border-gray-300 rounded-full p-1 flex flex-row items-center'
-                onPress={handleGetLocation}
-              >
-                <Text className='text-[12px] text-primary-black'>GPS </Text>
-                <MaterialIcons name='gps-fixed' size={12} color='gray' />
-              </TouchableOpacity>
-            }
+            children={<GetLocationButton onPress={handleGetLocationPress} />}
           />
           <Modal
             animationType='slide'

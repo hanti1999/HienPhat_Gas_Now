@@ -3,14 +3,15 @@ import { useLocalSearchParams, router } from 'expo-router';
 import { Modal, Switch, Text } from 'react-native';
 import { View, SafeAreaView } from 'react-native';
 import Toast from 'react-native-toast-message';
-import * as Location from 'expo-location';
 import React, { useState } from 'react';
 import axios from 'axios';
 import { District, IAddress, Province, Ward } from '@/types/type';
-import { AntDesign, MaterialIcons } from '@expo/vector-icons';
+import GetLocationButton from '@/components/GetLocationButton';
 import RectangleInput from '@/components/RectangleInput';
+import { handleGetLocation } from '@/utils/getLocation';
 import ScreenHeader from '@/components/ScreenHeader';
 import CustomButton from '@/components/CustomButton';
+import { AntDesign } from '@expo/vector-icons';
 
 const AddAddress = () => {
   const { token } = useLocalSearchParams();
@@ -104,37 +105,19 @@ const AddAddress = () => {
     setWards([]);
   };
 
-  const handleGetLocation = async () => {
-    let { status } = await Location.requestForegroundPermissionsAsync();
-
-    if (status !== 'granted') {
-      Toast.show({ type: 'info', text1: 'Quyền truy cập vị trí bị từ chối' });
-      return;
-    }
-
-    let currentLocation = await Location.getCurrentPositionAsync({});
-
-    let reverseGeocode = await Location.reverseGeocodeAsync({
-      longitude: currentLocation.coords.longitude,
-      latitude: currentLocation.coords.latitude,
-    });
-
-    if (reverseGeocode[0]?.formattedAddress === undefined) {
+  const handleGetLocationPress = async () => {
+    try {
+      const res = await handleGetLocation();
       setData((prev) => ({
         ...prev,
         address: {
           ...prev.address,
-          address_full: `${reverseGeocode[0]?.name}, ${reverseGeocode[0]?.street}, ${reverseGeocode[0]?.subregion}, ${reverseGeocode[0]?.region}`,
+          address_full: res,
         },
       }));
-    } else {
-      setData((prev) => ({
-        ...prev,
-        address: {
-          ...prev.address,
-          address_full: `${reverseGeocode[0]?.name}, ${reverseGeocode[0]?.street}, ${reverseGeocode[0]?.subregion}, ${reverseGeocode[0]?.region}`,
-        },
-      }));
+    } catch (error) {
+      console.error('Lỗi lấy vị trí:', error);
+      Toast.show({ type: 'error', text1: 'Không thể lấy vị trí' });
     }
   };
 
@@ -178,15 +161,7 @@ const AddAddress = () => {
               setModalVisible(!modalVisible);
               fetchProvinces();
             }}
-            children={
-              <TouchableOpacity
-                className='border border-gray-300 rounded-full p-1 flex flex-row items-center'
-                onPress={handleGetLocation}
-              >
-                <Text className='text-[12px] text-primary-black'>GPS </Text>
-                <MaterialIcons name='gps-fixed' size={12} color='gray' />
-              </TouchableOpacity>
-            }
+            children={<GetLocationButton onPress={handleGetLocationPress} />}
           />
           <Modal
             animationType='slide'

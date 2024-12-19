@@ -1,14 +1,17 @@
-import { View, ScrollView, SafeAreaView } from 'react-native';
+import { View, ScrollView, SafeAreaView, TouchableOpacity } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
 import Toast from 'react-native-toast-message';
-import { Text, Switch } from 'react-native';
+import { Text, Switch, Modal } from 'react-native';
 import React, { useState } from 'react';
 import axios from 'axios';
+import { District, IAddress, Province, Ward } from '@/types/type';
+import GetLocationButton from '@/components/GetLocationButton';
+import RectangleButton from '@/components/RectangleButton';
 import RectangleInput from '@/components/RectangleInput';
+import { handleGetLocation } from '@/utils/getLocation';
 import ScreenHeader from '@/components/ScreenHeader';
 import CustomButton from '@/components/CustomButton';
-import { IAddress } from '@/types/type';
-import RectangleButton from '@/components/RectangleButton';
+import { AntDesign } from '@expo/vector-icons';
 
 const UpdateAddress = () => {
   const { token, id, address, home, note, name, phonenumber, is_default } =
@@ -23,14 +26,60 @@ const UpdateAddress = () => {
     },
     is_default: JSON.parse(is_default as string),
   });
-  const [loading, setLoading] = useState<boolean>(false);
   const [delLoading, setDelLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [modalVisible, setModalVisible] = useState<boolean>(false);
+  const [provinces, setProvinces] = useState<Province[]>([]);
+  const [districts, setDistricts] = useState<District[]>([]);
+  const [wards, setWards] = useState<Ward[]>([]);
+  const [selectedProvince, setSelectedProvince] = useState<string>('');
+  const [selectedDistrict, setSelectedDistrict] = useState<string>('');
 
   const toggleSwitch = () => {
     setData((prevState) => ({
       ...prevState,
       is_default: !data.is_default,
     }));
+  };
+
+  const fetchProvinces = async () => {
+    const res = await axios.get(`${process.env.EXPO_PUBLIC_PROVINCE_API}/p/`);
+    setProvinces(res.data);
+  };
+
+  const fetchDistrict = async (provinceCode: number, name: string) => {
+    const url = `${process.env.EXPO_PUBLIC_PROVINCE_API}/p/${provinceCode}?depth=2`;
+    const res = await axios.get(url);
+    setProvinces([]);
+    setSelectedProvince(name);
+    setDistricts(res.data?.districts);
+  };
+
+  const fetchWard = async (districtCode: number, name: string) => {
+    const url = `${process.env.EXPO_PUBLIC_PROVINCE_API}/d/${districtCode}?depth=2`;
+    const res = await axios.get(url);
+    setDistricts([]);
+    setSelectedDistrict(name);
+    setWards(res.data?.wards);
+  };
+
+  const onCompleteSelectAddress = (name: string) => {
+    setModalVisible(!modalVisible);
+    setWards([]);
+    setData((prev) => ({
+      ...prev,
+      address: {
+        ...prev.address,
+        address_full: `${name}, ${selectedDistrict}, ${selectedProvince}`,
+      },
+    }));
+  };
+
+  const onCloseModal = () => {
+    setModalVisible(!modalVisible);
+    setDistricts([]);
+    setProvinces([]);
+    setWards([]);
   };
 
   const handleUpdateAddress = async () => {
@@ -90,6 +139,22 @@ const UpdateAddress = () => {
     }
   };
 
+  const handleGetLocationPress = async () => {
+    try {
+      const res = await handleGetLocation();
+      setData((prev) => ({
+        ...prev,
+        address: {
+          ...prev.address,
+          address_full: res,
+        },
+      }));
+    } catch (error) {
+      console.error('Lỗi lấy vị trí:', error);
+      Toast.show({ type: 'error', text1: 'Không thể lấy vị trí' });
+    }
+  };
+
   return (
     <SafeAreaView className='flex-1 bg-white'>
       <ScrollView stickyHeaderIndices={[0]}>
@@ -125,6 +190,11 @@ const UpdateAddress = () => {
           <RectangleInput
             label='Địa chỉ'
             value={data.address?.address_full}
+            multiline
+            onFocus={() => {
+              setModalVisible(!modalVisible);
+              fetchProvinces();
+            }}
             onChangeText={(text) =>
               setData((prevState) => ({
                 ...prevState,
@@ -134,7 +204,64 @@ const UpdateAddress = () => {
                 },
               }))
             }
+            children={<GetLocationButton onPress={handleGetLocationPress} />}
           />
+          <Modal
+            animationType='slide'
+            visible={modalVisible}
+            transparent={true}
+            onRequestClose={() => {
+              setModalVisible(!modalVisible);
+            }}
+          >
+            <View
+              style={{ backgroundColor: 'rgba( 0, 0, 0, 0.3)' }}
+              className='flex-1 items-center justify-end'
+            >
+              <View className='bg-white mb-3.5 rounded-lg w-full p-2 h-[80%]'>
+                <View className='flex-row justify-between items-center'>
+                  <Text className='text-left font-bold mb-2 mr-1 text-lg'>
+                    Chọn địa chỉ
+                  </Text>
+
+                  <TouchableOpacity onPress={onCloseModal}>
+                    <AntDesign name='close' size={24} color='black' />
+                  </TouchableOpacity>
+                </View>
+                <ScrollView showsHorizontalScrollIndicator={false}>
+                  {provinces.map((item, index) => (
+                    <TouchableOpacity
+                      onPress={() => fetchDistrict(item?.code, item?.name)}
+                      className='border-b border-gray-200 p-3'
+                      key={index}
+                    >
+                      <Text>{item?.name}</Text>
+                    </TouchableOpacity>
+                  ))}
+                  {districts?.map((item, index) => (
+                    <TouchableOpacity
+                      onPress={() => fetchWard(item?.code, item?.name)}
+                      className='border-b border-gray-200 p-3'
+                      key={index}
+                    >
+                      <Text>{item?.name}</Text>
+                    </TouchableOpacity>
+                  ))}
+                  {wards?.map((item, index) => (
+                    <TouchableOpacity
+                      onPress={() => {
+                        onCompleteSelectAddress(item?.name);
+                      }}
+                      className='border-b border-gray-200 p-3'
+                      key={index}
+                    >
+                      <Text>{item?.name}</Text>
+                    </TouchableOpacity>
+                  ))}
+                </ScrollView>
+              </View>
+            </View>
+          </Modal>
           <RectangleInput
             label='Số nhà (không bắt buộc)'
             value={data.address?.address_home}

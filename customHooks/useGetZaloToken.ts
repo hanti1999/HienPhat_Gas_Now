@@ -1,43 +1,49 @@
-import { ZaloToken } from '@/types/type';
-import axios from 'axios';
 import { useState, useEffect } from 'react';
-import Toast from 'react-native-toast-message';
+import axios from 'axios';
+import { ZaloToken } from '@/types/type';
 
-const useFetch = (url: string) => {
-  const [token, setToken] = useState<ZaloToken>({
+const useFetch = (url: string, options?: axios.AxiosRequestConfig) => {
+  const [zaloToken, setToken] = useState<ZaloToken>({
     access_token: '',
     refresh_token: '',
   });
-  const [loading, setLoading] = useState<boolean>(false);
+  const [isLoading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | null | unknown>(null);
+
+  const fetchData = async () => {
+    setLoading(true);
+
+    try {
+      const res = await axios.get(url, options);
+
+      if (res.status === 200) {
+        setToken({
+          access_token: res.data.ztk_access_token,
+          refresh_token: res.data.ztk_refresh_token,
+        });
+      } else {
+        setError(res.data?.error);
+      }
+    } catch (error) {
+      setError(error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true);
-
-      try {
-        const res = await axios.get(url);
-
-        if (res.status === 200) {
-          setToken({
-            access_token: res.data.ztk_access_token,
-            refresh_token: res.data.ztk_refresh_token,
-          });
-        } else {
-          Toast.show({ type: 'error', text1: 'Lấy token không thành công' });
-        }
-      } catch (error) {
-        console.error('Lấy token không thành công: ', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchData();
   }, [url]);
 
+  const refetch = () => {
+    fetchData();
+  };
+
   return {
-    token,
-    loading,
+    zaloToken,
+    isLoading,
+    error,
+    refetch,
   };
 };
 

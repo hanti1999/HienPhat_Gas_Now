@@ -6,6 +6,7 @@ import Toast from 'react-native-toast-message';
 import axios from 'axios';
 import OTPInputView from '@twotalltotems/react-native-otp-input';
 import PasswordValidate from '@/components/PasswordValidate';
+import useGetZaloToken from '@/customHooks/useGetZaloToken';
 import ScreenHeader from '@/components/ScreenHeader';
 import CustomButton from '@/components/CustomButton';
 import InputField from '@/components/InputField';
@@ -14,10 +15,6 @@ import { ZaloToken } from '@/types/type';
 
 const UpdatePassword = () => {
   const { token, account_phonenumber } = useLocalSearchParams();
-  const [zaloToken, setToken] = useState<ZaloToken>({
-    access_token: '',
-    refresh_token: '',
-  });
   const [currentPass, setCurrentPass] = useState<string>('');
   const [confirmPass, setConfirmPass] = useState<string>('');
   const [newPass, setNewPass] = useState<string>('');
@@ -30,26 +27,9 @@ const UpdatePassword = () => {
   const [validated, setValidated] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
 
-  const getAccessToken = async () => {
-    // lấy access token từ node server
-    try {
-      setLoading(true);
-      const url = `${process.env.EXPO_PUBLIC_API}/zalo-tokens/031d43fe-b157-413d-8cf1-7f51d8c8bcd0`;
-      const res = await axios.get(url);
-      if (res.status === 200) {
-        setToken({
-          access_token: res.data.ztk_access_token,
-          refresh_token: res.data.ztk_refresh_token,
-        });
-      } else {
-        Toast.show({ type: 'error', text1: 'Lấy token không thành công' });
-      }
-    } catch (error) {
-      console.error('Lấy token không thành công: ', error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const { zaloToken, refetch } = useGetZaloToken(
+    `${process.env.EXPO_PUBLIC_API}/zalo-tokens/b0455d2d-d138-46ad-b6c7-42aab30acf4b`
+  );
 
   const getOtp = async () => {
     // Lấy OTP từ Zalo
@@ -116,14 +96,14 @@ const UpdatePassword = () => {
     try {
       setLoading(true);
       // Lưu access token lên node server cho người dùng sau
-      const url = `${process.env.EXPO_PUBLIC_API}/zalo-tokens/031d43fe-b157-413d-8cf1-7f51d8c8bcd0`;
+      const url = `${process.env.EXPO_PUBLIC_API}/zalo-tokens/b0455d2d-d138-46ad-b6c7-42aab30acf4b`;
       const data = {
         accessToken: props.access_token,
         refreshToken: props.refresh_token,
       };
       const res = await axios.put(url, data);
       if (res.status === 200) {
-        getAccessToken();
+        refetch();
         Toast.show({ text1: 'Vui lòng thử lại lần nữa' });
       } else {
         console.error('Cập nhật token mới không thành công');
@@ -189,10 +169,6 @@ const UpdatePassword = () => {
   const onTogglePassword = () => {
     setShowPassword(!showPassword);
   };
-
-  useEffect(() => {
-    getAccessToken();
-  }, []);
 
   useEffect(() => {
     let interval: any;
