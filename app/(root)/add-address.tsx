@@ -3,28 +3,14 @@ import { useLocalSearchParams, router } from 'expo-router';
 import { Modal, Switch, Text } from 'react-native';
 import { View, SafeAreaView } from 'react-native';
 import Toast from 'react-native-toast-message';
+import * as Location from 'expo-location';
 import React, { useState } from 'react';
 import axios from 'axios';
+import { District, IAddress, Province, Ward } from '@/types/type';
+import { AntDesign, MaterialIcons } from '@expo/vector-icons';
 import RectangleInput from '@/components/RectangleInput';
 import ScreenHeader from '@/components/ScreenHeader';
 import CustomButton from '@/components/CustomButton';
-import { IAddress } from '@/types/type';
-import { AntDesign } from '@expo/vector-icons';
-
-interface Base {
-  code: number;
-  name: string;
-}
-
-interface Ward extends Base {}
-
-interface District extends Base {
-  wards: Ward;
-}
-
-interface Province extends Base {
-  districts: District;
-}
 
 const AddAddress = () => {
   const { token } = useLocalSearchParams();
@@ -117,6 +103,40 @@ const AddAddress = () => {
     setWards([]);
   };
 
+  const handleGetLocation = async () => {
+    let { status } = await Location.requestForegroundPermissionsAsync();
+
+    if (status !== 'granted') {
+      Toast.show({ type: 'info', text1: 'Quyền truy cập vị trí bị từ chối' });
+      return;
+    }
+
+    let currentLocation = await Location.getCurrentPositionAsync({});
+
+    let reverseGeocode = await Location.reverseGeocodeAsync({
+      longitude: currentLocation.coords.longitude,
+      latitude: currentLocation.coords.latitude,
+    });
+
+    if (reverseGeocode[0]?.formattedAddress === undefined) {
+      setData((prev) => ({
+        ...prev,
+        address: {
+          ...prev.address,
+          address_full: `${reverseGeocode[0]?.name}, ${reverseGeocode[0]?.street}, ${reverseGeocode[0]?.subregion}, ${reverseGeocode[0]?.region}`,
+        },
+      }));
+    } else {
+      setData((prev) => ({
+        ...prev,
+        address: {
+          ...prev.address,
+          address_full: `${reverseGeocode[0]?.name}, ${reverseGeocode[0]?.street}, ${reverseGeocode[0]?.subregion}, ${reverseGeocode[0]?.region}`,
+        },
+      }));
+    }
+  };
+
   return (
     <SafeAreaView className='bg-white flex-1'>
       <ScrollView stickyHeaderIndices={[0]}>
@@ -157,6 +177,15 @@ const AddAddress = () => {
               setModalVisible(!modalVisible);
               fetchProvinces();
             }}
+            children={
+              <TouchableOpacity
+                className='border border-gray-300 rounded-full p-1 flex flex-row items-center'
+                onPress={handleGetLocation}
+              >
+                <Text className='text-[12px] text-primary-black'>GPS </Text>
+                <MaterialIcons name='gps-fixed' size={12} color='gray' />
+              </TouchableOpacity>
+            }
           />
           <Modal
             animationType='slide'
@@ -170,7 +199,7 @@ const AddAddress = () => {
               style={{ backgroundColor: 'rgba( 0, 0, 0, 0.3)' }}
               className='flex-1 items-center justify-end'
             >
-              <View className='bg-white rounded-tl-lg rounded-tr-lg w-full p-2 h-[80%]'>
+              <View className='bg-white mb-3.5 rounded-lg w-full p-2 h-[80%]'>
                 <View className='flex-row justify-between items-center'>
                   <Text className='text-left font-bold mb-2 mr-1 text-lg'>
                     Chọn địa chỉ
@@ -180,7 +209,6 @@ const AddAddress = () => {
                     <AntDesign name='close' size={24} color='black' />
                   </TouchableOpacity>
                 </View>
-                <Text>Chọn tỉnh:</Text>
                 <ScrollView showsHorizontalScrollIndicator={false}>
                   {provinces.map((item, index) => (
                     <TouchableOpacity

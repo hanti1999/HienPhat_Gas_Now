@@ -53,14 +53,14 @@ const ProductInfo = () => {
       };
       const res = await axios.get(url, config);
       if (res.status === 200) {
-        const wishlist = res.data.wishlist;
-        const isInWishlist = wishlist.includes(itemId);
-        setIsInWishlist(isInWishlist);
+        const products: Product[] = res.data.wishlist;
+        const filteredProducts = products.find((p) => p.product_id === itemId);
+        setIsInWishlist(filteredProducts !== undefined);
       } else {
-        console.log('Lỗi check wishlist');
+        console.error(res.data?.message);
       }
     } catch (error) {
-      console.log('Lỗi check wishlist', error);
+      console.error('Lỗi check wishlist', error);
     }
   };
 
@@ -225,10 +225,10 @@ const ProductInfo = () => {
           </View>
           <View className='flex-row justify-between items-center'>
             <View className='flex-row items-center' style={{ gap: 4 }}>
-              <Text>{averageRating}</Text>
+              {/* <Text>{averageRating}</Text>
               <FontAwesome name='star' size={14} color='#faa935' />
-              <Text>({data?.reviews?.length} đánh giá)</Text>
-              <Text className='text-gray-400'>|</Text>
+              <Text>({data?.reviews?.length} đánh giá)</Text> */}
+              {/* <Text className='text-gray-400'>|</Text> */}
               <Text>Đã bán: {data?.product_sold}</Text>
             </View>
             {inWishlist ? (

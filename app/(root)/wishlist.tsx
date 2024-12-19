@@ -1,7 +1,7 @@
 import { SafeAreaView, FlatList, RefreshControl } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
+import React, { useEffect, useState } from 'react';
 import Toast from 'react-native-toast-message';
-import React, { useState } from 'react';
 import axios from 'axios';
 import LoadingScreen from './loading-screen';
 import NoProduct from './no-product';
@@ -25,8 +25,8 @@ const Wishlist = () => {
       };
       const res = await axios.get(url, config);
       if (res.status === 200) {
-        const wishlist = res.data.wishlist;
-        setWishlist(wishlist);
+        const products = res.data.wishlist;
+        setWishlist(products);
       } else {
         Toast.show({ type: 'error', text1: res.data?.message });
       }
@@ -44,9 +44,9 @@ const Wishlist = () => {
     setRefreshing(false);
   };
 
-  // useEffect(() => {
-  //   fetchWishlist();
-  // }, []);
+  useEffect(() => {
+    fetchWishlist();
+  }, []);
 
   if (loading) {
     return <LoadingScreen />;

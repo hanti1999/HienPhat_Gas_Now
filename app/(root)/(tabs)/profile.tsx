@@ -15,6 +15,7 @@ import { FontAwesome, AntDesign } from '@expo/vector-icons';
 import { Ionicons, Foundation } from '@expo/vector-icons';
 import ScreenHeader from '@/components/ScreenHeader';
 import { logout } from '@/redux/slices/authSlice';
+import hpLogo from '@/assets/images/icon.png';
 import { ProfileType } from '@/types/type';
 import { RootState } from '@/redux/store';
 import openLink from '@/utils/openLink';
@@ -83,9 +84,13 @@ const Profile = () => {
               source={{ uri: user?.user?.user_img_url }}
             />
           ) : (
-            <View className='bg-primary-pink flex justify-center items-center w-20 h-20 rounded-full'>
-              <FontAwesome name='user-o' size={40} color='white' />
-            </View>
+            // <View className='bg-primary-pink flex justify-center items-center w-20 h-20 rounded-full'>
+            //   <FontAwesome name='user-o' size={40} color='white' />
+            // </View>
+            <Image
+              className='w-20 h-20 rounded-full border border-primary-pink'
+              source={hpLogo}
+            />
           )}
           <View>
             <Text className='text-xl font-semibold'>

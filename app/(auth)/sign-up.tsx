@@ -1,17 +1,17 @@
+import { Text, ScrollView, View, Modal } from 'react-native';
 import { TouchableOpacity, StatusBar } from 'react-native';
-import { Text, ScrollView, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import Toast from 'react-native-toast-message';
 import { Link, router } from 'expo-router';
 import * as Location from 'expo-location';
 import axios from 'axios';
+import { District, Province, Ward, ZaloToken } from '@/types/type';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import PasswordValidate from '@/components/PasswordValidate';
+import { AntDesign, Ionicons } from '@expo/vector-icons';
 import CustomButton from '@/components/CustomButton';
 import HeaderImage from '@/components/HeaderImage';
 import InputField from '@/components/InputField';
-import { Ionicons } from '@expo/vector-icons';
-import { ZaloToken } from '@/types/type';
 
 interface SignupData {
   user_fullname: string;
@@ -34,8 +34,15 @@ const SignUp = () => {
     refresh_token: '',
   });
   const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [modalVisible, setModalVisible] = useState<boolean>(false);
   const [validated, setValidated] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
+  const [provinces, setProvinces] = useState<Province[]>([]);
+  const [districts, setDistricts] = useState<District[]>([]);
+  const [wards, setWards] = useState<Ward[]>([]);
+  const [selectedProvince, setSelectedProvince] = useState<string>('');
+  const [selectedDistrict, setSelectedDistrict] = useState<string>('');
+  const VN_PROVINCE_URL = 'https://provinces.open-api.vn/api';
 
   const getAccessToken = async () => {
     // lấy access token từ node server
@@ -194,6 +201,41 @@ const SignUp = () => {
     }
   };
 
+  const fetchProvinces = async () => {
+    const res = await axios.get(`${VN_PROVINCE_URL}/p/`);
+    setProvinces(res.data);
+  };
+
+  const fetchDistrict = async (provinceCode: number, name: string) => {
+    const res = await axios.get(`${VN_PROVINCE_URL}/p/${provinceCode}?depth=2`);
+    setProvinces([]);
+    setSelectedProvince(name);
+    setDistricts(res.data?.districts);
+  };
+
+  const fetchWard = async (districtCode: number, name: string) => {
+    const res = await axios.get(`${VN_PROVINCE_URL}/d/${districtCode}?depth=2`);
+    setDistricts([]);
+    setSelectedDistrict(name);
+    setWards(res.data?.wards);
+  };
+
+  const onCompleteSelectAddress = (name: string) => {
+    setModalVisible(!modalVisible);
+    setWards([]);
+    setForm((prev) => ({
+      ...prev,
+      address_detail: `${name}, ${selectedDistrict}, ${selectedProvince}`,
+    }));
+  };
+
+  const onCloseModal = () => {
+    setModalVisible(!modalVisible);
+    setDistricts([]);
+    setProvinces([]);
+    setWards([]);
+  };
+
   useEffect(() => {
     getAccessToken();
   }, []);
@@ -224,8 +266,13 @@ const SignUp = () => {
               setForm({ ...form, address_detail: value })
             }
             placeholder='Nhập địa chỉ nhận hàng'
-            label='Địa chỉ nhận hàng'
             value={form.address_detail}
+            label='Địa chỉ nhận hàng'
+            onFocus={() => {
+              setModalVisible(!modalVisible);
+              fetchProvinces();
+            }}
+            multiline
             icon='home'
             children={
               <TouchableOpacity
@@ -237,6 +284,62 @@ const SignUp = () => {
               </TouchableOpacity>
             }
           />
+          <Modal
+            animationType='slide'
+            visible={modalVisible}
+            transparent={true}
+            onRequestClose={() => {
+              setModalVisible(!modalVisible);
+            }}
+          >
+            <View
+              style={{ backgroundColor: 'rgba( 0, 0, 0, 0.3)' }}
+              className='flex-1 items-center justify-end'
+            >
+              <View className='bg-white mb-3.5 rounded-lg w-full p-2 h-[80%]'>
+                <View className='flex-row justify-between items-center'>
+                  <Text className='text-left font-bold mb-2 mr-1 text-lg'>
+                    Chọn địa chỉ
+                  </Text>
+
+                  <TouchableOpacity onPress={onCloseModal}>
+                    <AntDesign name='close' size={24} color='black' />
+                  </TouchableOpacity>
+                </View>
+                <ScrollView showsHorizontalScrollIndicator={false}>
+                  {provinces.map((item, index) => (
+                    <TouchableOpacity
+                      onPress={() => fetchDistrict(item?.code, item?.name)}
+                      className='border-b border-gray-200 p-3'
+                      key={index}
+                    >
+                      <Text>{item?.name}</Text>
+                    </TouchableOpacity>
+                  ))}
+                  {districts?.map((item, index) => (
+                    <TouchableOpacity
+                      onPress={() => fetchWard(item?.code, item?.name)}
+                      className='border-b border-gray-200 p-3'
+                      key={index}
+                    >
+                      <Text>{item?.name}</Text>
+                    </TouchableOpacity>
+                  ))}
+                  {wards?.map((item, index) => (
+                    <TouchableOpacity
+                      onPress={() => {
+                        onCompleteSelectAddress(item?.name);
+                      }}
+                      className='border-b border-gray-200 p-3'
+                      key={index}
+                    >
+                      <Text>{item?.name}</Text>
+                    </TouchableOpacity>
+                  ))}
+                </ScrollView>
+              </View>
+            </View>
+          </Modal>
           <InputField
             onChangeText={(value) => setForm({ ...form, password: value })}
             placeholder='Nhập mật khẩu của bạn'

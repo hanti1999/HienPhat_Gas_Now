@@ -1,5 +1,20 @@
 import { TextInputProps, TouchableOpacityProps } from 'react-native';
 
+declare interface Base {
+  code: number;
+  name: string;
+}
+
+declare interface Ward extends Base {}
+
+declare interface District extends Base {
+  wards: Ward;
+}
+
+declare interface Province extends Base {
+  districts: District;
+}
+
 declare interface IAddress {
   address: {
     address_full: string;
