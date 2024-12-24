@@ -263,7 +263,7 @@ const UpdateAddress = () => {
             </View>
           </Modal>
           <RectangleInput
-            label='Số nhà (không bắt buộc)'
+            label='Số nhà'
             value={data.address?.address_home}
             onChangeText={(text) =>
               setData((prevState) => ({

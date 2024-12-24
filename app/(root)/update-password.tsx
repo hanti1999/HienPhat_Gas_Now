@@ -27,9 +27,7 @@ const UpdatePassword = () => {
   const [validated, setValidated] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
 
-  const { zaloToken, refetch } = useGetZaloToken(
-    `${process.env.EXPO_PUBLIC_API}/zalo-tokens/b0455d2d-d138-46ad-b6c7-42aab30acf4b`
-  );
+  const { zaloToken, refetch } = useGetZaloToken();
 
   const getOtp = async () => {
     // Lấy OTP từ Zalo

@@ -263,7 +263,7 @@ const LogoutButton = () => {
           className='flex-1 items-center justify-center'
         >
           <View
-            className='p-2 rounded-xl bg-white shadow-lg'
+            className='p-3 rounded-xl bg-white shadow-lg'
             style={{ width: width * 0.8 - 8 }}
           >
             <Text className='text-center my-4 text-lg'>

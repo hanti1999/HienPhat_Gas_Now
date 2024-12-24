@@ -1,25 +1,45 @@
-import { FlatList, RefreshControl, TouchableOpacity } from 'react-native';
-import { SafeAreaView, ActivityIndicator, Modal } from 'react-native';
+import { SafeAreaView, Modal, TouchableOpacity } from 'react-native';
+import { Dimensions, FlatList, RefreshControl } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
 import React, { useState, useEffect } from 'react';
 import Toast from 'react-native-toast-message';
 import { Text, View } from 'react-native';
 import moment from 'moment';
 import axios from 'axios';
+import RectangleButton from '@/components/RectangleButton';
 import ScreenHeader from '@/components/ScreenHeader';
 import { AntDesign } from '@expo/vector-icons';
 import LoadingScreen from './loading-screen';
 import NoProduct from './no-product';
 
+interface IOrder {
+  order_id: string;
+  total_prive: number;
+  created_at: string;
+  points_earned: number;
+  points_used: number;
+  order_status: string;
+  items: [
+    {
+      product_id: string;
+      product_name: string;
+      product_iamge: string;
+      product_quantity: number;
+      unit_price: number;
+      total_price: number;
+    }
+  ];
+}
+
 const Orders = () => {
   const { token } = useLocalSearchParams();
   const [refreshing, setRefreshing] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
-  const [orders, setOrders] = useState<any>([]);
+  const [orders, setOrders] = useState<IOrder[]>([]);
 
   const fetchOrders = async () => {
     try {
-      const url = `${process.env.EXPO_PUBLIC_API}`;
+      const url = `${process.env.EXPO_PUBLIC_API}/order`;
       const config = {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -27,13 +47,15 @@ const Orders = () => {
       };
       const res = await axios.get(url, config);
       if (res.status === 200) {
-        const orders = res.data?.reverse();
+        const orders = res.data.reverse();
         setOrders(orders);
       } else {
         console.error(res.data?.message);
+        Toast.show({ type: 'error', text1: res.data?.message });
       }
     } catch (error) {
       console.error(error);
+      Toast.show({ type: 'error', text1: 'Lỗi hệ thống!' });
     } finally {
       setLoading(false);
     }
@@ -45,9 +67,9 @@ const Orders = () => {
     setRefreshing(false);
   };
 
-  // useEffect(() => {
-  //   fetchOrders();
-  // }, []);
+  useEffect(() => {
+    fetchOrders();
+  }, []);
 
   if (loading) {
     return <LoadingScreen />;
@@ -62,7 +84,7 @@ const Orders = () => {
       <ScreenHeader text='Lịch sử đơn hàng' />
       <FlatList
         style={{ backgroundColor: '#fff' }}
-        keyExtractor={(item) => item._id}
+        keyExtractor={(item) => item.order_id}
         data={orders}
         renderItem={({ item }) => (
           <RenderOrders fetchOrders={fetchOrders} item={item} />
@@ -76,7 +98,7 @@ const Orders = () => {
 };
 
 interface IProps {
-  item?: any;
+  item?: IOrder;
   fetchOrders: () => Promise<any>;
   id?: string;
 }
@@ -86,34 +108,34 @@ const RenderOrders = ({ item, fetchOrders }: IProps) => {
     <View className='py-2 px-3 mb-3 bg-pink-100'>
       <Text className='text-[16px] text-gray-500 font-semibold italic'>
         <AntDesign name='calendar' size={16} color='black' />
-        Thời gian: {moment(item.createAt).format('DD/MM/YYYY _ HH:mm')}
+        Thời gian: {moment(item?.created_at).format('DD/MM/YYYY _ HH:mm')}
       </Text>
       <Text className='text-[17px] my-1 italic font-semibold'>
         <AntDesign name='shoppingcart' size={16} color='black' />
-        Đơn hàng: ({item?.products.length})
+        Đơn hàng: ({item?.items.length})
       </Text>
       <FlatList
-        data={item?.products}
-        keyExtractor={(item) => item._id}
+        data={item?.items}
+        keyExtractor={(item) => item.product_id}
         renderItem={({ item }) => (
           <View className='flex-row border-2 border-gray-500'>
             <View className='p-1 flex-1'>
               <View className='flex-row items-center'>
                 <AntDesign name='star' size={12} />
                 <Text className='text-[16px] italic font-semibold text-pink-500'>
-                  {item.title}
+                  {item.product_name}
                 </Text>
               </View>
             </View>
             <View className='p-1'>
               <Text className='text-right font-semibold'>
-                x {item.quantity}
+                x {item.product_quantity}
               </Text>
               <Text className='text-right italic'>
-                ({item?.price.toLocaleString()})
+                ({item?.unit_price.toLocaleString()})
               </Text>
               <Text className='text-right font-semibold text-[16px]'>
-                {(item?.price * item?.quantity)?.toLocaleString()} đ
+                {item?.total_price?.toLocaleString()} đ
               </Text>
             </View>
           </View>
@@ -133,23 +155,23 @@ const RenderOrders = ({ item, fetchOrders }: IProps) => {
         <View>
           <Text
             style={{
-              color: item?.status != 'Đã hủy' ? '#3b82f6' : '#fc0303',
+              color: item?.order_status != 'Đã hủy' ? '#3b82f6' : '#fc0303',
               fontWeight: 700,
               fontSize: 16,
             }}
           >
-            {item?.status}
+            {item?.order_status}
           </Text>
           <Text className='font-bold text-[16px]'>
-            {item?.totalPrice.toLocaleString()} (vnđ)
+            {item?.total_prive.toLocaleString()} (vnđ)
           </Text>
-          <Text>{item?.points.toLocaleString()}</Text>
+          <Text>{item?.points_earned.toLocaleString()}</Text>
         </View>
       </View>
-      {item.status === 'Đã giao' || item.status === 'Đã hủy' ? (
+      {item?.order_status === 'Đã giao' || item?.order_status === 'Đã hủy' ? (
         <></>
       ) : (
-        <UpdateOrderButton fetchOrders={fetchOrders} id={item._id} />
+        <UpdateOrderButton fetchOrders={fetchOrders} id={item?.order_id} />
       )}
     </View>
   );
@@ -158,8 +180,9 @@ const RenderOrders = ({ item, fetchOrders }: IProps) => {
 const UpdateOrderButton = ({ id, fetchOrders }: IProps) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [loading, setLoading] = useState(false);
+  const width = Dimensions.get('window').width;
 
-  const handleUpdateOrder = async () => {
+  const handleCancelOrder = async () => {
     try {
       const url = `api`;
       const res = await axios.patch(url);
@@ -194,30 +217,24 @@ const UpdateOrderButton = ({ id, fetchOrders }: IProps) => {
           style={{ backgroundColor: 'rgba( 0, 0, 0, 0.3)' }}
           className='flex-1 items-center justify-center'
         >
-          <View className='py-2 px-3 rounded-xl bg-white shadow-lg'>
-            <Text className='text-center my-4 text-[16px]'>
-              Bạn muốn hủy đơn?
-            </Text>
-            <View style={{ gap: 4 }} className='flex-row items-center'>
-              <TouchableOpacity
-                className='rounded-xl w-32 h-10 justify-center border-primary-pink border'
+          <View
+            className='p-3 rounded-xl bg-white shadow-lg'
+            style={{ width: width * 0.8 - 8 }}
+          >
+            <Text className='text-center my-4 text-lg'>Bạn muốn hủy đơn?</Text>
+            <View style={{ gap: 8 }} className='flex-row items-center'>
+              <RectangleButton
+                title='Không'
+                bgVariant='outline'
+                textVariant='primary'
                 onPress={() => setModalVisible(!modalVisible)}
-              >
-                <Text className='text-center text-[16px]'>Không</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                className='rounded-xl w-32 h-10 justify-center bg-primary-pink border-primary-pink border'
-                onPress={handleUpdateOrder}
+              />
+              <RectangleButton
+                title='Đồng ý'
+                loading={loading}
                 disabled={loading}
-              >
-                {loading ? (
-                  <ActivityIndicator />
-                ) : (
-                  <Text className='text-center text-[16px] text-white'>
-                    Đồng ý
-                  </Text>
-                )}
-              </TouchableOpacity>
+                onPress={handleCancelOrder}
+              />
             </View>
           </View>
         </View>

@@ -8,17 +8,17 @@ import { Pressable, StatusBar } from 'react-native';
 import Toast from 'react-native-toast-message';
 import axios from 'axios';
 import { removeFromCart, clearCart } from '@/redux/slices/cartSlice';
-import { MaterialIcons, Fontisto } from '@expo/vector-icons';
 import { FontAwesome6, AntDesign } from '@expo/vector-icons';
-import { FontAwesome } from '@expo/vector-icons';
 import RectangleButton from '@/components/RectangleButton';
+import RectangleInput from '@/components/RectangleInput';
 import ScreenHeader from '@/components/ScreenHeader';
+import { MaterialIcons } from '@expo/vector-icons';
+import { FontAwesome } from '@expo/vector-icons';
 import tulip from '@/assets/images/tulip.png';
 import { RootState } from '@/redux/store';
 import { IAddress } from '@/types/type';
 import LoadingScreen from '../loading-screen';
 import NoProduct from '../no-product';
-import RectangleInput from '@/components/RectangleInput';
 
 const Cart = () => {
   const cartQuantity = useSelector(
@@ -32,7 +32,7 @@ const Cart = () => {
   const token = useSelector((state: RootState) => state.auth.accessToken);
   const dispatch = useDispatch();
   const [paymentMethod, setPaymentMethod] = useState<string>('cash');
-  const [voucher, setVoucher] = useState<string>('');
+  const [voucher, setVoucher] = useState<string>('HPWelcome');
   const [note, setNote] = useState<string>('');
   const [selectedAddress, setSelectedAddress] = useState<IAddress>();
   const [address, setAddress] = useState<IAddress[]>([]);
@@ -69,8 +69,8 @@ const Cart = () => {
   };
 
   const handleUseVoucher = async () => {
+    // test
     Toast.show({ type: 'error', text1: `Voucher ${voucher} không hợp lệ` });
-    setVoucher('');
   };
 
   const onRefresh = async () => {
@@ -80,28 +80,33 @@ const Cart = () => {
   };
 
   const handlePlaceOrder = async () => {
-    setOrderLoading(true);
     try {
+      setOrderLoading(true);
+      const items = cartItems.map((cartItem) => ({
+        product_id: cartItem.id,
+        product_quantity: cartItem.quantity,
+      }));
+      const url = `${process.env.EXPO_PUBLIC_API}/order`;
       const data = {
-        token: token,
         address_id: selectedAddress?.address?.address_id,
-        note: note,
-        cartItems: cartItems,
-        paymentMethod: paymentMethod,
-        point: {
-          usePoint: usePoint,
-          usedPoints: usePoint === true ? userPoints : 0,
-        },
-        voucher: voucher,
+        voucher_code: voucher,
+        payment_method: paymentMethod,
+        points_used: usePoint === true ? userPoints : 0,
+        delivery_note: note,
+        items: items,
       };
-      const url = `${process.env.EXPO_PUBLIC_API}/my-url`;
-      const res = await axios.post(url, data);
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+      const res = await axios.post(url, data, config);
       if (res.status === 200) {
         dispatch(clearCart());
         router.push({ pathname: '/(root)/orders', params: { token } });
       } else {
         Toast.show({ type: 'error', text1: res.data?.message });
-        console.error('Tạo đơn hàng không thành công');
+        console.error(res.data?.message);
       }
     } catch (error) {
       Toast.show({ type: 'error', text1: 'Tạo đơn hàng không thành công' });
@@ -393,10 +398,9 @@ const Cart = () => {
         <View className='w-[120px] h-[40px]'>
           <RectangleButton
             onPress={handlePlaceOrder}
-            // disabled={orderLoading}
+            disabled={orderLoading}
             loading={orderLoading}
             title='Đặt hàng'
-            disabled={true}
           />
         </View>
       </View>

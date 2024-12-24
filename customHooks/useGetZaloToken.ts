@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { ZaloToken } from '@/types/type';
 
-const useFetch = (url: string, options?: axios.AxiosRequestConfig) => {
+const useFetch = (url?: string, options?: axios.AxiosRequestConfig) => {
   const [zaloToken, setToken] = useState<ZaloToken>({
     access_token: '',
     refresh_token: '',
@@ -14,7 +14,10 @@ const useFetch = (url: string, options?: axios.AxiosRequestConfig) => {
     setLoading(true);
 
     try {
-      const res = await axios.get(url, options);
+      const res = await axios.get(
+        `${process.env.EXPO_PUBLIC_API}/zalo-tokens/b0455d2d-d138-46ad-b6c7-42aab30acf4b`,
+        options
+      );
 
       if (res.status === 200) {
         setToken({
