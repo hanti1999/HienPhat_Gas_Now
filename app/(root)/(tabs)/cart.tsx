@@ -14,7 +14,6 @@ import RectangleInput from '@/components/RectangleInput';
 import ScreenHeader from '@/components/ScreenHeader';
 import { MaterialIcons } from '@expo/vector-icons';
 import { FontAwesome } from '@expo/vector-icons';
-import tulip from '@/assets/images/tulip.png';
 import { RootState } from '@/redux/store';
 import { IAddress } from '@/types/type';
 import LoadingScreen from '../loading-screen';
@@ -31,7 +30,7 @@ const Cart = () => {
   const cartItems = useSelector((state: RootState) => state.cart.cartItems);
   const token = useSelector((state: RootState) => state.auth.accessToken);
   const dispatch = useDispatch();
-  const [paymentMethod, setPaymentMethod] = useState<string>('cash');
+  const [paymentMethod, setPaymentMethod] = useState<string>('cod');
   const [voucher, setVoucher] = useState<string>('HPWelcome');
   const [note, setNote] = useState<string>('');
   const [selectedAddress, setSelectedAddress] = useState<IAddress>();
@@ -101,7 +100,7 @@ const Cart = () => {
         },
       };
       const res = await axios.post(url, data, config);
-      if (res.status === 200) {
+      if (res.status === 201) {
         dispatch(clearCart());
         router.push({ pathname: '/(root)/orders', params: { token } });
       } else {
@@ -275,10 +274,10 @@ const Cart = () => {
           <View>
             <TouchableOpacity
               className='flex-row border border-gray-300 rounded-xl p-2 items-center mt-2'
-              onPress={() => setPaymentMethod('cash')}
+              onPress={() => setPaymentMethod('cod')}
               style={{ gap: 8 }}
             >
-              {paymentMethod === 'cash' ? (
+              {paymentMethod === 'cod' ? (
                 <AntDesign name='checkcircle' size={20} color={P_PINK} />
               ) : (
                 <FontAwesome6 name='circle' size={20} color={P_PINK} />

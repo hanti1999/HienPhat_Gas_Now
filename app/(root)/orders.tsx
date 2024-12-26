@@ -14,7 +14,7 @@ import NoProduct from './no-product';
 
 interface IOrder {
   order_id: string;
-  total_prive: number;
+  total_order_price: number;
   created_at: string;
   points_earned: number;
   points_used: number;
@@ -23,7 +23,7 @@ interface IOrder {
     {
       product_id: string;
       product_name: string;
-      product_iamge: string;
+      product_image: string;
       product_quantity: number;
       unit_price: number;
       total_price: number;
@@ -87,7 +87,7 @@ const Orders = () => {
         keyExtractor={(item) => item.order_id}
         data={orders}
         renderItem={({ item }) => (
-          <RenderOrders fetchOrders={fetchOrders} item={item} />
+          <RenderOrders fetchOrders={fetchOrders} item={item} token={token} />
         )}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
@@ -101,18 +101,19 @@ interface IProps {
   item?: IOrder;
   fetchOrders: () => Promise<any>;
   id?: string;
+  token: string | string[];
 }
 
-const RenderOrders = ({ item, fetchOrders }: IProps) => {
+const RenderOrders = ({ item, fetchOrders, token }: IProps) => {
   return (
-    <View className='py-2 px-3 mb-3 bg-pink-100'>
+    <View className='p-3 mb-3 bg-pink-100'>
       <Text className='text-[16px] text-gray-500 font-semibold italic'>
         <AntDesign name='calendar' size={16} color='black' />
         Thời gian: {moment(item?.created_at).format('DD/MM/YYYY _ HH:mm')}
       </Text>
       <Text className='text-[17px] my-1 italic font-semibold'>
         <AntDesign name='shoppingcart' size={16} color='black' />
-        Đơn hàng: ({item?.items.length})
+        Đơn hàng: ({item?.items.length} sản phẩm)
       </Text>
       <FlatList
         data={item?.items}
@@ -132,7 +133,7 @@ const RenderOrders = ({ item, fetchOrders }: IProps) => {
                 x {item.product_quantity}
               </Text>
               <Text className='text-right italic'>
-                ({item?.unit_price.toLocaleString()})
+                {item?.unit_price?.toLocaleString()}
               </Text>
               <Text className='text-right font-semibold text-[16px]'>
                 {item?.total_price?.toLocaleString()} đ
@@ -163,36 +164,44 @@ const RenderOrders = ({ item, fetchOrders }: IProps) => {
             {item?.order_status}
           </Text>
           <Text className='font-bold text-[16px]'>
-            {item?.total_prive.toLocaleString()} (vnđ)
+            {item?.total_order_price.toLocaleString()} (vnđ)
           </Text>
           <Text>{item?.points_earned.toLocaleString()}</Text>
         </View>
       </View>
-      {item?.order_status === 'Đã giao' || item?.order_status === 'Đã hủy' ? (
+      {item?.order_status === 'completed' || item?.order_status === 'Đã hủy' ? (
         <></>
       ) : (
-        <UpdateOrderButton fetchOrders={fetchOrders} id={item?.order_id} />
+        <UpdateOrderButton
+          fetchOrders={fetchOrders}
+          id={item?.order_id}
+          token={token}
+        />
       )}
     </View>
   );
 };
 
-const UpdateOrderButton = ({ id, fetchOrders }: IProps) => {
+const UpdateOrderButton = ({ id, fetchOrders, token }: IProps) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [loading, setLoading] = useState(false);
   const width = Dimensions.get('window').width;
 
   const handleCancelOrder = async () => {
     try {
-      const url = `api`;
-      const res = await axios.patch(url);
-
       setLoading(true);
+      const url = `${process.env.EXPO_PUBLIC_API}/order/${id}/Cancel`;
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+      const res = await axios.put(url, config);
       if (res.status === 200) {
         Toast.show({ text1: 'Hủy đơn hàng thành công' });
         fetchOrders();
       } else {
-        Toast.show({ type: 'error', text1: 'Hủy đơn không thành công' });
+        Toast.show({ type: 'error', text1: res.data.message });
       }
     } catch (error) {
       console.error('Lỗi (OrderScreen):', error);

@@ -1,17 +1,13 @@
-import {
-  ScrollView,
-  RefreshControl,
-  TouchableOpacity,
-  Dimensions,
-} from 'react-native';
+import { ScrollView, RefreshControl, TouchableOpacity } from 'react-native';
 import { Text, View, SafeAreaView, Pressable, Image } from 'react-native';
+import { Modal, StatusBar, Dimensions } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import React, { useEffect, useState } from 'react';
-import { Modal, StatusBar } from 'react-native';
 import Toast from 'react-native-toast-message';
 import { Link, router } from 'expo-router';
 import axios from 'axios';
 import { FontAwesome, AntDesign } from '@expo/vector-icons';
+import RectangleButton from '@/components/RectangleButton';
 import { Ionicons, Foundation } from '@expo/vector-icons';
 import ScreenHeader from '@/components/ScreenHeader';
 import { logout } from '@/redux/slices/authSlice';
@@ -20,7 +16,6 @@ import { ProfileType } from '@/types/type';
 import { RootState } from '@/redux/store';
 import openLink from '@/utils/openLink';
 import LoadingScreen from '../loading-screen';
-import RectangleButton from '@/components/RectangleButton';
 
 const Profile = () => {
   const token = useSelector((state: RootState) => state?.auth.accessToken);
@@ -84,9 +79,6 @@ const Profile = () => {
               source={{ uri: user?.user?.user_img_url }}
             />
           ) : (
-            // <View className='bg-primary-pink flex justify-center items-center w-20 h-20 rounded-full'>
-            //   <FontAwesome name='user-o' size={40} color='white' />
-            // </View>
             <Image
               className='w-20 h-20 rounded-full border border-primary-pink'
               source={hpLogo}
