@@ -69,6 +69,24 @@ declare interface AuthType {
   accessTokenExpiry: string | null;
   refreshTokenExpiry: string | null;
 }
+
+declare interface CartItem {
+  id: string;
+  title: string;
+  productImg: string;
+  price: number;
+  oldPrice: number;
+  quantity: number;
+  totalPrice: number;
+}
+
+declare interface CartType {
+  cartItems: CartItem[];
+  totalAmount: number;
+  totalDiscount: number;
+  totalQuantity: number;
+}
+
 declare interface Product {
   brand_id: string;
   category_id: string;

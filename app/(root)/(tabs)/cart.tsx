@@ -1,21 +1,23 @@
 import { Dimensions, TouchableOpacity, RefreshControl } from 'react-native';
 import { Image, TextInput, Text, View, Modal } from 'react-native';
 import { SafeAreaView, ScrollView, Switch } from 'react-native';
+import { Pressable, StatusBar, StyleSheet } from 'react-native';
 import { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { router, useFocusEffect } from 'expo-router';
-import { Pressable, StatusBar } from 'react-native';
 import Toast from 'react-native-toast-message';
 import axios from 'axios';
 import { removeFromCart, clearCart } from '@/redux/slices/cartSlice';
 import { FontAwesome6, AntDesign } from '@expo/vector-icons';
 import RectangleButton from '@/components/RectangleButton';
 import RectangleInput from '@/components/RectangleInput';
+import cashIcon from '@/assets/icons/dollar_128px.png';
 import ScreenHeader from '@/components/ScreenHeader';
+import bankIcon from '@/assets/icons/scan_128px.png';
 import { MaterialIcons } from '@expo/vector-icons';
+import { CartItem, IAddress } from '@/types/type';
 import { FontAwesome } from '@expo/vector-icons';
 import { RootState } from '@/redux/store';
-import { IAddress } from '@/types/type';
 import LoadingScreen from '../loading-screen';
 import NoProduct from '../no-product';
 
@@ -103,7 +105,10 @@ const Cart = () => {
       const res = await axios.post(url, data, config);
       if (res.status === 201) {
         dispatch(clearCart());
-        router.push({ pathname: '/(root)/orders', params: { token } });
+        router.push({
+          pathname: '/(root)/checkout',
+          params: { token, paymentMethod },
+        });
       } else {
         Toast.show({ type: 'error', text1: res.data?.message });
         console.error(res.data?.message);
@@ -214,7 +219,7 @@ const Cart = () => {
             <View className='w-5'>
               <FontAwesome6 name='cart-shopping' size={16} color={P_PINK} />
             </View>
-            <Text className='uppercase font-bold text-[16px]'>
+            <Text className='uppercase font-bold text-[18px]'>
               Chi tiết đơn hàng
             </Text>
           </View>
@@ -272,33 +277,31 @@ const Cart = () => {
               Phương thức thanh toán
             </Text>
           </View>
-          <View>
+          <View className='flex-row mt-2' style={{ gap: 8 }}>
             <TouchableOpacity
-              className='flex-row border border-gray-300 rounded-xl p-2 items-center mt-2'
+              className='flex-1 border rounded-lg p-2 flex flex-row items-center relative'
               onPress={() => setPaymentMethod('cod')}
-              style={{ gap: 8 }}
+              style={{
+                gap: 8,
+                borderColor: paymentMethod === 'cod' ? P_PINK : '#d1d5db',
+              }}
             >
-              {paymentMethod === 'cod' ? (
-                <AntDesign name='checkcircle' size={20} color={P_PINK} />
-              ) : (
-                <FontAwesome6 name='circle' size={20} color={P_PINK} />
-              )}
-              <Text className='text-[16px]'>
-                Thanh toán tiền mặt khi nhận hàng
-              </Text>
+              {paymentMethod === 'cod' && <CheckedMethodIcon />}
+              <Image source={cashIcon} className='w-12 h-12' />
+              <Text className='text-[16px]'>Tiền mặt</Text>
             </TouchableOpacity>
 
             <TouchableOpacity
-              className='flex-row border border-gray-300 rounded-xl p-2 items-center mt-2'
-              onPress={() => setPaymentMethod('card')}
-              style={{ gap: 8 }}
+              className='flex-1 border rounded-lg p-2 flex flex-row items-center relative'
+              onPress={() => setPaymentMethod('bank')}
+              style={{
+                gap: 8,
+                borderColor: paymentMethod === 'bank' ? P_PINK : '#d1d5db',
+              }}
             >
-              {paymentMethod === 'card' ? (
-                <AntDesign name='checkcircle' size={20} color={P_PINK} />
-              ) : (
-                <FontAwesome6 name='circle' size={20} color={P_PINK} />
-              )}
-              <Text className='text-[16px]'>Thanh toán chuyển khoản</Text>
+              {paymentMethod === 'bank' && <CheckedMethodIcon />}
+              <Image source={bankIcon} className='w-12 h-12' />
+              <Text className='text-[16px]'>Chuyển khoản</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -409,7 +412,7 @@ const Cart = () => {
 };
 
 interface IProp {
-  item: any;
+  item: CartItem;
   dispatch: (action: any) => void;
 }
 
@@ -454,4 +457,42 @@ const RenderItemToCart = ({ item, dispatch }: IProp) => {
   );
 };
 
+const CheckedMethodIcon = () => {
+  return (
+    <View className='absolute top-0 left-0 right-0 bottom-0'>
+      <View style={styles.square}>
+        <AntDesign name='check' size={14} color='white' />
+      </View>
+      <View style={styles.triangle} className='top-0 right-4' />
+      <View style={styles.triangle} className='top-4 right-0' />
+    </View>
+  );
+};
+
 export default Cart;
+
+const styles = StyleSheet.create({
+  triangle: {
+    width: 0,
+    height: 0,
+    borderLeftWidth: 16,
+    borderLeftColor: 'transparent',
+    borderTopWidth: 16,
+    borderTopColor: '#fb77c5',
+    borderBottomWidth: 16,
+    borderBottomColor: 'transparent',
+    position: 'absolute',
+  },
+  square: {
+    backgroundColor: '#fb77c5',
+    position: 'absolute',
+    borderTopRightRadius: 7,
+    top: 0,
+    right: 0,
+    width: 16,
+    height: 16,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+});

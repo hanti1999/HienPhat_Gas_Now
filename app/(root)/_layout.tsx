@@ -14,6 +14,7 @@ const Layout = () => {
       <Stack.Screen name='no-product' options={{ headerShown: false }} />
       <Stack.Screen name='user-info' options={{ headerShown: false }} />
       <Stack.Screen name='wishlist' options={{ headerShown: false }} />
+      <Stack.Screen name='checkout' options={{ headerShown: false }} />
       <Stack.Screen name='address' options={{ headerShown: false }} />
       <Stack.Screen name='account' options={{ headerShown: false }} />
       <Stack.Screen name='review' options={{ headerShown: false }} />

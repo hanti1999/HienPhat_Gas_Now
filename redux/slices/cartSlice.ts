@@ -1,19 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-
-interface CartType {
-  cartItems: Array<{
-    id: string;
-    title: string;
-    productImg: string;
-    price: number;
-    oldPrice: number;
-    quantity: number;
-    totalPrice: number;
-  }>;
-  totalAmount: number;
-  totalDiscount: number;
-  totalQuantity: number;
-}
+import { CartType } from '@/types/type';
 
 const initialState: CartType = {
   cartItems: [],
