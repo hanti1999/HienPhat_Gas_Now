@@ -69,7 +69,8 @@ const Cart = () => {
 
   const handleUseVoucher = async () => {
     // test
-    Toast.show({ type: 'error', text1: `Voucher ${voucher} không hợp lệ` });
+    Toast.show({ type: 'error', text1: `Voucher ${voucher} không tồn tại` });
+    setVoucherAmount(0);
   };
 
   const onRefresh = async () => {

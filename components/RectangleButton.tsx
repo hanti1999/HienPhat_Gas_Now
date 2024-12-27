@@ -54,7 +54,7 @@ const RectangleButton = ({
       {loading ? (
         <ActivityIndicator color={'white'} />
       ) : (
-        <Text className={`text-lg ${getTextVariantStyle(textVariant)}`}>
+        <Text className={`text-[18px] ${getTextVariantStyle(textVariant)}`}>
           {title}
         </Text>
       )}

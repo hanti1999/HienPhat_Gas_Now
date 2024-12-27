@@ -15,6 +15,25 @@ declare interface Province extends Base {
   districts: District;
 }
 
+declare interface IOrder {
+  order_id: string;
+  total_order_price: number;
+  created_at: string;
+  points_earned: number;
+  points_used: number;
+  order_status: string;
+  items: [
+    {
+      product_id: string;
+      product_name: string;
+      product_image: string;
+      product_quantity: number;
+      unit_price: number;
+      total_price: number;
+    }
+  ];
+}
+
 declare interface IAddress {
   address: {
     address_full: string;

@@ -1,5 +1,5 @@
-import { SafeAreaView, Modal, TouchableOpacity } from 'react-native';
 import { Dimensions, FlatList, RefreshControl } from 'react-native';
+import { SafeAreaView, Modal, Image } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
 import React, { useState, useEffect } from 'react';
 import Toast from 'react-native-toast-message';
@@ -9,27 +9,9 @@ import axios from 'axios';
 import RectangleButton from '@/components/RectangleButton';
 import ScreenHeader from '@/components/ScreenHeader';
 import { AntDesign } from '@expo/vector-icons';
+import { IOrder } from '@/types/type';
 import LoadingScreen from './loading-screen';
 import NoProduct from './no-product';
-
-interface IOrder {
-  order_id: string;
-  total_order_price: number;
-  created_at: string;
-  points_earned: number;
-  points_used: number;
-  order_status: string;
-  items: [
-    {
-      product_id: string;
-      product_name: string;
-      product_image: string;
-      product_quantity: number;
-      unit_price: number;
-      total_price: number;
-    }
-  ];
-}
 
 const Orders = () => {
   const { token } = useLocalSearchParams();
@@ -47,8 +29,7 @@ const Orders = () => {
       };
       const res = await axios.get(url, config);
       if (res.status === 200) {
-        const orders = res.data.reverse();
-        setOrders(orders);
+        setOrders(res?.data.reverse());
       } else {
         console.error(res.data?.message);
         Toast.show({ type: 'error', text1: res.data?.message });
@@ -98,40 +79,42 @@ const Orders = () => {
 };
 
 interface IProps {
-  item?: IOrder;
   fetchOrders: () => Promise<any>;
-  id?: string;
   token: string | string[];
+  item?: IOrder;
+  id?: string;
 }
 
 const RenderOrders = ({ item, fetchOrders, token }: IProps) => {
   return (
     <View className='p-3 mb-3 bg-pink-100'>
       <Text className='text-[16px] text-gray-500 font-semibold italic'>
-        <AntDesign name='calendar' size={16} color='black' />
+        <AntDesign name='calendar' size={16} />
         Thời gian: {moment(item?.created_at).format('DD/MM/YYYY _ HH:mm')}
       </Text>
-      <Text className='text-[17px] my-1 italic font-semibold'>
-        <AntDesign name='shoppingcart' size={16} color='black' />
+      <Text className='text-[16px] my-1 italic font-semibold'>
+        <AntDesign name='shoppingcart' size={16} />
         Đơn hàng: ({item?.items.length} sản phẩm)
       </Text>
       <FlatList
         data={item?.items}
         keyExtractor={(item) => item.product_id}
         renderItem={({ item }) => (
-          <View className='flex-row border-2 border-gray-500'>
-            <View className='p-1 flex-1'>
-              <View className='flex-row items-center'>
-                <AntDesign name='star' size={12} />
+          <View className='flex-row border-b border-gray-500 py-1'>
+            <View className='flex-1'>
+              <View className='flex-row' style={{ gap: 4 }}>
+                <Image
+                  className='w-full rounded-lg border border-gray-200'
+                  style={{ width: 90, height: 90 }}
+                  source={{ uri: item?.product_image }}
+                />
                 <Text className='text-[16px] italic font-semibold text-pink-500'>
                   {item.product_name}
                 </Text>
               </View>
             </View>
-            <View className='p-1'>
-              <Text className='text-right font-semibold'>
-                x {item.product_quantity}
-              </Text>
+            <View>
+              <Text className='text-right'>x {item.product_quantity}</Text>
               <Text className='text-right italic'>
                 {item?.unit_price?.toLocaleString()}
               </Text>
@@ -156,7 +139,7 @@ const RenderOrders = ({ item, fetchOrders, token }: IProps) => {
         <View>
           <Text
             style={{
-              color: item?.order_status != 'Đã hủy' ? '#3b82f6' : '#fc0303',
+              color: item?.order_status != 'cancelled' ? '#3b82f6' : '#fc0303',
               fontWeight: 700,
               fontSize: 16,
             }}
@@ -164,15 +147,16 @@ const RenderOrders = ({ item, fetchOrders, token }: IProps) => {
             {item?.order_status}
           </Text>
           <Text className='font-bold text-[16px]'>
-            {item?.total_order_price.toLocaleString()} (vnđ)
+            {item?.total_order_price.toLocaleString()} đ
           </Text>
           <Text>{item?.points_earned.toLocaleString()}</Text>
         </View>
       </View>
-      {item?.order_status === 'completed' || item?.order_status === 'Đã hủy' ? (
+      {item?.order_status === 'completed' ||
+      item?.order_status === 'cancelled' ? (
         <></>
       ) : (
-        <UpdateOrderButton
+        <CancelOrder
           fetchOrders={fetchOrders}
           id={item?.order_id}
           token={token}
@@ -182,7 +166,7 @@ const RenderOrders = ({ item, fetchOrders, token }: IProps) => {
   );
 };
 
-const UpdateOrderButton = ({ id, fetchOrders, token }: IProps) => {
+const CancelOrder = ({ id, fetchOrders, token }: IProps) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [loading, setLoading] = useState(false);
   const width = Dimensions.get('window').width;
@@ -196,7 +180,7 @@ const UpdateOrderButton = ({ id, fetchOrders, token }: IProps) => {
           Authorization: `Bearer ${token}`,
         },
       };
-      const res = await axios.put(url, config);
+      const res = await axios.put(url, {}, config);
       if (res.status === 200) {
         Toast.show({ text1: 'Hủy đơn hàng thành công' });
         fetchOrders();
@@ -248,14 +232,14 @@ const UpdateOrderButton = ({ id, fetchOrders, token }: IProps) => {
           </View>
         </View>
       </Modal>
-      <TouchableOpacity
-        className='border border-red-500 rounded-xl py-1 mt-1 w-32 flex justify-center'
-        onPress={() => setModalVisible(!modalVisible)}
-      >
-        <Text className='text-red-500 font-semibold text-center'>
-          Hủy đơn hàng
-        </Text>
-      </TouchableOpacity>
+      <View className='w-32 h-9 mt-1'>
+        <RectangleButton
+          onPress={() => setModalVisible(!modalVisible)}
+          textVariant='primary'
+          bgVariant='outline'
+          title='Hủy đơn'
+        />
+      </View>
     </>
   );
 };
