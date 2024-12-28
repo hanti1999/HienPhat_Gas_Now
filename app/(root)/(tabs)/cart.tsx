@@ -1,7 +1,7 @@
-import { Dimensions, TouchableOpacity, RefreshControl } from 'react-native';
+import { Pressable, StatusBar, RefreshControl } from 'react-native';
 import { Image, TextInput, Text, View, Modal } from 'react-native';
 import { SafeAreaView, ScrollView, Switch } from 'react-native';
-import { Pressable, StatusBar, StyleSheet } from 'react-native';
+import { Dimensions, TouchableOpacity } from 'react-native';
 import { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { router, useFocusEffect } from 'expo-router';
@@ -14,6 +14,7 @@ import RectangleInput from '@/components/RectangleInput';
 import cashIcon from '@/assets/icons/dollar_128px.png';
 import ScreenHeader from '@/components/ScreenHeader';
 import bankIcon from '@/assets/icons/scan_128px.png';
+import CheckedLabel from '@/components/CheckedLabel';
 import { MaterialIcons } from '@expo/vector-icons';
 import { CartItem, IAddress } from '@/types/type';
 import { FontAwesome } from '@expo/vector-icons';
@@ -284,7 +285,7 @@ const Cart = () => {
                 borderColor: paymentMethod === 'cod' ? P_PINK : '#d1d5db',
               }}
             >
-              {paymentMethod === 'cod' && <CheckedIcon />}
+              {paymentMethod === 'cod' && <CheckedLabel />}
               <Image source={cashIcon} className='w-12 h-12' />
               <Text className='text-[16px]'>Tiền mặt</Text>
             </TouchableOpacity>
@@ -297,7 +298,7 @@ const Cart = () => {
                 borderColor: paymentMethod === 'bank' ? P_PINK : '#d1d5db',
               }}
             >
-              {paymentMethod === 'bank' && <CheckedIcon />}
+              {paymentMethod === 'bank' && <CheckedLabel />}
               <Image source={bankIcon} className='w-12 h-12' />
               <Text className='text-[16px]'>Chuyển khoản</Text>
             </TouchableOpacity>
@@ -339,7 +340,7 @@ const Cart = () => {
                       setModalVisible(!modalVisible);
                     }}
                   >
-                    {selectedAddress === item && <CheckedIcon />}
+                    {selectedAddress === item && <CheckedLabel />}
                     <View className='flex-row items-center justify-between relative'>
                       <Text className='font-bold'>
                         {item.address?.address_recipient_name}
@@ -452,42 +453,4 @@ const RenderItemToCart = ({ item, dispatch }: IProp) => {
   );
 };
 
-const CheckedIcon = () => {
-  return (
-    <View className='absolute top-0 left-0 right-0 bottom-0'>
-      <View style={styles.square}>
-        <AntDesign name='check' size={14} color='white' />
-      </View>
-      <View style={styles.triangle} className='top-0 right-4' />
-      <View style={styles.triangle} className='top-4 right-0' />
-    </View>
-  );
-};
-
 export default Cart;
-
-const styles = StyleSheet.create({
-  triangle: {
-    width: 0,
-    height: 0,
-    borderLeftWidth: 16,
-    borderLeftColor: 'transparent',
-    borderTopWidth: 16,
-    borderTopColor: '#fb77c5',
-    borderBottomWidth: 16,
-    borderBottomColor: 'transparent',
-    position: 'absolute',
-  },
-  square: {
-    backgroundColor: '#fb77c5',
-    position: 'absolute',
-    borderTopRightRadius: 7,
-    top: 0,
-    right: 0,
-    width: 16,
-    height: 16,
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});

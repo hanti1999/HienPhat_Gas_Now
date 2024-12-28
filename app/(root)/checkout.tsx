@@ -29,7 +29,7 @@ const Checkout = () => {
   if (paymentMethod === 'cod') {
     return (
       <SafeAreaView className='flex-1 bg-white'>
-        <View>
+        <View className='flex-1 items-center justify-center p-3'>
           <Text>Cảm ơn bạn đã tin tưởng và ủng hộ!</Text>
           <Text className='mt-2'>Đơn hàng của bạn đang được xử lý</Text>
           <CustomButton
