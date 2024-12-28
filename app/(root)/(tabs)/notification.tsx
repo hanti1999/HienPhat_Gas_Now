@@ -12,7 +12,7 @@ import NoProduct from '../no-product';
 
 const Notification = () => {
   const token = useSelector((state: RootState) => state.auth.accessToken);
-  const [notification, setNotification] = useState<any>();
+  const [notification, setNotification] = useState<any>([{}]);
   const [refreshing, setRefreshing] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
 
@@ -43,13 +43,13 @@ const Notification = () => {
     // fetchNotification();
   }, []);
 
-  if (loading) {
-    return <LoadingScreen />;
-  }
+  // if (loading) {
+  //   return <LoadingScreen />;
+  // }
 
-  if (notification.length === 0 || notification.length === undefined) {
-    return <NoProduct text={'Tạm chưa có thông báo'} />;
-  }
+  // if (notification.length === 0 || notification.length === undefined) {
+  //   return <NoProduct text={'Tạm chưa có thông báo'} />;
+  // }
 
   return (
     <SafeAreaView className='flex-1 bg-white'>
@@ -72,7 +72,7 @@ const Notification = () => {
 const RenderItem = ({ item, index }: { item: any; index: number }) => {
   return (
     <View className='bg-white p-3 mb-2' key={index}>
-      <Text className='font-semibold uppercase text-[16px]'>{item?.title}</Text>
+      {/* <Text className='font-semibold uppercase text-[16px]'>{item?.title}</Text>
       <Text className='text-[15px]'>
         Vào phần <Text className='underline'>Tài khoản</Text>
         <AntDesign name='arrowright' size={16} color='black' />
@@ -82,6 +82,14 @@ const RenderItem = ({ item, index }: { item: any; index: number }) => {
         <Text className='text-gray-500 text-[14px]'>
           {moment(item?.createAt).format('DD/MM/YYYY HH:mm')}
         </Text>
+      </View> */}
+      <Text className='font-semibold uppercase text-base'>
+        Chào mừng bạn đến với mobile app của Gas Hiền Phát
+      </Text>
+      <Text>- Mở app đón ưu đãi</Text>
+      <Text>- Gọi gas nhanh chóng</Text>
+      <View className='my-4'>
+        <Text className='text-gray-500 text-sm'>01/01/2025 00:00</Text>
       </View>
     </View>
   );

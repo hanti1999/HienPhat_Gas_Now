@@ -57,22 +57,17 @@ const ProductCard = ({ item, token, size }: IProductCard) => {
           source={{ uri: item?.product_image_url }}
         />
         <View className='p-1.5 h-[120px] justify-between bg-pink-100'>
-          <Text numberOfLines={2}>{item?.product_name}</Text>
-          <View
-            className={`flex-row items-center ${
-              item?.product_discount == 0 ? 'none' : 'auto'
-            }`}
-            style={{
-              gap: 4,
-            }}
-          >
-            <View className='p-px rounded bg-red-500'>
-              <Text className='text-white '>-{item?.product_discount}%</Text>
+          <Text>{item?.product_name}</Text>
+          {item?.product_discount != 0 && (
+            <View className='flex-row items-center' style={{ gap: 4 }}>
+              <View className='px-0.5 rounded bg-red-500'>
+                <Text className='text-white '>-{item?.product_discount}%</Text>
+              </View>
+              <Text className='line-through text-gray-500'>
+                {item?.product_price?.toLocaleString()}
+              </Text>
             </View>
-            <Text className='line-through text-gray-500'>
-              {item?.product_price?.toLocaleString()}
-            </Text>
-          </View>
+          )}
           <Text className='font-semibold text-red-500 text-[18px]'>
             {item?.final_price.toLocaleString()}đ
           </Text>

@@ -419,7 +419,7 @@ const RenderItemToCart = ({ item, dispatch }: IProp) => {
   };
 
   return (
-    <View style={{ gap: 8 }} className='flex-row border-b border-gray-200 py-2'>
+    <View className='flex-row border-b border-gray-200 py-2'>
       <View style={{ width: width * 0.4 }}>
         <Image
           className='w-full rounded-lg border border-gray-200'
@@ -427,15 +427,15 @@ const RenderItemToCart = ({ item, dispatch }: IProp) => {
           source={{ uri: item?.productImg }}
         />
       </View>
-      <View style={{ width: width * 0.6, overflow: 'hidden' }}>
-        <Text className='font-semibold text-[18px]' numberOfLines={3}>
-          {item?.title}
-        </Text>
+      <View style={{ width: width * 0.6 }} className='flex-1'>
+        <Text className='font-semibold text-[18px]'>{item?.title}</Text>
         <Text className='mb-2 mt-4 text-[16px]'>
           {item?.quantity}x {item?.price?.toLocaleString()}đ{' '}
-          <Text className='line-through text-gray-500 text-xs'>
-            {item?.oldPrice.toLocaleString()}đ
-          </Text>
+          {item?.oldPrice !== item?.price && (
+            <Text className='line-through text-gray-500 text-xs'>
+              {item?.oldPrice.toLocaleString()}đ
+            </Text>
+          )}
         </Text>
         <Text className='font-bold text-[16px] mb-2'>
           = {(item?.quantity * item?.price)?.toLocaleString()}đ

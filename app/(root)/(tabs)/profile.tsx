@@ -69,10 +69,7 @@ const Profile = () => {
         }
       >
         <ScreenHeader text={'Tài khoản'} />
-        <View
-          style={{ gap: 12 }}
-          className='p-3 flex-row items-center bg-white'
-        >
+        <View style={{ gap: 8 }} className='p-3 flex-row items-center bg-white'>
           {user?.user?.user_img_url != null ? (
             <Image
               className='w-20 h-20 rounded-full border border-primary-pink'
