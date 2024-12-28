@@ -1,15 +1,52 @@
 import { router, useLocalSearchParams } from 'expo-router';
 import { View, Text, SafeAreaView } from 'react-native';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import CustomButton from '@/components/CustomButton';
-import ScreenHeader from '@/components/ScreenHeader';
 
 const Checkout = () => {
   const { token, paymentMethod } = useLocalSearchParams();
+  const [countdown, setCountdown] = useState(5);
+
+  // useEffect(() => {
+  //   if (paymentMethod === 'cod') {
+  //     const interval = setInterval(() => {
+  //       setCountdown((prev) => prev - 1);
+  //     }, 1000);
+
+  //     const timer = setTimeout(() => {
+  //       router.replace('/(root)/(tabs)/home');
+  //     }, 5000);
+
+  //     return () => {
+  //       clearInterval(interval);
+  //       clearTimeout(timer);
+  //     };
+  //   } else {
+  //     return;
+  //   }
+  // }, []);
+
+  if (paymentMethod === 'cod') {
+    return (
+      <SafeAreaView className='flex-1 bg-white'>
+        <View>
+          <Text>Cảm ơn bạn đã tin tưởng và ủng hộ!</Text>
+          <Text className='mt-2'>Đơn hàng của bạn đang được xử lý</Text>
+          <CustomButton
+            title='Trở về trang chủ'
+            className='mt-5'
+            onPress={() => router.replace('/(root)/(tabs)/home')}
+          />
+          <Text className='mt-2 text-gray-500'>
+            Bạn sẽ được tự động chuyển đến trang chủ sau {countdown} giây
+          </Text>
+        </View>
+      </SafeAreaView>
+    );
+  }
 
   return (
     <SafeAreaView className='flex-1 bg-white'>
-      <ScreenHeader text='Thanh toán' />
       <View>
         <CustomButton
           title='Trở về trang chủ'

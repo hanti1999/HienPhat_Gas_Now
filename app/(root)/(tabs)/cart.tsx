@@ -180,11 +180,9 @@ const Cart = () => {
             </View>
 
             <TouchableOpacity onPress={() => setModalVisible(!modalVisible)}>
-              <View className='flex-row items-center' style={{ gap: 4 }}>
-                <Text style={{ color: 'blue', fontSize: 16 }}>
-                  Chọn địa chỉ khác
-                </Text>
-              </View>
+              <Text className='text-blue-500 text-[16px] underline'>
+                Chọn địa chỉ khác
+              </Text>
             </TouchableOpacity>
           </View>
 
@@ -217,7 +215,7 @@ const Cart = () => {
         <View className='bg-white p-3 mb-3'>
           <View className='flex-row items-center' style={{ gap: 4 }}>
             <View className='w-5'>
-              <FontAwesome6 name='cart-shopping' size={16} color={P_PINK} />
+              <FontAwesome6 name='cart-shopping' size={18} color={P_PINK} />
             </View>
             <Text className='uppercase font-bold text-[18px]'>
               Chi tiết đơn hàng
@@ -236,7 +234,7 @@ const Cart = () => {
           </View>
           <View className='flex-row justify-between items-center mt-2'>
             <View className='flex-row items-center' style={{ gap: 4 }}>
-              <MaterialIcons name='wallet' size={24} color='pink' />
+              <MaterialIcons name='wallet' size={24} color={P_PINK} />
               <Text className='text-right text-[16px]'>
                 Dùng {userPoints?.toLocaleString()} điểm
               </Text>
@@ -271,7 +269,7 @@ const Cart = () => {
         <View className='p-3 mb-2 bg-white'>
           <View className='flex-row items-center' style={{ gap: 4 }}>
             <View className='w-5'>
-              <FontAwesome6 name='money-bill-1' size={16} color={P_PINK} />
+              <FontAwesome6 name='money-bill-1' size={18} color={P_PINK} />
             </View>
             <Text className='uppercase font-bold text-[18px]'>
               Phương thức thanh toán
@@ -286,7 +284,7 @@ const Cart = () => {
                 borderColor: paymentMethod === 'cod' ? P_PINK : '#d1d5db',
               }}
             >
-              {paymentMethod === 'cod' && <CheckedMethodIcon />}
+              {paymentMethod === 'cod' && <CheckedIcon />}
               <Image source={cashIcon} className='w-12 h-12' />
               <Text className='text-[16px]'>Tiền mặt</Text>
             </TouchableOpacity>
@@ -299,7 +297,7 @@ const Cart = () => {
                 borderColor: paymentMethod === 'bank' ? P_PINK : '#d1d5db',
               }}
             >
-              {paymentMethod === 'bank' && <CheckedMethodIcon />}
+              {paymentMethod === 'bank' && <CheckedIcon />}
               <Image source={bankIcon} className='w-12 h-12' />
               <Text className='text-[16px]'>Chuyển khoản</Text>
             </TouchableOpacity>
@@ -318,9 +316,9 @@ const Cart = () => {
             style={{ backgroundColor: 'rgba( 0, 0, 0, 0.3)' }}
             className='flex-1 items-center justify-end'
           >
-            <View className='p-2 mb-3.5 shadow-lg w-full bg-pink-100 rounded-lg'>
-              <View className='flex-row justify-between items-center'>
-                <Text className='text-left font-bold mb-2 mr-1 text-lg'>
+            <View className='p-3 mb-3.5 shadow-lg w-full bg-pink-100 rounded-lg'>
+              <View className='flex-row justify-between items-center mb-1'>
+                <Text className='text-left font-bold text-[18px]'>
                   Chọn địa chỉ
                 </Text>
 
@@ -333,22 +331,19 @@ const Cart = () => {
                   <Pressable
                     key={index}
                     className='w-36 h-36 p-3 border rounded-lg mr-1 bg-white'
+                    style={{
+                      borderColor: selectedAddress === item ? P_PINK : '',
+                    }}
                     onPress={() => {
                       setSelectedAddress(item);
                       setModalVisible(!modalVisible);
                     }}
                   >
-                    <View className='flex-row items-center justify-between'>
-                      <Text className='font-bold pr-1'>
+                    {selectedAddress === item && <CheckedIcon />}
+                    <View className='flex-row items-center justify-between relative'>
+                      <Text className='font-bold'>
                         {item.address?.address_recipient_name}
                       </Text>
-                      <FontAwesome
-                        name={
-                          selectedAddress === item ? 'check-circle' : 'circle-o'
-                        }
-                        color={selectedAddress === item ? '#fb77c5' : 'black'}
-                        size={20}
-                      />
                     </View>
                     <Text className='mt-1'>
                       {item.address?.address_recipient_phonenumber}
@@ -457,7 +452,7 @@ const RenderItemToCart = ({ item, dispatch }: IProp) => {
   );
 };
 
-const CheckedMethodIcon = () => {
+const CheckedIcon = () => {
   return (
     <View className='absolute top-0 left-0 right-0 bottom-0'>
       <View style={styles.square}>

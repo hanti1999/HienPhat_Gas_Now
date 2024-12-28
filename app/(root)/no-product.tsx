@@ -17,7 +17,7 @@ const NoProduct = ({ text }: { text: string }) => {
         <Text className='font-semibold text-[18px] my-10'>{text}</Text>
         <CustomButton
           title='Tiếp tục mua hàng'
-          onPress={() => router.push('/(root)/(tabs)/home')}
+          onPress={() => router.replace('/(root)/(tabs)/home')}
         />
       </View>
     </SafeAreaView>
