@@ -160,7 +160,7 @@ const Cart = () => {
   return (
     <SafeAreaView className='flex-1 bg-white'>
       <StatusBar barStyle='dark-content' />
-      <ScreenHeader text='Giỏ hàng' showBack={false} />
+      <ScreenHeader text='Giỏ hàng' />
       <ScrollView
         showsVerticalScrollIndicator={false}
         className='bg-gray-100'

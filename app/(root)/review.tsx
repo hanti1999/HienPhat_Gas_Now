@@ -1,6 +1,6 @@
 import { Text, View, TextInput, TouchableOpacity } from 'react-native';
-import { useLocalSearchParams, router } from 'expo-router';
 import { SafeAreaView, ActivityIndicator } from 'react-native';
+import { useLocalSearchParams, router } from 'expo-router';
 import Toast from 'react-native-toast-message';
 import React, { useState } from 'react';
 import axios from 'axios';
@@ -48,7 +48,7 @@ const Review = () => {
   return (
     <SafeAreaView className='bg-white flex-1'>
       <ScreenHeader text='Trở lại' />
-      <View className='py-2 px-3'>
+      <View className='p-3'>
         <View className='my-4 flex-row'>
           <View className='w-1/2'>
             <Text className='text-[16px]'>Tổng quan</Text>
