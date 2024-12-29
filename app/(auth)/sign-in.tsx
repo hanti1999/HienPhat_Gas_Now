@@ -34,16 +34,16 @@ const SignIn = () => {
       };
       const res = await axios.post(url, data);
       if (res.status === 200) {
-        const accessToken = res?.data.accessToken;
-        const refreshToken = res?.data.refreshToken;
-        const accessTokenExpiry = res?.data.accessTokenExpiry;
-        const refreshTokenExpiry = res?.data.refreshTokenExpiry;
+        const at: string = res?.data.accessToken;
+        const rt: string = res?.data.refreshToken;
+        const ate: number = res?.data.accessTokenExpiry + Date.now();
+        const rte: number = res?.data.refreshTokenExpiry;
         dispatch(
           loginSuccess({
-            accessToken,
-            refreshToken,
-            accessTokenExpiry,
-            refreshTokenExpiry,
+            accessToken: at,
+            refreshToken: rt,
+            accessTokenExpiry: ate.toString(),
+            refreshTokenExpiry: rte.toString(),
           })
         );
         router.replace('/(root)/(tabs)/home');
