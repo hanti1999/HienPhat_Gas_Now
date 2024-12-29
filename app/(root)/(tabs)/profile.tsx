@@ -68,8 +68,7 @@ const Profile = () => {
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
       >
-        <ScreenHeader text={'Tài khoản'} />
-        <View style={{ gap: 8 }} className='p-3 flex-row items-center bg-white'>
+        <View className='p-3 flex-row items-center bg-white'>
           {user?.user?.user_img_url != null ? (
             <Image
               className='w-20 h-20 rounded-full border border-primary-pink'
@@ -81,7 +80,7 @@ const Profile = () => {
               source={hpLogo}
             />
           )}
-          <View>
+          <View className='ml-2'>
             <Text className='text-xl font-semibold'>
               {user?.user?.user_fullname}
             </Text>
@@ -94,7 +93,7 @@ const Profile = () => {
           </View>
         </View>
 
-        <View className='p-3 mt-3 bg-white'>
+        <View className='p-3 mt-2 bg-white'>
           <Pressable
             onPress={() =>
               router.push({
@@ -155,7 +154,7 @@ const Profile = () => {
           </Pressable>
         </View>
 
-        <View className='p-3 mt-3 bg-white'>
+        <View className='p-3 mt-2 bg-white'>
           <Pressable
             onPress={() => router.push('/(root)/about')}
             className='flex-row items-center justify-between py-3'
@@ -198,7 +197,7 @@ const Profile = () => {
           </Pressable>
         </View>
 
-        <View className='p-3 bg-white mt-3'>
+        <View className='p-3 bg-white mt-2'>
           <LogoutButton />
         </View>
 

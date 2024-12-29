@@ -1,4 +1,4 @@
-import { Text, Pressable, View } from 'react-native';
+import { Text, View, TouchableOpacity } from 'react-native';
 import { useSelector } from 'react-redux';
 import { router } from 'expo-router';
 import React from 'react';
@@ -8,9 +8,10 @@ import { RootState } from '@/redux/store';
 interface IProps {
   text: string;
   showCart?: boolean;
+  showBack?: boolean;
 }
 
-const ScreenHeader = ({ text, showCart = false }: IProps) => {
+const ScreenHeader = ({ text, showCart = false, showBack = true }: IProps) => {
   const cartQuantity = useSelector(
     (state: RootState) => state.cart.totalQuantity
   );
@@ -19,16 +20,19 @@ const ScreenHeader = ({ text, showCart = false }: IProps) => {
   return (
     <View className='flex-row justify-between items-center bg-white border-b border-gray-300'>
       <View className='flex-row items-center'>
-        <Pressable onPress={() => router.back()}>
+        <TouchableOpacity
+          onPress={() => router.back()}
+          className={`${showBack ? '' : 'hidden'}`}
+        >
           <Entypo
             name='chevron-thin-left'
             size={24}
             style={{ paddingHorizontal: 12, paddingVertical: 10 }}
           />
-        </Pressable>
-        <Text className='font-bold text-[20px]'>{text}</Text>
+        </TouchableOpacity>
+        <Text className='font-bold text-[20px] px-3 py-2.5'>{text}</Text>
       </View>
-      <Pressable
+      <TouchableOpacity
         className={`relative px-3 py-2.5 ${showCart ? '' : 'hidden'}`}
         onPress={() => router.push('/(root)/(tabs)/cart')}
       >
@@ -38,7 +42,7 @@ const ScreenHeader = ({ text, showCart = false }: IProps) => {
             {displayValue}
           </Text>
         </View>
-      </Pressable>
+      </TouchableOpacity>
     </View>
   );
 };

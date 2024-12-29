@@ -284,21 +284,25 @@ const ProductInfo = () => {
       </ScrollView>
 
       <View
-        className='flex-row justify-evenly bg-white py-4 px-2'
-        style={{ gap: 8 }}
+        className='flex-row bg-white pt-1 px-3 h-[60px]'
+        style={{ gap: 12 }}
       >
-        <RectangleButton
-          onPress={() => openLink('https://zalo.me/0975841582')}
-          bgVariant='outline-blue'
-          textVariant='secondary'
-          title='Tư vấn Zalo'
-        />
-        <RectangleButton
-          onPress={addItemToCart}
-          disabled={isLoading}
-          loading={isLoading}
-          title='Mua ngay'
-        />
+        <View className='flex-1'>
+          <RectangleButton
+            onPress={() => openLink('https://zalo.me/0975841582')}
+            bgVariant='outline-blue'
+            textVariant='secondary'
+            title='Tư vấn Zalo'
+          />
+        </View>
+        <View className='flex-1'>
+          <RectangleButton
+            onPress={addItemToCart}
+            disabled={isLoading}
+            loading={isLoading}
+            title='Mua ngay'
+          />
+        </View>
       </View>
     </SafeAreaView>
   );

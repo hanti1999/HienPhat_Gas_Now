@@ -54,7 +54,7 @@ const Notification = () => {
   return (
     <SafeAreaView className='flex-1 bg-white'>
       <StatusBar barStyle={'dark-content'} />
-      <ScreenHeader text={'Thông báo'} />
+      <ScreenHeader text={'Thông báo'} showBack={false} />
       <FlatList
         data={notification}
         renderItem={({ item, index }) => (

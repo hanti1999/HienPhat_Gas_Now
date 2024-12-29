@@ -17,7 +17,10 @@ const About = () => {
           Đầu Tư tỉnh Đồng Nai cấp lần đầu ngày 30/12/2014
         </Text>
         <Text>Email: gashienphat1979@gmail.com</Text>
-        <Text>Điện thoại: 02513 511 610 - 0975 841 582</Text>
+        <Text>
+          Điện thoại/Zalo: 02513 511 610 - 0975 841 582 (Lộc) - 0986 573 072
+          (Nhựt)
+        </Text>
       </View>
     </SafeAreaView>
   );

@@ -1,7 +1,7 @@
-import { Pressable, StatusBar, RefreshControl } from 'react-native';
 import { Image, TextInput, Text, View, Modal } from 'react-native';
 import { SafeAreaView, ScrollView, Switch } from 'react-native';
 import { Dimensions, TouchableOpacity } from 'react-native';
+import { StatusBar, RefreshControl } from 'react-native';
 import { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { router, useFocusEffect } from 'expo-router';
@@ -160,7 +160,7 @@ const Cart = () => {
   return (
     <SafeAreaView className='flex-1 bg-white'>
       <StatusBar barStyle='dark-content' />
-      <ScreenHeader text='Giỏ hàng' />
+      <ScreenHeader text='Giỏ hàng' showBack={false} />
       <ScrollView
         showsVerticalScrollIndicator={false}
         className='bg-gray-100'
@@ -169,7 +169,7 @@ const Cart = () => {
         }
       >
         {/* Địa chỉ giao hàng */}
-        <View className='mb-3 p-3 bg-white'>
+        <View className='mb-2 p-3 bg-white'>
           <View className='flex-row justify-between'>
             <View className='flex-row items-center' style={{ gap: 4 }}>
               <View className='w-5'>
@@ -188,8 +188,8 @@ const Cart = () => {
           </View>
 
           <View className='mt-2'>
-            <View className='flex-row items-center' style={{ gap: 8 }}>
-              <Text className='font-bold text-lg'>
+            <View className='flex-row items-end' style={{ gap: 4 }}>
+              <Text className='font-bold text-[18px]'>
                 {selectedAddress?.address.address_recipient_name}
               </Text>
               <Text>
@@ -199,7 +199,7 @@ const Cart = () => {
             <Text>{selectedAddress?.address.address_full}</Text>
           </View>
 
-          <View className='flex-row items-center' style={{ gap: 8 }}>
+          <View className='flex-row items-center' style={{ gap: 4 }}>
             <Text className='w-[60px]'>Ghi chú:</Text>
             <TextInput
               className='p-2 border-b border-gray-300 flex-1'
@@ -213,7 +213,7 @@ const Cart = () => {
         </View>
 
         {/* Chi tiết đơn hàng */}
-        <View className='bg-white p-3 mb-3'>
+        <View className='bg-white p-3 mb-2'>
           <View className='flex-row items-center' style={{ gap: 4 }}>
             <View className='w-5'>
               <FontAwesome6 name='cart-shopping' size={18} color={P_PINK} />
@@ -257,7 +257,7 @@ const Cart = () => {
                 value={voucher}
               />
             </View>
-            <View className='h-[40px] w-[120px]'>
+            <View className='h-[37px] w-[120px]'>
               <RectangleButton
                 onPress={handleUseVoucher}
                 disabled={voucher === ''}
@@ -317,19 +317,21 @@ const Cart = () => {
             style={{ backgroundColor: 'rgba( 0, 0, 0, 0.3)' }}
             className='flex-1 items-center justify-end'
           >
-            <View className='p-3 mb-3.5 shadow-lg w-full bg-pink-100 rounded-lg'>
-              <View className='flex-row justify-between items-center mb-1'>
-                <Text className='text-left font-bold text-[18px]'>
-                  Chọn địa chỉ
-                </Text>
-
-                <Pressable onPress={() => setModalVisible(!modalVisible)}>
+            <View className='p-3 mb-2.5 shadow-lg w-full bg-pink-100 rounded-lg relative'>
+              <Text className='text-left font-bold text-[18px] mb-2'>
+                Chọn địa chỉ
+              </Text>
+              <View className='absolute top-0 right-0'>
+                <TouchableOpacity
+                  onPress={() => setModalVisible(!modalVisible)}
+                  className='p-2'
+                >
                   <AntDesign name='close' size={24} color='black' />
-                </Pressable>
+                </TouchableOpacity>
               </View>
               <ScrollView horizontal showsHorizontalScrollIndicator={false}>
                 {address.map((item, index) => (
-                  <Pressable
+                  <TouchableOpacity
                     key={index}
                     className='w-36 h-36 p-3 border rounded-lg mr-1 bg-white'
                     style={{
@@ -350,9 +352,9 @@ const Cart = () => {
                       {item.address?.address_recipient_phonenumber}
                     </Text>
                     <Text className='mt-1'>{item.address?.address_full}</Text>
-                  </Pressable>
+                  </TouchableOpacity>
                 ))}
-                <Pressable
+                <TouchableOpacity
                   className='w-36 h-36 border rounded-lg bg-white'
                   onPress={() => {
                     setModalVisible(!modalVisible);
@@ -365,7 +367,7 @@ const Cart = () => {
                   <View className='w-36 h-36 justify-center items-center'>
                     <AntDesign name='plus' size={40} color='black' />
                   </View>
-                </Pressable>
+                </TouchableOpacity>
               </ScrollView>
             </View>
           </View>
@@ -419,7 +421,7 @@ const RenderItemToCart = ({ item, dispatch }: IProp) => {
   };
 
   return (
-    <View className='flex-row border-b border-gray-200 py-2'>
+    <View className='flex-row border-b border-gray-200 py-2' style={{ gap: 4 }}>
       <View style={{ width: width * 0.4 }}>
         <Image
           className='w-full rounded-lg border border-gray-200'
