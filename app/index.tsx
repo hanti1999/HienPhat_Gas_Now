@@ -11,13 +11,6 @@ const Page = () => {
 
   useEffect(() => {
     const checkLoginStatus = () => {
-      // const isSignedin = SecureStore.getItem('accessToken');
-      // if (isSignedin != null) {
-      //   setIsLoggedIn(true);
-      // } else {
-      //   setIsLoggedIn(false);
-      // }
-
       try {
         const accessTokenExpiry = SecureStore.getItem('accessTokenExpiry');
         const expiryTime = parseInt(accessTokenExpiry as string);

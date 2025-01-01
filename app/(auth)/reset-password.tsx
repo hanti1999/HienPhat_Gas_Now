@@ -1,18 +1,21 @@
 import { View, ScrollView, Keyboard } from 'react-native';
 import { TouchableWithoutFeedback } from 'react-native';
 import React, { useState } from 'react';
+import { router } from 'expo-router';
+import useGetZaloToken from '@/customHooks/useGetZaloToken';
 import CustomButton from '@/components/CustomButton';
 import HeaderImage from '@/components/HeaderImage';
-import { generateOTP } from '@/utils/generateOTP';
 import InputField from '@/components/InputField';
+import generateOTP from '@/utils/generateOTP';
 import OTPModal from '@/components/OTPModal';
+import { ZaloToken } from '@/types/type';
 
 const ResetPassword = () => {
-  const [phoneNumber, setPhoneNumber] = useState<string | string[]>('');
-  const [otp, setOtp] = useState<string>();
   const [modalVisible, setModalVisible] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
+  const [phoneNumber, setPhoneNumber] = useState<string | string[]>('');
   const [code, setCode] = useState<string>('');
+  const [otp, setOtp] = useState<string>('');
 
   const handleConfirm = () => {};
 
@@ -34,6 +37,7 @@ const ResetPassword = () => {
               label='Nhập số điện thoại cần lấy lại mật khẩu'
               placeholder='Nhập số điện thoại...'
               keyboardType='numeric'
+              value={phoneNumber as string}
               onChangeText={setPhoneNumber}
             />
             <CustomButton

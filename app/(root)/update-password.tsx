@@ -7,8 +7,8 @@ import PasswordValidate from '@/components/PasswordValidate';
 import useGetZaloToken from '@/customHooks/useGetZaloToken';
 import ScreenHeader from '@/components/ScreenHeader';
 import CustomButton from '@/components/CustomButton';
-import { generateOTP } from '@/utils/generateOTP';
 import InputField from '@/components/InputField';
+import generateOTP from '@/utils/generateOTP';
 import { Ionicons } from '@expo/vector-icons';
 import OTPModal from '@/components/OTPModal';
 import { ZaloToken } from '@/types/type';
@@ -208,7 +208,7 @@ const UpdatePassword = () => {
               />
             }
           />
-          <Link href={'/(root)/(tabs)/home'}>
+          <Link href={'/(auth)/reset-password'}>
             <Text className='text-blue-500 text-base'>Quên mật khẩu?</Text>
           </Link>
           <InputField

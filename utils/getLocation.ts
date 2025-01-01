@@ -1,7 +1,7 @@
 import Toast from 'react-native-toast-message';
 import * as Location from 'expo-location';
 
-export const handleGetLocation = async () => {
+const handleGetLocation = async () => {
   let { status } = await Location.requestForegroundPermissionsAsync();
 
   if (status !== 'granted') {
@@ -22,3 +22,5 @@ export const handleGetLocation = async () => {
     return `${reverseGeocode[0]?.formattedAddress}`;
   }
 };
+
+export default handleGetLocation;

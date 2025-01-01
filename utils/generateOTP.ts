@@ -1,4 +1,4 @@
-export const generateOTP = () => {
+const generateOTP = () => {
   const length = 6;
   const characters = '0123456789';
   let otp = '';
@@ -10,3 +10,5 @@ export const generateOTP = () => {
 
   return otp;
 };
+
+export default generateOTP;

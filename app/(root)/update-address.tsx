@@ -1,16 +1,16 @@
-import { View, ScrollView, SafeAreaView, TouchableOpacity } from 'react-native';
+import { Text, Switch, Modal, TouchableOpacity } from 'react-native';
+import { View, ScrollView, SafeAreaView } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
 import Toast from 'react-native-toast-message';
-import { Text, Switch, Modal } from 'react-native';
 import React, { useState } from 'react';
 import axios from 'axios';
 import { District, IAddress, Province, Ward } from '@/types/type';
 import GetLocationButton from '@/components/GetLocationButton';
 import RectangleButton from '@/components/RectangleButton';
 import RectangleInput from '@/components/RectangleInput';
-import { handleGetLocation } from '@/utils/getLocation';
 import ScreenHeader from '@/components/ScreenHeader';
 import CustomButton from '@/components/CustomButton';
+import handleGetLocation from '@/utils/getLocation';
 import { AntDesign } from '@expo/vector-icons';
 
 const UpdateAddress = () => {

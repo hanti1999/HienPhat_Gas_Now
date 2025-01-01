@@ -1,0 +1,128 @@
+import { router, useLocalSearchParams } from 'expo-router';
+import { View, ScrollView, Keyboard } from 'react-native';
+import { TouchableWithoutFeedback } from 'react-native';
+import Toast from 'react-native-toast-message';
+import { useDispatch } from 'react-redux';
+import React, { useState } from 'react';
+import axios from 'axios';
+import PasswordValidate from '@/components/PasswordValidate';
+import CustomButton from '@/components/CustomButton';
+import HeaderImage from '@/components/HeaderImage';
+import { logout } from '@/redux/slices/authSlice';
+import InputField from '@/components/InputField';
+import { Ionicons } from '@expo/vector-icons';
+
+const SetPassword = () => {
+  const { phoneNumber } = useLocalSearchParams();
+  const dispatch = useDispatch();
+  const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [validated, setValidated] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [confirmPass, setConfirmPass] = useState<string>('');
+  const [newPass, setNewPass] = useState<string>('');
+
+  const onTogglePassword = () => {
+    setShowPassword(!showPassword);
+  };
+
+  const handleSetPassword = async () => {
+    if (!validated) {
+      Toast.show({ type: 'error', text1: 'Mật khẩu không hợp lệ' });
+      return;
+    }
+
+    try {
+      setLoading(true);
+      const url = `${process.env.EXPO_PUBLIC_API}/account/reset-password`;
+      const data = {
+        phonenumber: phoneNumber,
+        newPassword: newPass,
+      };
+      const res = await axios.put(url, data);
+      if (res.status === 200) {
+        dispatch(logout());
+        Toast.show({ type: 'success', text1: 'Đổi mật khẩu thành công' });
+        router.replace('/(auth)/sign-in');
+      } else {
+        Toast.show({ type: 'error', text1: res.data.message });
+      }
+    } catch (error) {
+      Toast.show({ type: 'error', text1: 'Đổi mật khẩu không thành công' });
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <ScrollView className='flex-1 bg-white'>
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <View>
+          <HeaderImage text='Lấy lại mật khẩu' />
+          <View className='p-5'>
+            <InputField
+              placeholder='Nhập mật khẩu mới...'
+              secureTextEntry={!showPassword}
+              textContentType='password'
+              label='Nhập mật khẩu mới'
+              onChangeText={setNewPass}
+              value={newPass}
+              children={
+                <Ionicons
+                  name={showPassword ? 'eye-off' : 'eye'}
+                  onPress={onTogglePassword}
+                  color='gray'
+                  size={24}
+                />
+              }
+            />
+            <InputField
+              placeholder='Nhập lại mật khẩu...'
+              secureTextEntry={!showPassword}
+              onChangeText={setConfirmPass}
+              textContentType='password'
+              label='Nhập lại mật khẩu'
+              value={confirmPass}
+              children={
+                <Ionicons
+                  name={showPassword ? 'eye-off' : 'eye'}
+                  onPress={onTogglePassword}
+                  color='gray'
+                  size={24}
+                />
+              }
+            />
+            <PasswordValidate
+              confirmPassword={confirmPass}
+              newPassword={newPass}
+              validationRules={[
+                {
+                  key: 'MIN_LENGTH',
+                  ruleValue: 8,
+                  label: 'Tối thiểu 8 ký tự',
+                },
+                {
+                  key: 'MAX_LENGTH',
+                  ruleValue: 20,
+                  label: 'Tối đa 20 ký tự',
+                },
+                { key: 'PASSWORDS_MATCH', label: 'Mật khẩu trùng khớp' },
+              ]}
+              onPasswordValidateChange={(validatedBoolean) =>
+                setValidated(validatedBoolean)
+              }
+            />
+            <CustomButton
+              title='Xác nhận mật khẩu mới'
+              onPress={handleSetPassword}
+              loading={loading}
+              className='mt-5'
+            />
+          </View>
+        </View>
+      </TouchableWithoutFeedback>
+    </ScrollView>
+  );
+};
+
+export default SetPassword;

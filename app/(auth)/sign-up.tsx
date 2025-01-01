@@ -9,11 +9,11 @@ import GetLocationButton from '@/components/GetLocationButton';
 import PasswordValidate from '@/components/PasswordValidate';
 import useGetZaloToken from '@/customHooks/useGetZaloToken';
 import { AntDesign, Ionicons } from '@expo/vector-icons';
-import { handleGetLocation } from '@/utils/getLocation';
 import CustomButton from '@/components/CustomButton';
+import handleGetLocation from '@/utils/getLocation';
 import HeaderImage from '@/components/HeaderImage';
-import { generateOTP } from '@/utils/generateOTP';
 import InputField from '@/components/InputField';
+import generateOTP from '@/utils/generateOTP';
 
 interface SignupData {
   user_fullname: string;
