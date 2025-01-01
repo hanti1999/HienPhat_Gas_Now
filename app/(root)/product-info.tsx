@@ -11,7 +11,7 @@ import axios from 'axios';
 import RectangleButton from '@/components/RectangleButton';
 import { addToCart } from '@/redux/slices/cartSlice';
 import ScreenHeader from '@/components/ScreenHeader';
-import { FontAwesome } from '@expo/vector-icons';
+import { FontAwesome, AntDesign } from '@expo/vector-icons';
 import openLink from '@/utils/openLink';
 import { Product } from '@/types/type';
 import LoadingScreen from './loading-screen';
@@ -74,6 +74,10 @@ const ProductInfo = () => {
         oldPrice: data?.product_price,
       })
     );
+  };
+
+  const handleAddToCart = () => {
+    addItemToCart();
     setIsLoading(true);
     const timeout = setTimeout(() => {
       setIsLoading(false);
@@ -83,6 +87,11 @@ const ProductInfo = () => {
     return () => {
       clearTimeout(timeout);
     };
+  };
+
+  const handleBuyNow = () => {
+    addItemToCart();
+    router.push('/(root)/(tabs)/cart');
   };
 
   const addWishlist = async () => {
@@ -175,10 +184,9 @@ const ProductInfo = () => {
 
   return (
     <SafeAreaView className='flex-1 bg-white'>
-      <StatusBar />
       <ScrollView
-        stickyHeaderIndices={[0]}
         showsVerticalScrollIndicator={false}
+        stickyHeaderIndices={[0]}
         className='bg-gray-100'
       >
         <ScreenHeader text={'Chi tiết sản phẩm'} showCart={true} />
@@ -202,7 +210,7 @@ const ProductInfo = () => {
           ))}
         </Swiper>
 
-        <View className='py-2 px-3 mb-3 bg-pink-100'>
+        <View className='p-3 mb-2 bg-pink-100'>
           <Text numberOfLines={2} className='font-semibold text-[18px]'>
             {data?.product_name}
           </Text>
@@ -251,7 +259,7 @@ const ProductInfo = () => {
           </View>
         </View>
 
-        <View className='py-2 px-3 mb-3 bg-pink-200'>
+        <View className='p-3 mb-2 bg-pink-200'>
           <Text className='text-[16px] font-semibold mb-2'>
             Đặc điểm nổi bật
           </Text>
@@ -264,7 +272,7 @@ const ProductInfo = () => {
           </View>
         </View>
 
-        <View className='py-2 px-3 mb-3 bg-pink-300'>
+        <View className='p-3 mb-2 bg-pink-300'>
           <Text className='text-[16px] font-semibold mb-2'>Bài đánh giá</Text>
           <Reviews reviews={data?.reviews} />
           <TouchableOpacity
@@ -284,24 +292,28 @@ const ProductInfo = () => {
       </ScrollView>
 
       <View
-        className='flex-row bg-white pt-1 px-3 h-[60px]'
+        className='flex-row items-center bg-white pt-1 px-3 h-[60px]'
         style={{ gap: 12 }}
       >
+        <TouchableOpacity
+          onPress={() => openLink('https://zalo.me/0975841582')}
+          className='flex items-center justify-center rounded-full border border-[#0068ff] h-14 w-14'
+        >
+          <AntDesign name='customerservice' size={22} color='#0068ff' />
+          <Text className='text-[12px] text-[#0068ff]'>Chat</Text>
+        </TouchableOpacity>
         <View className='flex-1'>
           <RectangleButton
-            onPress={() => openLink('https://zalo.me/0975841582')}
-            bgVariant='outline-blue'
-            textVariant='secondary'
-            title='Tư vấn Zalo'
+            onPress={handleAddToCart}
+            textVariant='primary'
+            title='Thêm vào giỏ'
+            bgVariant='outline'
+            disabled={isLoading}
+            loading={isLoading}
           />
         </View>
         <View className='flex-1'>
-          <RectangleButton
-            onPress={addItemToCart}
-            disabled={isLoading}
-            loading={isLoading}
-            title='Mua ngay'
-          />
+          <RectangleButton onPress={handleBuyNow} title='Mua ngay' />
         </View>
       </View>
     </SafeAreaView>

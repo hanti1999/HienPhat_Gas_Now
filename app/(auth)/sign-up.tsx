@@ -12,6 +12,7 @@ import { AntDesign, Ionicons } from '@expo/vector-icons';
 import { handleGetLocation } from '@/utils/getLocation';
 import CustomButton from '@/components/CustomButton';
 import HeaderImage from '@/components/HeaderImage';
+import { generateOTP } from '@/utils/generateOTP';
 import InputField from '@/components/InputField';
 
 interface SignupData {
@@ -369,19 +370,6 @@ const SignUp = () => {
       </View>
     </ScrollView>
   );
-};
-
-const generateOTP = () => {
-  const length = 6;
-  const characters = '0123456789';
-  let otp = '';
-
-  for (let i = 0; i < length; i++) {
-    const randomIndex = Math.floor(Math.random() * characters.length);
-    otp += characters[randomIndex];
-  }
-
-  return otp;
 };
 
 export default SignUp;

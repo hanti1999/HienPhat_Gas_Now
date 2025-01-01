@@ -1,16 +1,16 @@
-import { StyleSheet, TouchableOpacity, ActivityIndicator } from 'react-native';
-import { View, Text, SafeAreaView, ScrollView, Modal } from 'react-native';
+import { View, Text, SafeAreaView, ScrollView } from 'react-native';
 import { Link, router, useLocalSearchParams } from 'expo-router';
 import React, { useState, useEffect } from 'react';
 import Toast from 'react-native-toast-message';
 import axios from 'axios';
-import OTPInputView from '@twotalltotems/react-native-otp-input';
 import PasswordValidate from '@/components/PasswordValidate';
 import useGetZaloToken from '@/customHooks/useGetZaloToken';
 import ScreenHeader from '@/components/ScreenHeader';
 import CustomButton from '@/components/CustomButton';
+import { generateOTP } from '@/utils/generateOTP';
 import InputField from '@/components/InputField';
 import { Ionicons } from '@expo/vector-icons';
+import OTPModal from '@/components/OTPModal';
 import { ZaloToken } from '@/types/type';
 
 const UpdatePassword = () => {
@@ -168,6 +168,10 @@ const UpdatePassword = () => {
     setShowPassword(!showPassword);
   };
 
+  const handleCloseModal = () => {
+    setModalVisible(false);
+  };
+
   useEffect(() => {
     let interval: any;
 
@@ -261,56 +265,15 @@ const UpdatePassword = () => {
               setValidated(validatedBoolean)
             }
           />
-          <Modal
-            visible={modalVisible}
-            animationType='fade'
-            transparent={true}
-            onRequestClose={() => {
-              setModalVisible(!modalVisible);
-            }}
-          >
-            <View
-              style={{ backgroundColor: 'rgba( 0, 0, 0, 0.3)' }}
-              className='flex-1 items-center justify-center'
-            >
-              <View className='p-2 rounded-xl bg-white'>
-                <Text className='text-center mt-4 text-[16px]'>
-                  Nhập OTP được gửi đến {account_phonenumber} để tiếp tục
-                </Text>
-                <OTPInputView
-                  codeInputHighlightStyle={{ borderColor: '#fb77c5' }}
-                  codeInputFieldStyle={styles.codeInputFieldStyle}
-                  onCodeChanged={(code) => setCode(code)}
-                  style={{ height: 100, width: '80%' }}
-                  autoFocusOnLoad={false}
-                  pinCount={6}
-                  code={code}
-                />
-                <View className='flex-row justify-evenly'>
-                  <TouchableOpacity
-                    className='rounded-full w-32 h-10 justify-center border-primary-pink border'
-                    onPress={() => setModalVisible(!modalVisible)}
-                  >
-                    <Text className='text-center text-[16px]'>Hủy</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    className='rounded-full w-32 h-10 justify-center bg-primary-pink border-primary-pink border'
-                    disabled={confirmLoading}
-                    onPress={handleConfirm}
-                  >
-                    {confirmLoading ? (
-                      <ActivityIndicator />
-                    ) : (
-                      <Text className='text-center text-[16px] text-white'>
-                        Xác minh
-                      </Text>
-                    )}
-                  </TouchableOpacity>
-                </View>
-              </View>
-            </View>
-          </Modal>
-
+          <OTPModal
+            onClose={handleCloseModal}
+            onConfirm={handleConfirm}
+            onCodeChanged={setCode}
+            modalVisible={modalVisible}
+            phone={account_phonenumber}
+            loading={confirmLoading}
+            code={code}
+          />
           {otpCountdown > 0 ? (
             <Text className='my-5'>Gửi lại sau {otpCountdown}s</Text>
           ) : (
@@ -329,25 +292,3 @@ const UpdatePassword = () => {
 };
 
 export default UpdatePassword;
-
-const styles = StyleSheet.create({
-  codeInputFieldStyle: {
-    borderRadius: 12,
-    color: '#333',
-    height: 50,
-    fontSize: 16,
-  },
-});
-
-const generateOTP = () => {
-  const length = 6;
-  const characters = '0123456789';
-  let otp = '';
-
-  for (let i = 0; i < length; i++) {
-    const randomIndex = Math.floor(Math.random() * characters.length);
-    otp += characters[randomIndex];
-  }
-
-  return otp;
-};

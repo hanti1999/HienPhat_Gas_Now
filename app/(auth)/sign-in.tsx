@@ -103,7 +103,7 @@ const SignIn = () => {
             <View className='items-end'>
               <TouchableOpacity
                 onPress={() => {
-                  Alert.alert('Thông báo', 'Mật khẩu mặc định là: 88888888');
+                  router.push('/(auth)/reset-password');
                 }}
               >
                 <Text className='text-blue-500'>Quên mật khẩu?</Text>

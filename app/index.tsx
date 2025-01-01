@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import * as SecureStore from 'expo-secure-store';
+import Toast from 'react-native-toast-message';
 import { useDispatch } from 'react-redux';
 import { Redirect } from 'expo-router';
 import { logout } from '@/redux/slices/authSlice';
@@ -25,6 +26,7 @@ const Page = () => {
           if (expiryTime < Date.now()) {
             setIsLoggedIn(false);
             dispatch(logout());
+            Toast.show({ type: 'info', text1: 'Phiên đăng nhập đã hết hạn' });
           } else {
             setIsLoggedIn(true);
           }

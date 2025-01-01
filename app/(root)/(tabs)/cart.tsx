@@ -276,7 +276,7 @@ const Cart = () => {
               Phương thức thanh toán
             </Text>
           </View>
-          <View className='flex-row mt-2' style={{ gap: 8 }}>
+          <View className='flex-row mt-2' style={{ gap: 12 }}>
             <TouchableOpacity
               className='flex-1 border rounded-lg p-2 flex flex-row items-center relative'
               onPress={() => setPaymentMethod('cod')}
