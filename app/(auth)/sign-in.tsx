@@ -4,6 +4,7 @@ import Toast from 'react-native-toast-message';
 import { Link, router } from 'expo-router';
 import { useDispatch } from 'react-redux';
 import React, { useState } from 'react';
+import moment from 'moment';
 import axios from 'axios';
 import { loginSuccess } from '@/redux/slices/authSlice';
 import CustomButton from '@/components/CustomButton';
@@ -36,7 +37,7 @@ const SignIn = () => {
       if (res.status === 200) {
         const at: string = res?.data.accessToken;
         const rt: string = res?.data.refreshToken;
-        const ate: number = res?.data.accessTokenExpiry + Date.now();
+        const ate: number = res?.data.accessTokenExpiry + moment().unix();
         const rte: number = res?.data.refreshTokenExpiry;
         dispatch(
           loginSuccess({

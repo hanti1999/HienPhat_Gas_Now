@@ -15,6 +15,15 @@ declare interface Province extends Base {
   districts: District;
 }
 
+declare interface IOrderItem {
+  product_id: string;
+  product_name: string;
+  product_image: string;
+  product_quantity: number;
+  unit_price: number;
+  total_price: number;
+}
+
 declare interface IOrder {
   order_id: string;
   total_order_price: number;
@@ -22,16 +31,7 @@ declare interface IOrder {
   points_earned: number;
   points_used: number;
   order_status: string;
-  items: [
-    {
-      product_id: string;
-      product_name: string;
-      product_image: string;
-      product_quantity: number;
-      unit_price: number;
-      total_price: number;
-    }
-  ];
+  items: IOrderItem[];
 }
 
 declare interface IAddress {
@@ -87,6 +87,16 @@ declare interface CartType {
   totalQuantity: number;
 }
 
+declare interface Review {
+  _id: string;
+  name: string;
+  comment: string;
+  rating: number;
+  productRating: number;
+  serviceRating: number;
+  createAt: Date;
+}
+
 declare interface Product {
   brand_id: string;
   category_id: string;
@@ -98,17 +108,7 @@ declare interface Product {
   product_name: string;
   product_price: number;
   product_sold: number;
-  reviews: [
-    {
-      _id: string;
-      name: string;
-      comment: string;
-      rating: number;
-      productRating: number;
-      serviceRating: number;
-      createAt: Date;
-    }
-  ];
+  reviews: Review[];
 }
 
 declare interface User {

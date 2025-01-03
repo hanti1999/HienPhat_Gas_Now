@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { Text, TouchableOpacity, ActivityIndicator } from 'react-native';
 import React from 'react';
 import { ButtonProps } from '@/types/type';
 
@@ -7,7 +7,7 @@ const getBgVariantStyle = (variant: ButtonProps['bgVariant']) => {
     case 'secondary':
       return 'bg-white';
     case 'danger':
-      return 'bg-red-500';
+      return 'bg-red-400';
     case 'success':
       return 'bg-green-500';
     case 'outline':

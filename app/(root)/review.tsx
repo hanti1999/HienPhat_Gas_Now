@@ -1,9 +1,11 @@
-import { Text, View, TextInput, TouchableOpacity } from 'react-native';
-import { SafeAreaView, ActivityIndicator } from 'react-native';
+import { Text, View, TouchableOpacity } from 'react-native';
 import { useLocalSearchParams, router } from 'expo-router';
 import Toast from 'react-native-toast-message';
+import { SafeAreaView } from 'react-native';
 import React, { useState } from 'react';
 import axios from 'axios';
+import RectangleButton from '@/components/RectangleButton';
+import RectangleInput from '@/components/RectangleInput';
 import ScreenHeader from '@/components/ScreenHeader';
 import { FontAwesome } from '@expo/vector-icons';
 
@@ -19,30 +21,31 @@ const Review = () => {
   const [comment, setComment] = useState<string>('');
 
   const handleSendReview = async () => {
-    try {
-      setLoading(true);
-      const data = {
-        comment: comment,
-        rating: defaultOverallRating,
-        productRating: defaultProductRating,
-        serviceRating: defaultServiceRating,
-      };
-      // need replace
-      const url = `${process.env.EXPO_PUBLIC_API}`;
-      const res = await axios.post(url, data);
-      if (res.status === 200) {
-        Toast.show({ text1: 'Gửi đánh giá thành công' });
-        router.back();
-      } else {
-        console.error('Gửi đánh giá không thành công');
-        Toast.show({ type: 'error', text1: 'Gửi đánh giá không thành công' });
-      }
-    } catch (error) {
-      console.log('Gửi đánh giá không thành công', error);
-      Toast.show({ type: 'error', text1: 'Gửi đánh giá không thành công' });
-    } finally {
-      setLoading(false);
-    }
+    console.log(productId);
+    // try {
+    //   setLoading(true);
+    //   const data = {
+    //     comment: comment,
+    //     rating: defaultOverallRating,
+    //     productRating: defaultProductRating,
+    //     serviceRating: defaultServiceRating,
+    //   };
+    //   // need replace
+    //   const url = `${process.env.EXPO_PUBLIC_API}`;
+    //   const res = await axios.post(url, data);
+    //   if (res.status === 200) {
+    //     Toast.show({ text1: 'Gửi đánh giá thành công' });
+    //     router.back();
+    //   } else {
+    //     console.error('Gửi đánh giá không thành công');
+    //     Toast.show({ type: 'error', text1: res.data?.message });
+    //   }
+    // } catch (error) {
+    //   console.log('Gửi đánh giá không thành công', error);
+    //   Toast.show({ type: 'error', text1: 'Gửi đánh giá không thành công' });
+    // } finally {
+    //   setLoading(false);
+    // }
   };
 
   return (
@@ -109,26 +112,21 @@ const Review = () => {
             ))}
           </View>
         </View>
-        <TextInput
-          className='bg-white rounded-lg p-2 border border-gray-300 mt-2 min-h-[70px]'
+        <RectangleInput
           placeholder='Chia sẻ trải nghiệm của bạn'
+          placeholderTextColor={'#999'}
           onChangeText={setComment}
           value={comment}
           multiline
         />
-        <TouchableOpacity
-          className='h-[42px] mt-6 rounded-full bg-blue-500 flex justify-center items-center'
-          onPress={handleSendReview}
-          disabled={loading}
-        >
-          {loading ? (
-            <ActivityIndicator color={'white'} />
-          ) : (
-            <Text className='text-white text-center font-medium'>
-              Gửi đánh giá
-            </Text>
-          )}
-        </TouchableOpacity>
+        <View className='flex-row mt-4'>
+          <RectangleButton
+            loading={loading}
+            disabled={loading}
+            title='Gửi đánh giá'
+            onPress={handleSendReview}
+          />
+        </View>
       </View>
     </SafeAreaView>
   );

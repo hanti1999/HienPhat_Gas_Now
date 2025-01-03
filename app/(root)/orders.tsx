@@ -1,6 +1,6 @@
 import { Dimensions, FlatList, RefreshControl } from 'react-native';
 import { SafeAreaView, Modal, Image } from 'react-native';
-import { useLocalSearchParams } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
 import React, { useState, useEffect } from 'react';
 import Toast from 'react-native-toast-message';
 import { Text, View } from 'react-native';
@@ -9,7 +9,7 @@ import axios from 'axios';
 import RectangleButton from '@/components/RectangleButton';
 import ScreenHeader from '@/components/ScreenHeader';
 import { AntDesign } from '@expo/vector-icons';
-import { IOrder } from '@/types/type';
+import { IOrder, IOrderItem } from '@/types/type';
 import LoadingScreen from './loading-screen';
 import NoProduct from './no-product';
 
@@ -86,6 +86,17 @@ interface IProps {
 }
 
 const RenderOrders = ({ item, fetchOrders, token }: IProps) => {
+  const navToReview = (items: IOrderItem[]) => {
+    const productIds: string[] = [];
+    items.forEach((item) => {
+      productIds.push(item.product_id);
+    });
+    router.push({
+      pathname: '/(root)/review',
+      params: { token: token, productId: productIds },
+    });
+  };
+
   return (
     <View className='p-3 mb-2 bg-pink-100'>
       <Text className='text-[16px] text-gray-500 font-semibold italic'>
@@ -108,7 +119,7 @@ const RenderOrders = ({ item, fetchOrders, token }: IProps) => {
                   style={{ width: 90, height: 90 }}
                   source={{ uri: item?.product_image }}
                 />
-                <Text className='text-[16px] italic font-semibold text-pink-500'>
+                <Text className='text-[16px] italic font-semibold'>
                   {item.product_name}
                 </Text>
               </View>
@@ -116,16 +127,16 @@ const RenderOrders = ({ item, fetchOrders, token }: IProps) => {
             <View>
               <Text className='text-right'>x {item.product_quantity}</Text>
               <Text className='text-right italic'>
-                {item?.unit_price?.toLocaleString()}
+                {item?.unit_price.toLocaleString()}
               </Text>
               <Text className='text-right font-semibold text-[16px]'>
-                {item?.total_price?.toLocaleString()} đ
+                {item?.total_price.toLocaleString()} đ
               </Text>
             </View>
           </View>
         )}
       />
-      <View className='flex-row' style={{ gap: 4 }}>
+      <View className='flex-row mt-1' style={{ gap: 4 }}>
         <View>
           <Text className='text-[16px]'>Trạng thái</Text>
           <Text className='text-[16px]'>Tổng</Text>
@@ -152,16 +163,29 @@ const RenderOrders = ({ item, fetchOrders, token }: IProps) => {
           <Text>{item?.points_earned.toLocaleString()}</Text>
         </View>
       </View>
-      {item?.order_status === 'completed' ||
-      item?.order_status === 'cancelled' ? (
-        <></>
-      ) : (
-        <CancelOrder
-          fetchOrders={fetchOrders}
-          id={item?.order_id}
-          token={token}
-        />
-      )}
+      <View className='flex-row' style={{ gap: 8 }}>
+        {item?.order_status === 'completed' && (
+          <View className='h-8 w-24 mt-1'>
+            <RectangleButton
+              onPress={() => navToReview(item?.items)}
+              textVariant='primary'
+              bgVariant='outline'
+              title='Đánh giá'
+            />
+          </View>
+        )}
+
+        {item?.order_status === 'completed' ||
+        item?.order_status === 'cancelled' ? (
+          <></>
+        ) : (
+          <CancelOrder
+            fetchOrders={fetchOrders}
+            id={item?.order_id}
+            token={token}
+          />
+        )}
+      </View>
     </View>
   );
 };
@@ -232,11 +256,11 @@ const CancelOrder = ({ id, fetchOrders, token }: IProps) => {
           </View>
         </View>
       </Modal>
-      <View className='w-32 h-9 mt-1'>
+      <View className='h-8 w-24 mt-1'>
         <RectangleButton
           onPress={() => setModalVisible(!modalVisible)}
-          textVariant='primary'
-          bgVariant='outline'
+          textVariant='danger'
+          bgVariant='danger'
           title='Hủy đơn'
         />
       </View>

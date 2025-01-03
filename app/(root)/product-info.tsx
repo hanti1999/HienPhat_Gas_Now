@@ -2,10 +2,10 @@ import { ScrollView, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { View, Text, SafeAreaView, Dimensions, FlatList } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
 import React, { useState, useEffect } from 'react';
-import { StatusBar, Image } from 'react-native';
 import Toast from 'react-native-toast-message';
 import { useDispatch } from 'react-redux';
 import Swiper from 'react-native-swiper';
+import { Image } from 'react-native';
 import moment from 'moment';
 import axios from 'axios';
 import RectangleButton from '@/components/RectangleButton';
@@ -13,7 +13,7 @@ import { addToCart } from '@/redux/slices/cartSlice';
 import ScreenHeader from '@/components/ScreenHeader';
 import { FontAwesome, AntDesign } from '@expo/vector-icons';
 import openLink from '@/utils/openLink';
-import { Product } from '@/types/type';
+import { Product, Review } from '@/types/type';
 import LoadingScreen from './loading-screen';
 
 interface IDes {
@@ -274,20 +274,7 @@ const ProductInfo = () => {
 
         <View className='p-3 mb-2 bg-pink-300'>
           <Text className='text-[16px] font-semibold mb-2'>Bài đánh giá</Text>
-          <Reviews reviews={data?.reviews} />
-          <TouchableOpacity
-            onPress={() =>
-              router.push({
-                pathname: '/(root)/review',
-                params: { productId: data?.product_id, token: token },
-              })
-            }
-            className='bg-white w-[200px] rounded-full p-2 mt-2'
-          >
-            <Text className='text-[16px] text-center'>
-              Viết đánh giá của bạn
-            </Text>
-          </TouchableOpacity>
+          <Reviews reviews={data!.reviews} />
         </View>
       </ScrollView>
 
@@ -320,8 +307,8 @@ const ProductInfo = () => {
   );
 };
 
-const Reviews = ({ reviews }: { reviews: any }) => {
-  if (reviews?.length === 0) {
+const Reviews = ({ reviews }: { reviews: Review[] }) => {
+  if (!reviews) {
     return <Text>Chưa có đánh giá!</Text>;
   }
 
@@ -336,7 +323,7 @@ const Reviews = ({ reviews }: { reviews: any }) => {
   );
 };
 
-const RenderItem = ({ item, index }: { item: any; index: number }) => {
+const RenderItem = ({ item, index }: { item: Review; index: number }) => {
   return (
     <View key={index} className='mr-2 bg-white rounded-lg p-2 w-[360px]'>
       <View className='flex-row items-center' style={{ gap: 4 }}>
