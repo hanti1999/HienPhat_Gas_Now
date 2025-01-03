@@ -295,6 +295,7 @@ const UpdateAddress = () => {
             trackColor={{ false: '#767577', true: '#fb77c5' }}
             onValueChange={toggleSwitch}
             value={data.is_default}
+            disabled={true}
           />
         </View>
         <View className='m-3'>
