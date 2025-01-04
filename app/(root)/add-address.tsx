@@ -8,9 +8,9 @@ import axios from 'axios';
 import { District, IAddress, Province, Ward } from '@/types/type';
 import GetLocationButton from '@/components/GetLocationButton';
 import RectangleInput from '@/components/RectangleInput';
-import { handleGetLocation } from '@/utils/getLocation';
 import ScreenHeader from '@/components/ScreenHeader';
 import CustomButton from '@/components/CustomButton';
+import handleGetLocation from '@/utils/getLocation';
 import { AntDesign } from '@expo/vector-icons';
 
 const AddAddress = () => {

@@ -1,5 +1,5 @@
-import { TouchableWithoutFeedback, Keyboard, Text, Alert } from 'react-native';
 import { View, ScrollView, StatusBar, TouchableOpacity } from 'react-native';
+import { TouchableWithoutFeedback, Keyboard, Text } from 'react-native';
 import Toast from 'react-native-toast-message';
 import { Link, router } from 'expo-router';
 import { useDispatch } from 'react-redux';

@@ -6,6 +6,7 @@ import { useDispatch } from 'react-redux';
 import React, { useState } from 'react';
 import axios from 'axios';
 import PasswordValidate from '@/components/PasswordValidate';
+import validationRules from '@/constants/validationRules';
 import CustomButton from '@/components/CustomButton';
 import HeaderImage from '@/components/HeaderImage';
 import { logout } from '@/redux/slices/authSlice';
@@ -95,19 +96,7 @@ const SetPassword = () => {
             <PasswordValidate
               confirmPassword={confirmPass}
               newPassword={newPass}
-              validationRules={[
-                {
-                  key: 'MIN_LENGTH',
-                  ruleValue: 8,
-                  label: 'Tối thiểu 8 ký tự',
-                },
-                {
-                  key: 'MAX_LENGTH',
-                  ruleValue: 20,
-                  label: 'Tối đa 20 ký tự',
-                },
-                { key: 'PASSWORDS_MATCH', label: 'Mật khẩu trùng khớp' },
-              ]}
+              validationRules={validationRules}
               onPasswordValidateChange={(validatedBoolean) =>
                 setValidated(validatedBoolean)
               }

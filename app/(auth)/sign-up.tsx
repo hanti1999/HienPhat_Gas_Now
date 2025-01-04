@@ -8,6 +8,7 @@ import { District, Province, Ward, ZaloToken } from '@/types/type';
 import GetLocationButton from '@/components/GetLocationButton';
 import PasswordValidate from '@/components/PasswordValidate';
 import useGetZaloToken from '@/customHooks/useGetZaloToken';
+import validationRules from '@/constants/validationRules';
 import { AntDesign, Ionicons } from '@expo/vector-icons';
 import CustomButton from '@/components/CustomButton';
 import handleGetLocation from '@/utils/getLocation';
@@ -65,7 +66,6 @@ const SignUp = () => {
       });
     } else if (res.data.error === -124) {
       console.error('Access token hết hạn', res.data);
-      Toast.show({ type: 'info', text1: 'Vui lòng chờ trong giây lát' });
       getNewToken();
     } else {
       setLoading(false);
@@ -327,27 +327,10 @@ const SignUp = () => {
               />
             }
           />
-          <View className='mt-1'>
-            <Text className='text-gray-500'>
-              (Đã điền sẵn mật khẩu mặc định là: 88888888)
-            </Text>
-          </View>
           <PasswordValidate
             newPassword={form.password}
             confirmPassword={form.confirmPass}
-            validationRules={[
-              {
-                key: 'MIN_LENGTH',
-                ruleValue: 8,
-                label: 'Tối thiểu 8 ký tự',
-              },
-              {
-                key: 'MAX_LENGTH',
-                ruleValue: 20,
-                label: 'Tối đa 20 ký tự',
-              },
-              { key: 'PASSWORDS_MATCH', label: 'Mật khẩu trùng khớp' },
-            ]}
+            validationRules={validationRules}
             onPasswordValidateChange={(validatedBoolean) =>
               setValidated(validatedBoolean)
             }
@@ -356,7 +339,6 @@ const SignUp = () => {
             onPress={handleSignUp}
             disabled={loading}
             loading={loading}
-            className='mt-5'
             title='Đăng ký'
           />
           <Link

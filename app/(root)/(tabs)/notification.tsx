@@ -1,13 +1,8 @@
-import {
-  SafeAreaView,
-  StatusBar,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
-import { RefreshControl, FlatList } from 'react-native';
+import { SafeAreaView, StatusBar, TouchableOpacity } from 'react-native';
+import { RefreshControl, FlatList, View, Text } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
+import { router } from 'expo-router';
 import moment from 'moment';
 import axios from 'axios';
 import ScreenHeader from '@/components/ScreenHeader';
@@ -15,7 +10,6 @@ import { AntDesign } from '@expo/vector-icons';
 import { RootState } from '@/redux/store';
 import LoadingScreen from '../loading-screen';
 import NoProduct from '../no-product';
-import { router } from 'expo-router';
 
 const Notification = () => {
   const token = useSelector((state: RootState) => state.auth.accessToken);

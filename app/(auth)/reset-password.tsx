@@ -43,7 +43,6 @@ const ResetPassword = () => {
       setOtpCountdown(30);
     } else if (res.data.error === -124) {
       console.error('Access token hết hạn', res.data);
-      Toast.show({ type: 'info', text1: 'Vui lòng chờ trong giây lát' });
       getNewToken();
     } else {
       setLoading(false);

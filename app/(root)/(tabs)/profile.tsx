@@ -9,7 +9,6 @@ import axios from 'axios';
 import { FontAwesome, AntDesign } from '@expo/vector-icons';
 import RectangleButton from '@/components/RectangleButton';
 import { Ionicons, Foundation } from '@expo/vector-icons';
-import ScreenHeader from '@/components/ScreenHeader';
 import { logout } from '@/redux/slices/authSlice';
 import hpLogo from '@/assets/images/icon.png';
 import { ProfileType } from '@/types/type';

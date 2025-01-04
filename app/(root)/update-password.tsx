@@ -5,6 +5,7 @@ import Toast from 'react-native-toast-message';
 import axios from 'axios';
 import PasswordValidate from '@/components/PasswordValidate';
 import useGetZaloToken from '@/customHooks/useGetZaloToken';
+import validationRules from '@/constants/validationRules';
 import ScreenHeader from '@/components/ScreenHeader';
 import CustomButton from '@/components/CustomButton';
 import InputField from '@/components/InputField';
@@ -50,7 +51,6 @@ const UpdatePassword = () => {
       setOtpCountdown(30);
     } else if (res.data.error === -124) {
       console.error('Access token hết hạn', res.data);
-      Toast.show({ type: 'info', text1: 'Vui lòng chờ trong giây lát' });
       getNewToken();
     } else {
       setLoading(false);
@@ -248,19 +248,7 @@ const UpdatePassword = () => {
           <PasswordValidate
             confirmPassword={confirmPass}
             newPassword={newPass}
-            validationRules={[
-              {
-                key: 'MIN_LENGTH',
-                ruleValue: 8,
-                label: 'Tối thiểu 8 ký tự',
-              },
-              {
-                key: 'MAX_LENGTH',
-                ruleValue: 20,
-                label: 'Tối đa 20 ký tự',
-              },
-              { key: 'PASSWORDS_MATCH', label: 'Mật khẩu trùng khớp' },
-            ]}
+            validationRules={validationRules}
             onPasswordValidateChange={(validatedBoolean) =>
               setValidated(validatedBoolean)
             }
