@@ -56,6 +56,9 @@ declare interface ProfileType {
     user_fullname: string;
     user_img_url: string;
   };
+  points: {
+    total_points: number;
+  };
 }
 
 declare interface ZaloToken {

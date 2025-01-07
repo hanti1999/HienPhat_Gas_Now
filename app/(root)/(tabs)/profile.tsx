@@ -83,9 +83,9 @@ const Profile = () => {
             <Text className='text-xl font-semibold'>
               {user?.user?.user_fullname}
             </Text>
-            {/* <Text className='font-semibold'>
-              {user?.points?.toLocaleString()} điểm
-            </Text> */}
+            <Text className='font-semibold'>
+              {user?.points?.total_points.toLocaleString()} điểm
+            </Text>
             <Text className='text-gray-500'>
               {user?.account?.account_phonenumber}
             </Text>

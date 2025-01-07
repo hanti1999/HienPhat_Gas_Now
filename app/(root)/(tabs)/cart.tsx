@@ -2,10 +2,10 @@ import { Image, TextInput, Text, View, Modal } from 'react-native';
 import { SafeAreaView, ScrollView, Switch } from 'react-native';
 import { Dimensions, TouchableOpacity } from 'react-native';
 import { StatusBar, RefreshControl } from 'react-native';
-import { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { router, useFocusEffect } from 'expo-router';
 import Toast from 'react-native-toast-message';
+import { useEffect, useState } from 'react';
+import { router } from 'expo-router';
 import axios from 'axios';
 import { removeFromCart, clearCart } from '@/redux/slices/cartSlice';
 import { FontAwesome6, AntDesign } from '@expo/vector-icons';
@@ -59,7 +59,8 @@ const Cart = () => {
       };
       const res = await axios.get(url, config);
       if (res.status === 200) {
-        setAddress(res?.data);
+        setAddress(res?.data?.addresses);
+        setUserPoints(res?.data?.points?.total_points);
       } else {
         console.error(res.data?.message);
       }
@@ -141,13 +142,6 @@ const Cart = () => {
     const filteredAddress = address.find((address) => address.is_default);
     setSelectedAddress(filteredAddress);
   }, [address]);
-
-  // Lấy lại danh sách địa chỉ khi focus
-  useFocusEffect(
-    useCallback(() => {
-      fetchAddress();
-    }, [])
-  );
 
   if (cartQuantity === 0) {
     return <NoProduct text={'Giỏ hàng trống!'} />;
@@ -247,8 +241,7 @@ const Cart = () => {
               value={usePoint}
             />
           </View>
-
-          <View className='flex-row items-center' style={{ gap: 8 }}>
+          <View className='flex-row items-center mt-1' style={{ gap: 8 }}>
             <View className='flex-1'>
               <RectangleInput
                 placeholder='nhập mã giảm giá...'

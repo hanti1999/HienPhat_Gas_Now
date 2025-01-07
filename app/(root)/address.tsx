@@ -25,7 +25,7 @@ const Address = () => {
       };
       const res = await axios.get(url, config);
       if (res.status === 200) {
-        setAddress(res?.data);
+        setAddress(res?.data?.addresses);
       } else {
         Toast.show({ type: 'error', text1: res?.data?.message });
       }

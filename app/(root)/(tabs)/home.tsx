@@ -1,6 +1,6 @@
-import { Image, ScrollView, RefreshControl, View, Text } from 'react-native';
 import { StatusBar, Dimensions, FlatList, Pressable } from 'react-native';
-import { ActivityIndicator, SafeAreaView } from 'react-native';
+import { Image, ScrollView, RefreshControl, View } from 'react-native';
+import { ActivityIndicator, SafeAreaView, Text } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import Swiper from 'react-native-swiper';
@@ -27,7 +27,6 @@ const Home = () => {
   const [kitchenAppli, setKitchenAppli] = useState<Product[]>([]);
   const [accessories, setAccessories] = useState<Product[]>([]);
   const [gasStove, setGasStove] = useState<Product[]>([]);
-
   const width = Dimensions.get('window').width;
 
   const onRefresh = async () => {
