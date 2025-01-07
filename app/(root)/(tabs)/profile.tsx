@@ -10,7 +10,6 @@ import { FontAwesome, AntDesign } from '@expo/vector-icons';
 import RectangleButton from '@/components/RectangleButton';
 import { Ionicons, Foundation } from '@expo/vector-icons';
 import { logout } from '@/redux/slices/authSlice';
-import hpLogo from '@/assets/images/icon.png';
 import { ProfileType } from '@/types/type';
 import { RootState } from '@/redux/store';
 import openLink from '@/utils/openLink';
@@ -74,10 +73,7 @@ const Profile = () => {
               source={{ uri: user?.user?.user_img_url }}
             />
           ) : (
-            <Image
-              className='w-20 h-20 rounded-full border border-primary-pink'
-              source={hpLogo}
-            />
+            <FontAwesome name='user-circle' size={80} color='#fb77c5' />
           )}
           <View className='ml-2'>
             <Text className='text-xl font-semibold'>

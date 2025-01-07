@@ -8,12 +8,12 @@ import Swiper from 'react-native-swiper';
 import { Image } from 'react-native';
 import moment from 'moment';
 import axios from 'axios';
+import { FontAwesome, AntDesign } from '@expo/vector-icons';
 import RectangleButton from '@/components/RectangleButton';
 import { addToCart } from '@/redux/slices/cartSlice';
 import ScreenHeader from '@/components/ScreenHeader';
-import { FontAwesome, AntDesign } from '@expo/vector-icons';
-import openLink from '@/utils/openLink';
 import { Product, Review } from '@/types/type';
+import openLink from '@/utils/openLink';
 import LoadingScreen from './loading-screen';
 
 interface IDes {
@@ -36,9 +36,9 @@ const ProductInfo = () => {
   const [wlLoading, setWlLoading] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
   const [averageRating, setAverageRating] = useState<number>();
-  const [totalRating, setTotalRating] = useState<number>();
   const [description, setDescription] = useState<IDes[]>([]);
   const [carousel, setCarousel] = useState<ICarousel[]>([]);
+  const [reviews, setReviews] = useState<Review[]>([]);
   const [data, setData] = useState<Product>();
   const width = Dimensions.get('window').width;
   const dispatch = useDispatch();
@@ -152,19 +152,28 @@ const ProductInfo = () => {
         const url1 = `${process.env.EXPO_PUBLIC_API}/product/${itemId}`;
         const url2 = `${process.env.EXPO_PUBLIC_API}/carousel/${itemId}`;
         const url3 = `${process.env.EXPO_PUBLIC_API}/description/${itemId}`;
+        const url4 = `${process.env.EXPO_PUBLIC_API}/review/product/${itemId}`;
         const config = {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         };
-        const [response1, response2, response3] = await Promise.all([
+        const [response1, response2, response3, response4] = await Promise.all([
           axios.get(url1, config),
           axios.get(url2, config),
           axios.get(url3, config),
+          axios.get(url4, config),
         ]);
         setData(response1?.data);
         setCarousel(response2?.data);
         setDescription(response3?.data);
+        setReviews(response4?.data);
+        // Tính đánh giá trung bình
+        const totalRating = response4?.data.reduce(
+          (acc: any, item: any) => acc + item.review_rating,
+          0
+        );
+        setAverageRating(totalRating / response4?.data.length);
       } catch (error) {
         console.error(error);
       } finally {
@@ -233,10 +242,10 @@ const ProductInfo = () => {
           </View>
           <View className='flex-row justify-between items-center'>
             <View className='flex-row items-center' style={{ gap: 4 }}>
-              {/* <Text>{averageRating}</Text>
+              <Text>{averageRating}</Text>
               <FontAwesome name='star' size={14} color='#faa935' />
-              <Text>({data?.reviews?.length} đánh giá)</Text> */}
-              {/* <Text className='text-gray-400'>|</Text> */}
+              <Text>({reviews?.length} đánh giá)</Text>
+              <Text className='text-gray-400'>|</Text>
               <Text>Đã bán: {data?.product_sold}</Text>
             </View>
             {inWishlist ? (
@@ -274,7 +283,7 @@ const ProductInfo = () => {
 
         <View className='p-3 mb-2 bg-pink-300'>
           <Text className='text-[16px] font-semibold mb-2'>Bài đánh giá</Text>
-          <Reviews reviews={data!.reviews} />
+          <Reviews reviews={reviews} />
         </View>
       </ScrollView>
 
@@ -316,7 +325,7 @@ const Reviews = ({ reviews }: { reviews: Review[] }) => {
     <FlatList
       renderItem={({ item, index }) => <RenderItem item={item} index={index} />}
       showsHorizontalScrollIndicator={false}
-      initialNumToRender={6}
+      initialNumToRender={2}
       data={reviews}
       horizontal
     />
@@ -326,26 +335,42 @@ const Reviews = ({ reviews }: { reviews: Review[] }) => {
 const RenderItem = ({ item, index }: { item: Review; index: number }) => {
   return (
     <View key={index} className='mr-2 bg-white rounded-lg p-2 w-[360px]'>
+      <View className='flex-row items-center mb-3' style={{ gap: 4 }}>
+        {item?.user?.user_img_url != null ? (
+          <Image
+            className='w-8 h-8 rounded-full border border-primary-pink'
+            source={{ uri: item?.user?.user_img_url }}
+          />
+        ) : (
+          <FontAwesome name='user-circle' size={32} color='#fb77c5' />
+        )}
+        <View>
+          <Text className='font-semibold'>{item?.user.user_fullname}</Text>
+          <Text className='text-gray-500 text-[12px]'>
+            Đánh giá {moment().diff(moment('2024-12-26T15:16:39.186Z'), 'days')}{' '}
+            ngày trước
+          </Text>
+        </View>
+      </View>
       <View className='flex-row items-center' style={{ gap: 4 }}>
-        <Text className='text-[#faa935] font-semibold'>{item?.rating}</Text>
-        <FontAwesome name='star' size={16} color='#faa935' />
+        {Array(parseInt(item?.review_rating))
+          .fill(0)
+          .map((item, index) => (
+            <FontAwesome name='star' size={16} color='#faa935' key={index} />
+          ))}
       </View>
-      <Text className='font-semibold mb-1'>{item?.name}</Text>
-      <Text>{item?.comment}</Text>
+      <Text className='my-1'>{item?.review_comment}</Text>
       <View className='flex-row'>
-        <Text className='text-[#faa935] font-medium'>
-          Sản phẩm: {item?.productRating}
+        <Text className='font-medium'>
+          Sản phẩm: {item?.review_productrating}
           <FontAwesome name='star' size={16} color='#faa935' />
         </Text>
-        <Text className='text-[#faa935]'> | </Text>
-        <Text className='text-[#faa935] font-medium'>
-          Dịch vụ: {item?.serviceRating}
+        <Text> | </Text>
+        <Text className='font-medium'>
+          Dịch vụ: {item?.review_servicerating}
           <FontAwesome name='star' size={16} color='#faa935' />
         </Text>
       </View>
-      <Text className='italic text-gray-500'>
-        {moment(item?.createAt).format('DD/MM/YYYY HH:mm')}
-      </Text>
     </View>
   );
 };

@@ -27,8 +27,8 @@ const Review = () => {
       const data = {
         review_comment: comment,
         review_rating: defaultOverallRating,
-        review_productRating: defaultProductRating,
-        review_serviceRating: defaultServiceRating,
+        review_productrating: defaultProductRating,
+        review_servicerating: defaultServiceRating,
         product_id: productId,
       };
       const config = {

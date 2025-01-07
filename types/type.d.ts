@@ -91,13 +91,16 @@ declare interface CartType {
 }
 
 declare interface Review {
-  _id: string;
-  name: string;
-  comment: string;
-  rating: number;
-  productRating: number;
-  serviceRating: number;
-  createAt: Date;
+  review_id: string;
+  review_comment: string;
+  review_rating: string;
+  review_productrating: number;
+  review_servicerating: number;
+  user: {
+    user_fullname: string;
+    user_id: string;
+    user_img_url: string;
+  };
 }
 
 declare interface Product {
@@ -111,7 +114,6 @@ declare interface Product {
   product_name: string;
   product_price: number;
   product_sold: number;
-  reviews: Review[];
 }
 
 declare interface User {
