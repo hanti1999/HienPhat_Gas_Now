@@ -1,11 +1,11 @@
-import { ScrollView, TouchableOpacity, ActivityIndicator } from 'react-native';
-import { View, Text, SafeAreaView, Dimensions, FlatList } from 'react-native';
+import { View, Text, SafeAreaView, Dimensions } from 'react-native';
+import { TouchableOpacity, ActivityIndicator } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
+import { Image, FlatList, ScrollView } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import Toast from 'react-native-toast-message';
 import { useDispatch } from 'react-redux';
 import Swiper from 'react-native-swiper';
-import { Image } from 'react-native';
 import moment from 'moment';
 import axios from 'axios';
 import { FontAwesome, AntDesign } from '@expo/vector-icons';
@@ -204,11 +204,10 @@ const ProductInfo = () => {
           activeDot={
             <View className='w-1 h-1 mx-1 bg-primary-pink rounded-full' />
           }
-          loop={true}
           autoplay={false}
-          autoplayTimeout={5}
           height={width}
           width={width}
+          loop={true}
         >
           {carousel?.map((item, index) => (
             <Image

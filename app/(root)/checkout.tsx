@@ -1,8 +1,8 @@
-import { SafeAreaView, TouchableOpacity, Image } from 'react-native';
+import { SafeAreaView, TouchableOpacity } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
 import React, { useEffect, useState } from 'react';
+import { View, Text, Image } from 'react-native';
 import WebView from 'react-native-webview';
-import { View, Text } from 'react-native';
 import Constants from 'expo-constants';
 import CustomButton from '@/components/CustomButton';
 import img from '@/assets/images/delivery.png';

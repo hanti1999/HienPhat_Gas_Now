@@ -1,6 +1,6 @@
 import { ScrollView, RefreshControl, TouchableOpacity } from 'react-native';
-import { Text, View, SafeAreaView, Pressable, Image } from 'react-native';
-import { Modal, StatusBar, Dimensions } from 'react-native';
+import { Text, View, SafeAreaView, Pressable } from 'react-native';
+import { Modal, StatusBar, Dimensions, Image } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import React, { useEffect, useState } from 'react';
 import Toast from 'react-native-toast-message';

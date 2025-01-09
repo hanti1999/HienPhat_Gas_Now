@@ -93,7 +93,7 @@ const RenderOrders = ({ item, fetchOrders, token }: IProps) => {
     });
     router.push({
       pathname: '/(root)/review',
-      params: { token: token, productId: productIds },
+      params: { token: token, product_id: productIds, orderId: item?.order_id },
     });
   };
 
@@ -163,7 +163,7 @@ const RenderOrders = ({ item, fetchOrders, token }: IProps) => {
           <Text>{item?.points_earned.toLocaleString()}</Text>
         </View>
       </View>
-      <View className='flex-row' style={{ gap: 8 }}>
+      <View>
         {item?.order_status === 'completed' && (
           <View className='h-8 w-24 mt-1'>
             <RectangleButton
@@ -174,7 +174,6 @@ const RenderOrders = ({ item, fetchOrders, token }: IProps) => {
             />
           </View>
         )}
-
         {item?.order_status === 'completed' ||
         item?.order_status === 'cancelled' ? (
           <></>
