@@ -2,10 +2,14 @@ import { Text, View, SafeAreaView, ActivityIndicator } from 'react-native';
 import React from 'react';
 import ScreenHeader from '@/components/ScreenHeader';
 
-const LoadingScreen = () => {
+interface IProps {
+  showBack?: boolean;
+}
+
+const LoadingScreen = ({ showBack = true }: IProps) => {
   return (
     <SafeAreaView className='bg-white h-full'>
-      <ScreenHeader text='Trở lại' />
+      {showBack && <ScreenHeader text='Trở lại' />}
       <View
         style={{ gap: 10 }}
         className='bg-white py-2 h-full flex-row justify-center items-center'

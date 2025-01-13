@@ -155,7 +155,7 @@ const RenderOrders = ({ item, fetchOrders, token }: IProps) => {
               fontSize: 16,
             }}
           >
-            {item?.order_status}
+            {translateStatus(item?.order_status as string)}
           </Text>
           <Text className='font-bold text-[16px]'>
             {item?.total_order_price.toLocaleString()} đ
@@ -265,6 +265,21 @@ const CancelOrder = ({ id, fetchOrders, token }: IProps) => {
       </View>
     </>
   );
+};
+
+const translateStatus = (status: string): string => {
+  switch (status.toLowerCase()) {
+    case 'completed':
+      return 'Đã thanh toán';
+    case 'cancelled':
+      return 'Đã hủy';
+    case 'shipping':
+      return 'Đang giao';
+    case 'shipped':
+      return 'Đã giao';
+    default:
+      return 'Trạng thái không hợp lệ';
+  }
 };
 
 export default Orders;
