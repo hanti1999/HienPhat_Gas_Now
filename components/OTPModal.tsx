@@ -42,8 +42,8 @@ const OTPModal = (props: IProps) => {
           <OTPInputView
             codeInputHighlightStyle={{ borderColor: '#fb77c5' }}
             codeInputFieldStyle={styles.codeInputFieldStyle}
-            onCodeChanged={onCodeChanged}
             style={{ height: 100, width: '80%' }}
+            onCodeChanged={onCodeChanged}
             autoFocusOnLoad={false}
             pinCount={6}
             code={code}

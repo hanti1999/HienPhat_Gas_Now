@@ -8,8 +8,8 @@ import moment from 'moment';
 import axios from 'axios';
 import RectangleButton from '@/components/RectangleButton';
 import ScreenHeader from '@/components/ScreenHeader';
-import { AntDesign } from '@expo/vector-icons';
 import { IOrder, IOrderItem } from '@/types/type';
+import { AntDesign } from '@expo/vector-icons';
 import LoadingScreen from './loading-screen';
 import NoProduct from './no-product';
 
@@ -277,6 +277,8 @@ const translateStatus = (status: string): string => {
       return 'Đang giao';
     case 'shipped':
       return 'Đã giao';
+    case 'processing':
+      return 'Đang xử lý';
     default:
       return 'Trạng thái không hợp lệ';
   }

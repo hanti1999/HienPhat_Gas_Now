@@ -34,13 +34,13 @@ const UserInfo = () => {
             </View>
           </Pressable>
 
-          <Pressable className='flex-row items-center justify-between py-3'>
+          {/* <Pressable className='flex-row items-center justify-between py-3'>
             <Text className='text-base'>Email</Text>
             <View style={{ gap: 8 }} className='flex-row items-center'>
               <Text className='text-[#999]'>{account_email}</Text>
               <AntDesign name='right' size={16} color='black' />
             </View>
-          </Pressable>
+          </Pressable> */}
 
           <Pressable
             onPress={() =>

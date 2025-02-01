@@ -11,7 +11,7 @@ const HeaderImage = ({ text }: { text: string }) => {
         colors={['transparent', '#fff']}
         className='absolute h-[180px] left-0 right-0 top-0'
       />
-      <Text className='text-3xl text-primary-black font-RobotoMedium absolute bottom-5 left-5'>
+      <Text className='text-3xl text-primary-black font-RobotoBold absolute bottom-5 left-5'>
         {text}
       </Text>
     </View>
