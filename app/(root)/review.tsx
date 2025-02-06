@@ -80,7 +80,7 @@ const Form = ({ product_id, order_id, token }: IProps) => {
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <View className='p-3'>
+      <View className='p-3 flex-1'>
         <View className='mb-2 flex-row'>
           <View className='w-1/2'>
             <Text className='text-[16px]'>Tổng quan</Text>

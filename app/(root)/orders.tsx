@@ -93,7 +93,11 @@ const RenderOrders = ({ item, fetchOrders, token }: IProps) => {
     });
     router.push({
       pathname: '/(root)/review',
-      params: { token: token, product_id: productIds, orderId: item?.order_id },
+      params: {
+        token: token,
+        product_id: productIds,
+        order_id: item?.order_id,
+      },
     });
   };
 
@@ -165,7 +169,10 @@ const RenderOrders = ({ item, fetchOrders, token }: IProps) => {
       </View>
       <View>
         {item?.order_status === 'completed' && (
-          <View className='h-8 w-24 mt-1'>
+          <View
+            className='h-8 w-24 mt-1'
+            style={{ display: item.is_rated ? 'none' : 'flex' }}
+          >
             <RectangleButton
               onPress={() => navToReview(item?.items)}
               textVariant='primary'
@@ -183,6 +190,11 @@ const RenderOrders = ({ item, fetchOrders, token }: IProps) => {
             id={item?.order_id}
             token={token}
           />
+        )}
+        {item?.is_rated && (
+          <Text className='italic text-[16px] mt-1 text-primary-pink'>
+            Cảm ơn bạn đã đánh giá đơn hàng này!
+          </Text>
         )}
       </View>
     </View>
@@ -278,9 +290,9 @@ const translateStatus = (status: string): string => {
     case 'shipped':
       return 'Đã giao';
     case 'processing':
-      return 'Đang xử lý';
+      return 'Chờ xác nhận';
     default:
-      return 'Trạng thái không hợp lệ';
+      return 'Lỗi không xác định';
   }
 };
 

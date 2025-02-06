@@ -31,6 +31,7 @@ declare interface IOrder {
   points_earned: number;
   points_used: number;
   order_status: string;
+  is_rated: boolean;
   items: IOrderItem[];
 }
 
