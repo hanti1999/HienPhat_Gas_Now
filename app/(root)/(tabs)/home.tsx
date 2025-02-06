@@ -1,9 +1,9 @@
 import { StatusBar, Dimensions, FlatList, Pressable } from 'react-native';
 import { Image, ScrollView, RefreshControl, View } from 'react-native';
 import { ActivityIndicator, SafeAreaView, Text } from 'react-native';
+import { SwiperFlatList } from 'react-native-swiper-flatlist';
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import Swiper from 'react-native-swiper';
 import { router } from 'expo-router';
 import axios from 'axios';
 import banner2 from '@/assets/slider-img/DonTetSaleHet_MayLocNuoc.png';
@@ -85,29 +85,23 @@ const Home = () => {
       >
         <SearchBar token={token} />
         <HorizontalCategory token={token} />
-        <Swiper
-          dot={<View className='w-1 h-1 mx-1 bg-gray-200 rounded-full' />}
-          activeDot={
-            <View className='w-1 h-1 mx-1 bg-primary-pink rounded-full' />
-          }
-          height={0.5625 * width}
-          autoplayTimeout={5}
-          autoplay={true}
-          width={width}
-          loop={true}
-        >
-          {slider.map((item, index) => (
+        <SwiperFlatList
+          autoplay
+          autoplayDelay={5}
+          autoplayLoop
+          showPagination={true}
+          data={slider}
+          renderItem={({ item }) => (
             <Image
               source={item}
-              key={index}
               style={{
                 height: 0.5625 * width,
                 aspectRatio: '16/9',
                 width: width,
               }}
             />
-          ))}
-        </Swiper>
+          )}
+        />
 
         {/* <View className='flex-row items-center justify-between bg-white py-1'>
           <Image className='w-12 h-12' source={daisy} />

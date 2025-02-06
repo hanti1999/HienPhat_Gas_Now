@@ -1,11 +1,11 @@
 import { View, Text, SafeAreaView, Dimensions } from 'react-native';
 import { TouchableOpacity, ActivityIndicator } from 'react-native';
+import { SwiperFlatList } from 'react-native-swiper-flatlist';
 import { router, useLocalSearchParams } from 'expo-router';
 import { Image, FlatList, ScrollView } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import Toast from 'react-native-toast-message';
 import { useDispatch } from 'react-redux';
-import Swiper from 'react-native-swiper';
 import moment from 'moment';
 import axios from 'axios';
 import { FontAwesome, AntDesign } from '@expo/vector-icons';
@@ -199,24 +199,16 @@ const ProductInfo = () => {
         className='bg-gray-100'
       >
         <ScreenHeader text={'Chi tiết sản phẩm'} showCart={true} />
-        <Swiper
-          dot={<View className='w-1 h-1 mx-1 bg-gray-200 rounded-full' />}
-          activeDot={
-            <View className='w-1 h-1 mx-1 bg-primary-pink rounded-full' />
-          }
-          autoplay={false}
-          height={width}
-          width={width}
-          loop={true}
-        >
-          {carousel?.map((item, index) => (
+        <SwiperFlatList
+          showPagination={true}
+          data={carousel}
+          renderItem={({ item }) => (
             <Image
-              key={index}
               source={{ uri: item?.image_url }}
-              style={{ height: width }}
+              style={{ height: width, width: width }}
             />
-          ))}
-        </Swiper>
+          )}
+        />
 
         <View className='p-3 mb-2 bg-pink-100'>
           <Text numberOfLines={2} className='font-semibold text-[18px]'>
