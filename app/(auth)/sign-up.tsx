@@ -29,8 +29,8 @@ const SignUp = () => {
     user_fullname: '',
     phonenumber: '',
     address_detail: '',
-    password: '88888888',
-    confirmPass: '88888888',
+    password: '',
+    confirmPass: '',
   });
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [modalVisible, setModalVisible] = useState<boolean>(false);

@@ -1,4 +1,4 @@
-import { Image, TextInput, Text, View, Modal } from 'react-native';
+import { Image, TextInput, Text, View, Modal, Alert } from 'react-native';
 import { SafeAreaView, ScrollView, Switch } from 'react-native';
 import { Dimensions, TouchableOpacity } from 'react-native';
 import { StatusBar, RefreshControl } from 'react-native';
@@ -34,7 +34,7 @@ const Cart = () => {
   const token = useSelector((state: RootState) => state.auth.accessToken);
   const dispatch = useDispatch();
   const [paymentMethod, setPaymentMethod] = useState<string>('cod');
-  const [voucher, setVoucher] = useState<string>('HPWelcome');
+  const [voucher, setVoucher] = useState<string>('');
   const [note, setNote] = useState<string>('');
   const [selectedAddress, setSelectedAddress] = useState<IAddress>();
   const [address, setAddress] = useState<IAddress[]>([]);
@@ -285,7 +285,10 @@ const Cart = () => {
 
             <TouchableOpacity
               className='flex-1 border rounded-lg p-2 flex flex-row items-center relative'
-              onPress={() => setPaymentMethod('bank')}
+              // onPress={() => setPaymentMethod('bank')}
+              onPress={() => {
+                Alert.alert('Thông báo', 'Chức năng này đang bảo trì!');
+              }}
               style={{
                 gap: 8,
                 borderColor: paymentMethod === 'bank' ? P_PINK : '#d1d5db',
