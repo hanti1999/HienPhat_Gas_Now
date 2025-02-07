@@ -12,7 +12,7 @@ import ProductTitle from '@/components/ProductTitle';
 import ProductCard from '@/components/ProductCard';
 import SeeMoreCard from '@/components/SeeMoreCard';
 import SearchBar from '@/components/SearchBar';
-// import daisy from '@/assets/images/daisy.png';
+import daisy from '@/assets/images/daisy.png';
 import { RootState } from '@/redux/store';
 import { Product } from '@/types/type';
 import { slider } from '@/constants';
@@ -22,7 +22,7 @@ const Home = () => {
   const token = useSelector((state: RootState) => state.auth.accessToken);
   const [refreshing, setRefreshing] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
-  // const [sale, setSale] = useState<Product[]>([]);
+  const [sale, setSale] = useState<Product[]>([]);
   const [electricStove, setElectricStove] = useState<Product[]>([]);
   const [kitchenAppli, setKitchenAppli] = useState<Product[]>([]);
   const [accessories, setAccessories] = useState<Product[]>([]);
@@ -42,22 +42,24 @@ const Home = () => {
       const url2 = `${process.env.EXPO_PUBLIC_API}/product/category/17c6fd3b-ab50-4d21-a94e-0269495f0937`;
       const url3 = `${process.env.EXPO_PUBLIC_API}/product/category/553cfa8a-5bb6-4b48-a253-a9460a5c8922`;
       const url4 = `${process.env.EXPO_PUBLIC_API}/product/category/1f967d66-4955-4542-ad89-37458d8e1365`;
+      const url5 = `${process.env.EXPO_PUBLIC_API}/product/top-discount`;
       const config = {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       };
-      const [res1, res2, res3, res4] = await Promise.all([
+      const [res1, res2, res3, res4, res5] = await Promise.all([
         axios.get(url1, config),
         axios.get(url2, config),
         axios.get(url3, config),
         axios.get(url4, config),
+        axios.get(url5, config),
       ]);
-
       setGasStove(res1.data);
       setElectricStove(res2.data);
       setKitchenAppli(res3.data);
       setAccessories(res4.data);
+      setSale(res5.data);
     } catch (error) {
       console.error('Lỗi fetch sản phẩm', error);
     } finally {
@@ -103,7 +105,7 @@ const Home = () => {
           )}
         />
 
-        {/* <View className='flex-row items-center justify-between bg-white py-1'>
+        <View className='flex-row items-center justify-between bg-white py-1'>
           <Image className='w-12 h-12' source={daisy} />
           <Text className='font-bold text-2xl text-red-500 '>
             Ưu đãi quá trời!
@@ -120,7 +122,7 @@ const Home = () => {
           keyExtractor={(item) => item?.product_id}
           showsHorizontalScrollIndicator={false}
           horizontal
-        /> */}
+        />
 
         <View className='border-t-2 border-primary-pink mt-5 relative bg-white'>
           <ProductTitle text={'Bếp gas'} />
