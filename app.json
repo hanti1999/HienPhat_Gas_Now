@@ -20,8 +20,7 @@
         "android.permission.ACCESS_COARSE_LOCATION",
         "android.permission.ACCESS_FINE_LOCATION"
       ],
-      "package": "com.nthanh99.hienphatgasnow",
-      "versionCode": 1
+      "package": "com.nthanh99.hienphatgasnow"
     },
     "web": {
       "bundler": "metro",
