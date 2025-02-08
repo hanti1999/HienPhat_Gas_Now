@@ -58,7 +58,7 @@ const Verify = () => {
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View className='flex'>
           <HeaderImage text='Xác minh OTP' />
-          <View className='p-5'>
+          <View className='px-5 pb-5'>
             <Text className='text-center'>
               Vui lòng kiểm tra mã OTP được gửi đến Zalo {phonenumber}
             </Text>

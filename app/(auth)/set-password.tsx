@@ -60,7 +60,7 @@ const SetPassword = () => {
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View>
           <HeaderImage text='Lấy lại mật khẩu' />
-          <View className='p-5'>
+          <View className='px-5 pb-5'>
             <InputField
               placeholder='Nhập mật khẩu mới...'
               secureTextEntry={!showPassword}

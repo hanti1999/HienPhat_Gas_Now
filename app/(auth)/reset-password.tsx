@@ -147,7 +147,7 @@ const ResetPassword = () => {
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View>
           <HeaderImage text='Lấy lại mật khẩu' />
-          <View className='p-5'>
+          <View className='px-5 pb-5'>
             <InputField
               label='Nhập số điện thoại cần lấy lại mật khẩu'
               placeholder='Nhập số điện thoại...'

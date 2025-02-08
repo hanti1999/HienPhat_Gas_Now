@@ -75,7 +75,7 @@ const SignIn = () => {
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View>
           <HeaderImage text='Đăng nhập' />
-          <View className='p-5'>
+          <View className='px-5 pb-5'>
             <InputField
               onChangeText={(value) => setForm({ ...form, phonenumber: value })}
               placeholder='Nhập số điện thoại của bạn'
