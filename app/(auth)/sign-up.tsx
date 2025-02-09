@@ -15,6 +15,7 @@ import handleGetLocation from '@/utils/getLocation';
 import HeaderImage from '@/components/HeaderImage';
 import InputField from '@/components/InputField';
 import generateOTP from '@/utils/generateOTP';
+import GoBack from '@/components/GoBack';
 
 interface SignupData {
   user_fullname: string;
@@ -207,6 +208,7 @@ const SignUp = () => {
       <View>
         <HeaderImage text='Đăng ký' />
         <View className='px-5 pb-5'>
+          <GoBack />
           <InputField
             onChangeText={(value) => setForm({ ...form, phonenumber: value })}
             placeholder='Nhập số điện thoại của bạn'

@@ -11,6 +11,7 @@ import InputField from '@/components/InputField';
 import generateOTP from '@/utils/generateOTP';
 import OTPModal from '@/components/OTPModal';
 import { ZaloToken } from '@/types/type';
+import GoBack from '@/components/GoBack';
 
 const ResetPassword = () => {
   const [modalVisible, setModalVisible] = useState<boolean>(false);
@@ -148,6 +149,7 @@ const ResetPassword = () => {
         <View>
           <HeaderImage text='Lấy lại mật khẩu' />
           <View className='px-5 pb-5'>
+            <GoBack />
             <InputField
               label='Nhập số điện thoại cần lấy lại mật khẩu'
               placeholder='Nhập số điện thoại...'

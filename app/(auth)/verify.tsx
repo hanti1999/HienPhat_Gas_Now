@@ -7,6 +7,7 @@ import axios from 'axios';
 import OTPInputView from '@twotalltotems/react-native-otp-input';
 import CustomButton from '@/components/CustomButton';
 import HeaderImage from '@/components/HeaderImage';
+import GoBack from '@/components/GoBack';
 
 const Verify = () => {
   const { phonenumber, user_fullname, address_detail, password, otp } =
@@ -59,6 +60,7 @@ const Verify = () => {
         <View className='flex'>
           <HeaderImage text='Xác minh OTP' />
           <View className='px-5 pb-5'>
+            <GoBack />
             <Text className='text-center'>
               Vui lòng kiểm tra mã OTP được gửi đến Zalo {phonenumber}
             </Text>

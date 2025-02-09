@@ -12,6 +12,7 @@ import HeaderImage from '@/components/HeaderImage';
 import { logout } from '@/redux/slices/authSlice';
 import InputField from '@/components/InputField';
 import { Ionicons } from '@expo/vector-icons';
+import GoBack from '@/components/GoBack';
 
 const SetPassword = () => {
   const { phoneNumber } = useLocalSearchParams();
@@ -61,6 +62,7 @@ const SetPassword = () => {
         <View>
           <HeaderImage text='Lấy lại mật khẩu' />
           <View className='px-5 pb-5'>
+            <GoBack />
             <InputField
               placeholder='Nhập mật khẩu mới...'
               secureTextEntry={!showPassword}
