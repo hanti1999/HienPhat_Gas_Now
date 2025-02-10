@@ -11,7 +11,7 @@ const GoBack = () => {
       onPress={() => router.back()}
     >
       <Entypo name='chevron-thin-left' size={16} color={'#3b82f6'} />
-      <Text className='text-[18px] underline text-blue-500'>Trở lại</Text>
+      <Text className='text-[18px] text-blue-500'>Trở lại</Text>
     </TouchableOpacity>
   );
 };
