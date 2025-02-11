@@ -34,6 +34,11 @@ const UpdateAddress = () => {
   const [wards, setWards] = useState<Ward[]>([]);
   const [selectedProvince, setSelectedProvince] = useState<string>('');
   const [selectedDistrict, setSelectedDistrict] = useState<string>('');
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
 
   const toggleSwitch = () => {
     setData((prevState) => ({
@@ -86,11 +91,6 @@ const UpdateAddress = () => {
     try {
       setLoading(true);
       const url = `${process.env.EXPO_PUBLIC_API}/shipping/${id}`;
-      const config = {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      };
       const res = await axios.put(url, data, config);
 
       if (res.status === 200) {
@@ -114,11 +114,6 @@ const UpdateAddress = () => {
     try {
       setLoading(true);
       const url = `${process.env.EXPO_PUBLIC_API}/shipping/${id}`;
-      const config = {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      };
       const res = await axios.delete(url, config);
 
       if (res.status === 200) {

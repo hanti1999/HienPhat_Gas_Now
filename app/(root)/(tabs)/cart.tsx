@@ -47,16 +47,16 @@ const Cart = () => {
   const [usePoint, setUsePoint] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const P_PINK = '#fb77c5';
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
 
   const fetchAddress = async () => {
     try {
       setLoading(true);
       const url = `${process.env.EXPO_PUBLIC_API}/shipping`;
-      const config = {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      };
       const res = await axios.get(url, config);
       if (res.status === 200) {
         setAddress(res?.data?.addresses);
@@ -98,11 +98,6 @@ const Cart = () => {
         points_used: usePoint === true ? userPoints : 0,
         delivery_note: note,
         items: items,
-      };
-      const config = {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
       };
       const res = await axios.post(url, data, config);
       if (res.status === 201) {

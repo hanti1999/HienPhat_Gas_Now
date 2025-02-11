@@ -23,6 +23,13 @@ interface IDes {
   title: string;
 }
 
+interface IFeature {
+  feature_id: string;
+  feature_name: string;
+  feature_des: string;
+  product_id: string;
+}
+
 interface ICarousel {
   image_id: string;
   product_id: string;
@@ -37,20 +44,21 @@ const ProductInfo = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [averageRating, setAverageRating] = useState<number>();
   const [description, setDescription] = useState<IDes[]>([]);
+  const [feature, setFeature] = useState<IFeature[]>([]);
   const [carousel, setCarousel] = useState<ICarousel[]>([]);
   const [reviews, setReviews] = useState<Review[]>([]);
   const [data, setData] = useState<Product>();
   const width = Dimensions.get('window').width;
   const dispatch = useDispatch();
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
 
   const checkWishlist = async () => {
     try {
       const url = `${process.env.EXPO_PUBLIC_API}/wishlist`;
-      const config = {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      };
       const res = await axios.get(url, config);
       if (res.status === 200) {
         const products: Product[] = res.data.wishlist;
@@ -98,11 +106,6 @@ const ProductInfo = () => {
     try {
       setWlLoading(true);
       const url = `${process.env.EXPO_PUBLIC_API}/wishlist`;
-      const config = {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      };
       const data = {
         product_id: itemId,
       };
@@ -125,11 +128,6 @@ const ProductInfo = () => {
     try {
       setWlLoading(true);
       const url = `${process.env.EXPO_PUBLIC_API}/wishlist/${itemId}`;
-      const config = {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      };
       const res = await axios.delete(url, config);
       if (res.status === 200) {
         checkWishlist();
@@ -153,27 +151,25 @@ const ProductInfo = () => {
         const url2 = `${process.env.EXPO_PUBLIC_API}/carousel/${itemId}`;
         const url3 = `${process.env.EXPO_PUBLIC_API}/description/${itemId}`;
         const url4 = `${process.env.EXPO_PUBLIC_API}/review/product/${itemId}`;
-        const config = {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        };
-        const [response1, response2, response3, response4] = await Promise.all([
+        const url5 = `${process.env.EXPO_PUBLIC_API}/feature/${itemId}`;
+        const [res1, res2, res3, res4, res5] = await Promise.all([
           axios.get(url1, config),
           axios.get(url2, config),
           axios.get(url3, config),
           axios.get(url4, config),
+          axios.get(url5, config),
         ]);
-        setData(response1?.data);
-        setCarousel(response2?.data);
-        setDescription(response3?.data);
-        setReviews(response4?.data);
+        setData(res1?.data);
+        setCarousel(res2?.data);
+        setDescription(res3?.data);
+        setReviews(res4?.data);
+        setFeature(res5?.data);
         // Tính đánh giá trung bình
-        const totalRating = response4?.data.reduce(
+        const totalRating = res4?.data.reduce(
           (acc: any, item: any) => acc + item.review_rating,
           0
         );
-        setAverageRating(totalRating / response4?.data.length);
+        setAverageRating(totalRating / res4?.data.length);
       } catch (error) {
         console.error(error);
       } finally {
@@ -262,6 +258,19 @@ const ProductInfo = () => {
         <View className='p-3 mb-2 bg-pink-200'>
           <Text className='text-[16px] font-semibold mb-2'>
             Đặc điểm nổi bật
+          </Text>
+          <View>
+            {feature?.map((item, index) => (
+              <Text className='pt-0.5' key={index}>
+                o {item?.feature_des}
+              </Text>
+            ))}
+          </View>
+        </View>
+
+        <View className='p-3 mb-2 bg-pink-200'>
+          <Text className='text-[16px] font-semibold mb-2'>
+            Thông tin chi tiết
           </Text>
           <View>
             {description?.map((item, index) => (

@@ -28,6 +28,11 @@ const Home = () => {
   const [accessories, setAccessories] = useState<Product[]>([]);
   const [gasStove, setGasStove] = useState<Product[]>([]);
   const width = Dimensions.get('window').width;
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
 
   const onRefresh = async () => {
     setRefreshing(true);
@@ -43,11 +48,6 @@ const Home = () => {
       const url3 = `${process.env.EXPO_PUBLIC_API}/product/category/553cfa8a-5bb6-4b48-a253-a9460a5c8922`;
       const url4 = `${process.env.EXPO_PUBLIC_API}/product/category/1f967d66-4955-4542-ad89-37458d8e1365`;
       const url5 = `${process.env.EXPO_PUBLIC_API}/product/top-discount`;
-      const config = {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      };
       const [res1, res2, res3, res4, res5] = await Promise.all([
         axios.get(url1, config),
         axios.get(url2, config),
