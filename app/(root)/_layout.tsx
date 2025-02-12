@@ -21,6 +21,7 @@ const Layout = () => {
       <Stack.Screen name='(tabs)' options={{ headerShown: false }} />
       <Stack.Screen name='orders' options={{ headerShown: false }} />
       <Stack.Screen name='about' options={{ headerShown: false }} />
+      <Stack.Screen name='sale' options={{ headerShown: false }} />
     </Stack>
   );
 };

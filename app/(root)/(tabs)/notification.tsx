@@ -1,5 +1,6 @@
-import { SafeAreaView, StatusBar, TouchableOpacity } from 'react-native';
-import { RefreshControl, FlatList, View, Text } from 'react-native';
+import { Alert, SafeAreaView, StatusBar, TouchableOpacity } from 'react-native';
+import { RefreshControl, FlatList, View, Text, Image } from 'react-native';
+import { Dimensions } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { router } from 'expo-router';
@@ -10,10 +11,25 @@ import { AntDesign } from '@expo/vector-icons';
 import { RootState } from '@/redux/store';
 import LoadingScreen from '../loading-screen';
 import NoProduct from '../no-product';
+import Toast from 'react-native-toast-message';
+
+interface INoti {
+  title: string;
+  description: string;
+  created_at: string;
+  image?: string | null;
+}
 
 const Notification = () => {
   const token = useSelector((state: RootState) => state.auth.accessToken);
-  const [notification, setNotification] = useState<any>([{}]);
+  const [notification, setNotification] = useState<INoti[]>([
+    {
+      title: 'Đón tết sale hết',
+      description: 'Mở app đón ưu đãi',
+      created_at: '2025-02-11T02:30:12.221Z',
+      image: 'https://placehold.co/180x100',
+    },
+  ]);
   const [refreshing, setRefreshing] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
 
@@ -26,12 +42,16 @@ const Notification = () => {
   const fetchNotification = async () => {
     try {
       const url = `${process.env.EXPO_PUBLIC_API}/noti-url`;
-      const res = await axios.get(url);
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+      const res = await axios.get(url, config);
       if (res.status === 200) {
-        const notification = res.data?.notification;
-        setNotification(notification);
+        setNotification(res.data);
       } else {
-        console.error('Fetch thông báo không thành công');
+        Toast.show({ type: 'error', text1: res.data?.message });
       }
     } catch (error) {
       console.error('Lỗi (NotificationScreen)', error);
@@ -56,29 +76,6 @@ const Notification = () => {
     <SafeAreaView className='flex-1 bg-white'>
       <StatusBar barStyle={'dark-content'} />
       <ScreenHeader text={'Thông báo'} showBack={false} />
-      {/* Test */}
-      <TouchableOpacity
-        className='p-3 bg-primary-pink rounded-lg'
-        onPress={() =>
-          router.push({
-            pathname: '/(root)/checkout',
-            params: { paymentMethod: 'bank' },
-          })
-        }
-      >
-        <Text>Test Checkout dạng chuyển khoản</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        className='p-3 bg-primary-pink rounded-lg'
-        onPress={() =>
-          router.push({
-            pathname: '/(root)/checkout',
-            params: { paymentMethod: 'cod' },
-          })
-        }
-      >
-        <Text>Test Checkout dạng cod</Text>
-      </TouchableOpacity>
       <FlatList
         data={notification}
         renderItem={({ item, index }) => (
@@ -93,29 +90,27 @@ const Notification = () => {
   );
 };
 
-const RenderItem = ({ item, index }: { item: any; index: number }) => {
+const RenderItem = ({ item, index }: { item: INoti; index: number }) => {
+  const width = Dimensions.get('window').width;
   return (
-    <View className='bg-white p-3 mb-2' key={index}>
-      {/* <Text className='font-semibold uppercase text-[16px]'>{item?.title}</Text>
-      <Text className='text-[15px]'>
-        Vào phần <Text className='underline'>Tài khoản</Text>
-        <AntDesign name='arrowright' size={16} color='black' />
-        <Text className='underline'>Đơn hàng của bạn</Text> để xem chi tiết
-      </Text>
-      <View className='mt-4'>
-        <Text className='text-gray-500 text-[14px]'>
-          {moment(item?.createAt).format('DD/MM/YYYY HH:mm')}
+    <TouchableOpacity
+      onPress={() => {
+        Alert.alert('heloo');
+      }}
+      className='mt-2 bg-white p-3'
+      key={index}
+    >
+      <Text className='font-semibold uppercase text-base'>{item.title}</Text>
+      <Text>{item?.description}</Text>
+      {item?.image && (
+        <Image source={{ uri: item?.image }} className='aspect-video' />
+      )}
+      <View className='pb-2 border-b border-gray-200'>
+        <Text className='text-gray-500 text-sm'>
+          {moment(item?.created_at).format('DD/MM/YYYY HH:mm')}
         </Text>
-      </View> */}
-      <Text className='font-semibold uppercase text-base'>
-        Chào mừng bạn đến với mobile app của Gas Hiền Phát
-      </Text>
-      <Text>- Mở app đón ưu đãi</Text>
-      <Text>- Gọi gas nhanh chóng</Text>
-      <View className='my-4'>
-        <Text className='text-gray-500 text-sm'>01/01/2025 00:00</Text>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 
