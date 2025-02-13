@@ -12,24 +12,20 @@ import { RootState } from '@/redux/store';
 import LoadingScreen from '../loading-screen';
 import NoProduct from '../no-product';
 import Toast from 'react-native-toast-message';
+import openLink from '@/utils/openLink';
 
 interface INoti {
-  title: string;
-  description: string;
+  sysn_title: string;
+  sysn_description: string;
   created_at: string;
-  image?: string | null;
+  sysn_image?: string | null;
+  sysn_link: string;
+  sysn_is_link: boolean;
 }
 
 const Notification = () => {
   const token = useSelector((state: RootState) => state.auth.accessToken);
-  const [notification, setNotification] = useState<INoti[]>([
-    {
-      title: 'Đón tết sale hết',
-      description: 'Mở app đón ưu đãi',
-      created_at: '2025-02-11T02:30:12.221Z',
-      image: 'https://placehold.co/180x100',
-    },
-  ]);
+  const [notification, setNotification] = useState<INoti[]>([]);
   const [refreshing, setRefreshing] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
 
@@ -41,7 +37,7 @@ const Notification = () => {
 
   const fetchNotification = async () => {
     try {
-      const url = `${process.env.EXPO_PUBLIC_API}/noti-url`;
+      const url = `${process.env.EXPO_PUBLIC_API}/notification`;
       const config = {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -61,16 +57,16 @@ const Notification = () => {
   };
 
   useEffect(() => {
-    // fetchNotification();
+    fetchNotification();
   }, []);
 
-  // if (loading) {
-  //   return <LoadingScreen />;
-  // }
+  if (loading) {
+    return <LoadingScreen />;
+  }
 
-  // if (notification.length === 0 || notification.length === undefined) {
-  //   return <NoProduct text={'Tạm chưa có thông báo'} />;
-  // }
+  if (notification.length === 0 || notification.length === undefined) {
+    return <NoProduct text={'Tạm chưa có thông báo'} />;
+  }
 
   return (
     <SafeAreaView className='flex-1 bg-white'>
@@ -91,19 +87,24 @@ const Notification = () => {
 };
 
 const RenderItem = ({ item, index }: { item: INoti; index: number }) => {
-  const width = Dimensions.get('window').width;
   return (
     <TouchableOpacity
       onPress={() => {
-        Alert.alert('heloo');
+        openLink(item?.sysn_link);
       }}
       className='mt-2 bg-white p-3'
+      disabled={!item?.sysn_is_link}
       key={index}
     >
-      <Text className='font-semibold uppercase text-base'>{item.title}</Text>
-      <Text>{item?.description}</Text>
-      {item?.image && (
-        <Image source={{ uri: item?.image }} className='aspect-video' />
+      <Text className='font-semibold uppercase text-base'>
+        {item.sysn_title}
+      </Text>
+      <Text>✨{item?.sysn_description}</Text>
+      {item?.sysn_image && (
+        <Image
+          source={{ uri: item?.sysn_image }}
+          className='aspect-[16/6] py-2'
+        />
       )}
       <View className='pb-2 border-b border-gray-200'>
         <Text className='text-gray-500 text-sm'>
