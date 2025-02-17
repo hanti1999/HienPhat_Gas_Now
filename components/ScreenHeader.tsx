@@ -6,19 +6,29 @@ import { Entypo, Ionicons } from '@expo/vector-icons';
 import { RootState } from '@/redux/store';
 
 interface IProps {
-  text: string;
+  text?: string;
   showCart?: boolean;
   showBack?: boolean;
+  bg?: string;
+  className?: string;
 }
 
-const ScreenHeader = ({ text, showCart = false, showBack = true }: IProps) => {
+const ScreenHeader = ({
+  text,
+  showCart = false,
+  showBack = true,
+  bg = 'white',
+  className,
+}: IProps) => {
   const cartQuantity = useSelector(
     (state: RootState) => state.cart.totalQuantity
   );
   const displayValue = cartQuantity > 9 ? '9+' : cartQuantity;
 
   return (
-    <View className='flex-row justify-between items-center bg-white border-b border-gray-300'>
+    <View
+      className={`flex-row justify-between items-center bg-${bg} border-b border-gray-300 ${className}`}
+    >
       <View className='flex-row items-center'>
         <TouchableOpacity
           onPress={() => router.back()}
@@ -30,7 +40,9 @@ const ScreenHeader = ({ text, showCart = false, showBack = true }: IProps) => {
             style={{ paddingHorizontal: 12, paddingVertical: 10 }}
           />
         </TouchableOpacity>
-        <Text className='font-bold text-[20px] px-3 py-2.5'>{text}</Text>
+        {text && (
+          <Text className='font-bold text-[20px] px-3 py-2.5'>{text}</Text>
+        )}
       </View>
       <TouchableOpacity
         className={`relative px-3 py-2.5 ${showCart ? '' : 'hidden'}`}

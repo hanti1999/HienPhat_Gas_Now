@@ -17,7 +17,7 @@ import openLink from '@/utils/openLink';
 interface INoti {
   sysn_title: string;
   sysn_description: string;
-  created_at: string;
+  sysn_created_at: string;
   sysn_image?: string | null;
   sysn_link: string;
   sysn_is_link: boolean;
@@ -90,7 +90,7 @@ const RenderItem = ({ item, index }: { item: INoti; index: number }) => {
   return (
     <TouchableOpacity
       onPress={() => {
-        openLink(item?.sysn_link);
+        router.push(`/(root)/sale`);
       }}
       className='mt-2 bg-white p-3'
       disabled={!item?.sysn_is_link}
@@ -108,7 +108,7 @@ const RenderItem = ({ item, index }: { item: INoti; index: number }) => {
       )}
       <View className='pb-2 border-b border-gray-200'>
         <Text className='text-gray-500 text-sm'>
-          {moment(item?.created_at).format('DD/MM/YYYY HH:mm')}
+          {moment(item?.sysn_created_at).format('DD/MM/YYYY HH:mm')}
         </Text>
       </View>
     </TouchableOpacity>

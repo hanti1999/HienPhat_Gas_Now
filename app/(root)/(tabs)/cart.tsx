@@ -413,15 +413,15 @@ const RenderItemToCart = ({ item, dispatch }: IProp) => {
 
   return (
     <View className='flex-row border-b border-gray-200 py-2' style={{ gap: 4 }}>
-      <View style={{ width: width * 0.4 }}>
-        <Image
-          className='w-full rounded-lg border border-gray-200'
-          style={{ width: width * 0.4, height: width * 0.4 }}
-          source={{ uri: item?.productImg }}
-        />
-      </View>
-      <View style={{ width: width * 0.6 }} className='flex-1'>
-        <Text className='font-semibold text-[18px]'>{item?.title}</Text>
+      <Image
+        className='w-full rounded-lg border border-gray-200'
+        style={{ width: width * 0.4, height: width * 0.4 }}
+        source={{ uri: item?.productImg }}
+      />
+      <View className='flex-1'>
+        <Text numberOfLines={2} className='font-semibold text-[18px]'>
+          {item?.title}
+        </Text>
         <Text className='mb-2 mt-4 text-[16px]'>
           {item?.quantity}x {item?.price?.toLocaleString()}đ{' '}
           {item?.oldPrice !== item?.price && (
