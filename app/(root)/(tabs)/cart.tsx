@@ -21,6 +21,7 @@ import { FontAwesome } from '@expo/vector-icons';
 import { RootState } from '@/redux/store';
 import LoadingScreen from '../loading-screen';
 import NoProduct from '../no-product';
+import moment from 'moment';
 
 const Cart = () => {
   const cartQuantity = useSelector(
@@ -102,9 +103,15 @@ const Cart = () => {
       const res = await axios.post(url, data, config);
       if (res.status === 201) {
         dispatch(clearCart());
-        router.push({
+        const data: string = res.data?.order_id;
+        const description: string = data.slice(-12);
+        router.replace({
           pathname: '/(root)/checkout',
-          params: { token, paymentMethod },
+          params: {
+            paymentMethod,
+            sum: totalAmount - voucherAmount,
+            description,
+          },
         });
       } else {
         Toast.show({ type: 'error', text1: res.data?.message });
@@ -280,16 +287,13 @@ const Cart = () => {
 
             <TouchableOpacity
               className='flex-1 border rounded-lg p-2 flex flex-row items-center relative'
-              // onPress={() => setPaymentMethod('bank')}
-              onPress={() => {
-                Alert.alert('Thông báo', 'Chức năng này đang bảo trì!');
-              }}
+              onPress={() => setPaymentMethod('banking')}
               style={{
                 gap: 8,
-                borderColor: paymentMethod === 'bank' ? P_PINK : '#d1d5db',
+                borderColor: paymentMethod === 'banking' ? P_PINK : '#d1d5db',
               }}
             >
-              {paymentMethod === 'bank' && <CheckedLabel />}
+              {paymentMethod === 'banking' && <CheckedLabel />}
               <Image source={bankIcon} className='w-12 h-12' />
               <Text className='text-[16px]'>Chuyển khoản</Text>
             </TouchableOpacity>

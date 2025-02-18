@@ -16,6 +16,7 @@ import openLink from '@/utils/openLink';
 import LoadingScreen from '../loading-screen';
 
 const Profile = () => {
+  const version: string = 'v25.02.2';
   const token = useSelector((state: RootState) => state?.auth.accessToken);
   const [refreshing, setRefreshing] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
@@ -198,7 +199,7 @@ const Profile = () => {
 
         <View className='mt-5'>
           <View className='flex items-center'>
-            <Text className='text-gray-500'>Gas Hiền Phát - v{'0.12.24'}</Text>
+            <Text className='text-gray-500'>Gas Hiền Phát - {version}</Text>
             <Text className='mt-2 text-gray-500'>
               Thiết kế và phát triển bởi:
             </Text>
