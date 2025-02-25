@@ -3,14 +3,16 @@ import { Image, ScrollView, RefreshControl, View } from 'react-native';
 import { ActivityIndicator, SafeAreaView, Text } from 'react-native';
 import { SwiperFlatList } from 'react-native-swiper-flatlist';
 import React, { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { router } from 'expo-router';
 import axios from 'axios';
 import banner2 from '@/assets/slider-img/DonTetSaleHet_MayLocNuoc.png';
+import { Dispatch, UnknownAction } from '@reduxjs/toolkit';
 import banner1 from '@/assets/slider-img/sale8-3.jpg';
 import ProductTitle from '@/components/ProductTitle';
 import ProductCard from '@/components/ProductCard';
 import SeeMoreCard from '@/components/SeeMoreCard';
+import { logout } from '@/redux/slices/authSlice';
 import SearchBar from '@/components/SearchBar';
 import daisy from '@/assets/images/daisy.png';
 import { RootState } from '@/redux/store';
@@ -28,6 +30,7 @@ const Home = () => {
   const [accessories, setAccessories] = useState<Product[]>([]);
   const [gasStove, setGasStove] = useState<Product[]>([]);
   const width = Dimensions.get('window').width;
+  const dispatch = useDispatch();
   const config = {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -86,7 +89,7 @@ const Home = () => {
         }
       >
         <SearchBar token={token} />
-        <HorizontalCategory token={token} />
+        <HorizontalCategory token={token} dispatch={dispatch} />
         <SwiperFlatList
           autoplay
           autoplayDelay={5}
@@ -94,14 +97,16 @@ const Home = () => {
           showPagination={true}
           data={slider}
           renderItem={({ item }) => (
-            <Image
-              source={item}
-              style={{
-                height: 0.5625 * width,
-                aspectRatio: '16/9',
-                width: width,
-              }}
-            />
+            <Pressable onPress={() => router.push('/sale')}>
+              <Image
+                source={item}
+                style={{
+                  height: 0.5625 * width,
+                  aspectRatio: '16/9',
+                  width: width,
+                }}
+              />
+            </Pressable>
           )}
         />
 
@@ -148,7 +153,9 @@ const Home = () => {
           />
         </View>
 
-        <Image className='w-full h-[60px]' source={banner1} />
+        <Pressable onPress={() => router.push('/sale')}>
+          <Image className='w-full h-[60px]' source={banner1} />
+        </Pressable>
 
         <View className='border-t-2 border-primary-pink mt-5 relative bg-white'>
           <ProductTitle text={'Bếp điện'} />
@@ -175,7 +182,9 @@ const Home = () => {
           />
         </View>
 
-        <Image className='w-full h-[140px]' source={banner2} />
+        <Pressable onPress={() => router.push('/sale')}>
+          <Image className='w-full h-[140px]' source={banner2} />
+        </Pressable>
 
         <View className='border-t-2 border-primary-pink mt-5 relative bg-white'>
           <ProductTitle text={'Gia dụng'} />
@@ -233,14 +242,19 @@ const Home = () => {
               Thương hiệu
             </Text>
           </View>
-          <HorizontalBrand token={token} />
+          <HorizontalBrand token={token} dispatch={dispatch} />
         </View>
       </ScrollView>
     </SafeAreaView>
   );
 };
 
-const HorizontalCategory = ({ token }: { token: string | null }) => {
+interface IProps {
+  token: string | null;
+  dispatch: Dispatch<UnknownAction>;
+}
+
+const HorizontalCategory = ({ token, dispatch }: IProps) => {
   const [catList, setCatList] = useState<any>();
   const [loading, setLoading] = useState<boolean>(true);
 
@@ -258,6 +272,8 @@ const HorizontalCategory = ({ token }: { token: string | null }) => {
         if (res.status === 200) {
           const cat = res.data;
           setCatList(cat);
+        } else if (res.status === 401) {
+          dispatch(logout());
         } else {
           console.error(res.data?.message);
         }
@@ -312,7 +328,7 @@ const HorizontalCategory = ({ token }: { token: string | null }) => {
   );
 };
 
-const HorizontalBrand = ({ token }: { token: string | null }) => {
+const HorizontalBrand = ({ token, dispatch }: IProps) => {
   const [brandList, setBrandList] = useState<any>();
   const [loading, setLoading] = useState<boolean>(true);
 
@@ -328,6 +344,8 @@ const HorizontalBrand = ({ token }: { token: string | null }) => {
         const res = await axios.get(url, config);
         if (res.status === 200) {
           setBrandList(res?.data.reverse());
+        } else if (res.status === 401) {
+          dispatch(logout());
         } else {
           console.error(res.data?.message);
         }
