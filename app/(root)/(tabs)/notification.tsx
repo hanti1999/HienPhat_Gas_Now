@@ -64,7 +64,7 @@ const Notification = () => {
   }
 
   if (notification.length === 0 || notification.length === undefined) {
-    return <NoProduct text={'Tạm chưa có thông báo'} />;
+    return <NoProduct text={'Tạm chưa có thông báo'} type='noti' />;
   }
 
   return (
