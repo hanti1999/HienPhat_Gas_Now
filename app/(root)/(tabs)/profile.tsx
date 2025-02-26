@@ -3,7 +3,6 @@ import { Text, View, SafeAreaView, Pressable } from 'react-native';
 import { Modal, StatusBar, Dimensions, Image } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import React, { useEffect, useState } from 'react';
-import Toast from 'react-native-toast-message';
 import { Link, router } from 'expo-router';
 import axios from 'axios';
 import { FontAwesome, AntDesign } from '@expo/vector-icons';
@@ -13,6 +12,7 @@ import { logout } from '@/redux/slices/authSlice';
 import { ProfileType } from '@/types/type';
 import { RootState } from '@/redux/store';
 import openLink from '@/utils/openLink';
+import SignOut from '@/utils/sign-out';
 import LoadingScreen from '../loading-screen';
 
 const Profile = () => {
@@ -39,11 +39,13 @@ const Profile = () => {
       const res = await axios.get(url, config);
       if (res.status === 200) {
         setUser(res.data);
-      } else {
-        Toast.show({ type: 'error', text1: res.data?.message });
       }
-    } catch (error) {
-      console.error('Lỗi (catch ProfileScreen): ', error);
+    } catch (error: any) {
+      if (error.response && error.response.status === 401) {
+        SignOut();
+      } else {
+        console.error('Lỗi (catch ProfileScreen): ', error);
+      }
     } finally {
       setLoading(false);
     }

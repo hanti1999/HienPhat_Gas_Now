@@ -1,4 +1,4 @@
-import { Image, TextInput, Text, View, Modal, Alert } from 'react-native';
+import { Image, TextInput, Text, View, Modal } from 'react-native';
 import { SafeAreaView, ScrollView, Switch } from 'react-native';
 import { Dimensions, TouchableOpacity } from 'react-native';
 import { StatusBar, RefreshControl } from 'react-native';
@@ -19,9 +19,9 @@ import { MaterialIcons } from '@expo/vector-icons';
 import { CartItem, IAddress } from '@/types/type';
 import { FontAwesome } from '@expo/vector-icons';
 import { RootState } from '@/redux/store';
+import SignOut from '@/utils/sign-out';
 import LoadingScreen from '../loading-screen';
 import NoProduct from '../no-product';
-import moment from 'moment';
 
 const Cart = () => {
   const cartQuantity = useSelector(
@@ -62,11 +62,13 @@ const Cart = () => {
       if (res.status === 200) {
         setAddress(res?.data?.addresses);
         setUserPoints(res?.data?.points?.total_points);
-      } else {
-        console.error(res.data?.message);
       }
-    } catch (error) {
-      console.error('Lỗi fetch địa chỉ: ' + error);
+    } catch (error: any) {
+      if (error.response && error.response.status === 401) {
+        SignOut();
+      } else {
+        console.error('Lỗi (NotificationScreen)', error);
+      }
     } finally {
       setLoading(false);
     }
@@ -113,13 +115,14 @@ const Cart = () => {
             description,
           },
         });
-      } else {
-        Toast.show({ type: 'error', text1: res.data?.message });
-        console.error(res.data?.message);
       }
-    } catch (error) {
-      Toast.show({ type: 'error', text1: 'Tạo đơn hàng không thành công' });
-      console.error('Lỗi (CartScreen): ', error);
+    } catch (error: any) {
+      if (error.response && error.response.status === 401) {
+        SignOut();
+      } else {
+        Toast.show({ type: 'error', text1: 'Tạo đơn hàng không thành công' });
+        console.error('Lỗi (CartScreen): ', error);
+      }
     } finally {
       setOrderLoading(false);
     }

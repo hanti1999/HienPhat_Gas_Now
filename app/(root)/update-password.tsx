@@ -50,7 +50,7 @@ const UpdatePassword = () => {
       setModalVisible(true);
       setOtpCountdown(30);
     } else if (res.data.error === -124) {
-      console.error('Access token hết hạn', res.data);
+      console.error('Access token hết hạn: ', res.data);
       getNewToken();
     } else {
       setLoading(false);

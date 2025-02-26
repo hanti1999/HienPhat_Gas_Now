@@ -3,20 +3,19 @@ import { Image, ScrollView, RefreshControl, View } from 'react-native';
 import { ActivityIndicator, SafeAreaView, Text } from 'react-native';
 import { SwiperFlatList } from 'react-native-swiper-flatlist';
 import React, { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { router } from 'expo-router';
 import axios from 'axios';
 import banner2 from '@/assets/slider-img/DonTetSaleHet_MayLocNuoc.png';
-import { Dispatch, UnknownAction } from '@reduxjs/toolkit';
 import banner1 from '@/assets/slider-img/sale8-3.jpg';
 import ProductTitle from '@/components/ProductTitle';
 import ProductCard from '@/components/ProductCard';
 import SeeMoreCard from '@/components/SeeMoreCard';
-import { logout } from '@/redux/slices/authSlice';
 import SearchBar from '@/components/SearchBar';
 import daisy from '@/assets/images/daisy.png';
 import { RootState } from '@/redux/store';
 import { Product } from '@/types/type';
+import SignOut from '@/utils/sign-out';
 import { slider } from '@/constants';
 import LoadingScreen from '../loading-screen';
 
@@ -30,7 +29,6 @@ const Home = () => {
   const [accessories, setAccessories] = useState<Product[]>([]);
   const [gasStove, setGasStove] = useState<Product[]>([]);
   const width = Dimensions.get('window').width;
-  const dispatch = useDispatch();
   const config = {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -89,7 +87,7 @@ const Home = () => {
         }
       >
         <SearchBar token={token} />
-        <HorizontalCategory token={token} dispatch={dispatch} />
+        <HorizontalCategory token={token} />
         <SwiperFlatList
           autoplay
           autoplayDelay={5}
@@ -242,19 +240,14 @@ const Home = () => {
               Thương hiệu
             </Text>
           </View>
-          <HorizontalBrand token={token} dispatch={dispatch} />
+          <HorizontalBrand token={token} />
         </View>
       </ScrollView>
     </SafeAreaView>
   );
 };
 
-interface IProps {
-  token: string | null;
-  dispatch: Dispatch<UnknownAction>;
-}
-
-const HorizontalCategory = ({ token, dispatch }: IProps) => {
+const HorizontalCategory = ({ token }: { token: string | null }) => {
   const [catList, setCatList] = useState<any>();
   const [loading, setLoading] = useState<boolean>(true);
 
@@ -268,17 +261,15 @@ const HorizontalCategory = ({ token, dispatch }: IProps) => {
           },
         };
         const res = await axios.get(url, config);
-
         if (res.status === 200) {
-          const cat = res.data;
-          setCatList(cat);
-        } else if (res.status === 401) {
-          dispatch(logout());
-        } else {
-          console.error(res.data?.message);
+          setCatList(res.data);
         }
-      } catch (error) {
-        console.error('Lỗi Horizontal category', error);
+      } catch (error: any) {
+        if (error.response && error.response.status === 401) {
+          SignOut();
+        } else {
+          console.error('Lỗi Horizontal category ', error.message);
+        }
       } finally {
         setLoading(false);
       }
@@ -328,7 +319,7 @@ const HorizontalCategory = ({ token, dispatch }: IProps) => {
   );
 };
 
-const HorizontalBrand = ({ token, dispatch }: IProps) => {
+const HorizontalBrand = ({ token }: { token: string | null }) => {
   const [brandList, setBrandList] = useState<any>();
   const [loading, setLoading] = useState<boolean>(true);
 
@@ -344,13 +335,13 @@ const HorizontalBrand = ({ token, dispatch }: IProps) => {
         const res = await axios.get(url, config);
         if (res.status === 200) {
           setBrandList(res?.data.reverse());
-        } else if (res.status === 401) {
-          dispatch(logout());
-        } else {
-          console.error(res.data?.message);
         }
-      } catch (error) {
-        console.error('Lỗi Horizontal brand ', error);
+      } catch (error: any) {
+        if (error.response && error.response.status === 401) {
+          SignOut();
+        } else {
+          console.error('Lỗi Horizontal brand ', error.message);
+        }
       } finally {
         setLoading(false);
       }

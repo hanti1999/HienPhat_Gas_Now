@@ -1,18 +1,15 @@
-import { Alert, SafeAreaView, StatusBar, TouchableOpacity } from 'react-native';
 import { RefreshControl, FlatList, View, Text, Image } from 'react-native';
-import { Dimensions } from 'react-native';
+import { SafeAreaView, StatusBar, TouchableOpacity } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { router } from 'expo-router';
 import moment from 'moment';
 import axios from 'axios';
 import ScreenHeader from '@/components/ScreenHeader';
-import { AntDesign } from '@expo/vector-icons';
 import { RootState } from '@/redux/store';
+import SignOut from '@/utils/sign-out';
 import LoadingScreen from '../loading-screen';
 import NoProduct from '../no-product';
-import Toast from 'react-native-toast-message';
-import openLink from '@/utils/openLink';
 
 interface INoti {
   sysn_title: string;
@@ -46,11 +43,13 @@ const Notification = () => {
       const res = await axios.get(url, config);
       if (res.status === 200) {
         setNotification(res.data);
-      } else {
-        Toast.show({ type: 'error', text1: res.data?.message });
       }
-    } catch (error) {
-      console.error('Lỗi (NotificationScreen)', error);
+    } catch (error: any) {
+      if (error.response && error.response.status === 401) {
+        SignOut();
+      } else {
+        console.error('Lỗi (NotificationScreen)', error);
+      }
     } finally {
       setLoading(false);
     }
