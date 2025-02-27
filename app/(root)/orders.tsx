@@ -10,6 +10,7 @@ import RectangleButton from '@/components/RectangleButton';
 import ScreenHeader from '@/components/ScreenHeader';
 import { IOrder, IOrderItem } from '@/types/type';
 import { AntDesign } from '@expo/vector-icons';
+import getNewToken from '@/utils/getNewToken';
 import LoadingScreen from './loading-screen';
 import NoProduct from './no-product';
 
@@ -30,13 +31,14 @@ const Orders = () => {
       const res = await axios.get(url, config);
       if (res.status === 200) {
         setOrders(res?.data.reverse());
-      } else {
-        console.error(res.data?.message);
-        Toast.show({ type: 'error', text1: res.data?.message });
       }
-    } catch (error) {
-      console.error(error);
-      Toast.show({ type: 'error', text1: 'Lỗi hệ thống!' });
+    } catch (error: any) {
+      if (error.response && error.response.status === 401) {
+        await getNewToken();
+      } else {
+        console.error(error);
+        Toast.show({ type: 'error', text1: 'Lỗi hệ thống!' });
+      }
     } finally {
       setLoading(false);
     }
@@ -219,12 +221,14 @@ const CancelOrder = ({ id, fetchOrders, token }: IProps) => {
       if (res.status === 200) {
         Toast.show({ text1: 'Hủy đơn hàng thành công' });
         fetchOrders();
-      } else {
-        Toast.show({ type: 'error', text1: res.data.message });
       }
-    } catch (error) {
-      console.error('Lỗi (OrderScreen):', error);
-      Toast.show({ type: 'error', text1: 'Hủy đơn không thành công' });
+    } catch (error: any) {
+      if (error.response && error.response.status === 401) {
+        await getNewToken();
+      } else {
+        console.error('Lỗi (OrderScreen):', error);
+        Toast.show({ type: 'error', text1: 'Hủy đơn không thành công' });
+      }
     } finally {
       setModalVisible(!modalVisible);
       setLoading(false);

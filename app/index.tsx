@@ -23,9 +23,6 @@ const Page = () => {
 
       if (expiryTime) {
         if (expiryTime < moment().unix()) {
-          // setIsLoggedIn(false);
-          // dispatch(logout());
-          // Toast.show({ type: 'info', text1: 'Phiên đăng nhập đã hết hạn' });
           const refreshToken = SecureStore.getItem('refreshToken');
           getNewToken(refreshToken);
         } else {
@@ -45,7 +42,6 @@ const Page = () => {
         refreshToken: refreshToken,
       };
       const res = await axios.post(url, data);
-
       if (res.status === 200) {
         const at: string = res?.data.accessToken;
         const ate: number = res?.data.accessTokenExpiry + moment().unix();
@@ -56,10 +52,6 @@ const Page = () => {
           })
         );
         setIsLoggedIn(true);
-      } else {
-        setIsLoggedIn(false);
-        dispatch(logout());
-        Toast.show({ type: 'info', text1: 'Phiên đăng nhập đã hết hạn' });
       }
     } catch (error) {
       console.error('Lỗi lấy token mới: ', error);

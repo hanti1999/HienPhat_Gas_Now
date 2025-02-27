@@ -120,9 +120,6 @@ const SignUp = () => {
       if (res.status === 200) {
         refetch();
         Toast.show({ text1: 'Vui lòng thử lại lần nữa' });
-      } else {
-        console.error('Cập nhật token mới không thành công');
-        Toast.show({ type: 'error', text1: 'Vui lòng liên hệ bộ phận hỗ trợ' });
       }
     } catch (error) {
       console.error('Cập nhật token mới không thành công', error);

@@ -9,10 +9,10 @@ import { FontAwesome, AntDesign } from '@expo/vector-icons';
 import RectangleButton from '@/components/RectangleButton';
 import { Ionicons, Foundation } from '@expo/vector-icons';
 import { logout } from '@/redux/slices/authSlice';
+import getNewToken from '@/utils/getNewToken';
 import { ProfileType } from '@/types/type';
 import { RootState } from '@/redux/store';
 import openLink from '@/utils/openLink';
-import SignOut from '@/utils/sign-out';
 import LoadingScreen from '../loading-screen';
 
 const Profile = () => {
@@ -42,7 +42,7 @@ const Profile = () => {
       }
     } catch (error: any) {
       if (error.response && error.response.status === 401) {
-        SignOut();
+        await getNewToken();
       } else {
         console.error('Lỗi (catch ProfileScreen): ', error);
       }

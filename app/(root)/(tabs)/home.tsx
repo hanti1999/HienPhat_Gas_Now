@@ -13,9 +13,9 @@ import ProductCard from '@/components/ProductCard';
 import SeeMoreCard from '@/components/SeeMoreCard';
 import SearchBar from '@/components/SearchBar';
 import daisy from '@/assets/images/daisy.png';
+import getNewToken from '@/utils/getNewToken';
 import { RootState } from '@/redux/store';
 import { Product } from '@/types/type';
-import SignOut from '@/utils/sign-out';
 import { slider } from '@/constants';
 import LoadingScreen from '../loading-screen';
 
@@ -266,7 +266,7 @@ const HorizontalCategory = ({ token }: { token: string | null }) => {
         }
       } catch (error: any) {
         if (error.response && error.response.status === 401) {
-          SignOut();
+          await getNewToken();
         } else {
           console.error('Lỗi Horizontal category ', error.message);
         }
@@ -338,7 +338,7 @@ const HorizontalBrand = ({ token }: { token: string | null }) => {
         }
       } catch (error: any) {
         if (error.response && error.response.status === 401) {
-          SignOut();
+          await getNewToken();
         } else {
           console.error('Lỗi Horizontal brand ', error.message);
         }

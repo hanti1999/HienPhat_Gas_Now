@@ -6,6 +6,7 @@ import Toast from 'react-native-toast-message';
 import axios from 'axios';
 import RectangleButton from '@/components/RectangleButton';
 import ScreenHeader from '@/components/ScreenHeader';
+import getNewToken from '@/utils/getNewToken';
 import { IAddress } from '@/types/type';
 import LoadingScreen from './loading-screen';
 
@@ -26,12 +27,14 @@ const Address = () => {
       const res = await axios.get(url, config);
       if (res.status === 200) {
         setAddress(res?.data?.addresses);
-      } else {
-        Toast.show({ type: 'error', text1: res?.data?.message });
       }
-    } catch (error) {
-      Toast.show({ type: 'error', text1: 'Lỗi khi lấy địa chỉ' });
-      console.log('Lỗi fetch địa chỉ: ' + error);
+    } catch (error: any) {
+      if (error.response && error.response.status === 401) {
+        await getNewToken();
+      } else {
+        Toast.show({ type: 'error', text1: 'Lỗi khi lấy địa chỉ' });
+        console.log('Lỗi fetch địa chỉ: ' + error);
+      }
     } finally {
       setLoading(false);
     }

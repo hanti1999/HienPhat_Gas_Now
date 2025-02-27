@@ -12,6 +12,7 @@ import ScreenHeader from '@/components/ScreenHeader';
 import CustomButton from '@/components/CustomButton';
 import handleGetLocation from '@/utils/getLocation';
 import { AntDesign } from '@expo/vector-icons';
+import getNewToken from '@/utils/getNewToken';
 
 const UpdateAddress = () => {
   const { token, id, address, home, note, name, phonenumber, is_default } =
@@ -96,15 +97,14 @@ const UpdateAddress = () => {
       if (res.status === 200) {
         Toast.show({ type: 'success', text1: 'Cập nhật địa chỉ thành công' });
         router.back();
-      } else {
-        Toast.show({
-          type: 'error',
-          text1: res.data?.message,
-        });
-        console.error(res.data?.message);
       }
-    } catch (error) {
-      console.error('Cập nhật địa chỉ không thành công: ', error);
+    } catch (error: any) {
+      if (error.response && error.response.status === 401) {
+        await getNewToken();
+      } else {
+        console.error('Cập nhật địa chỉ không thành công: ', error);
+        Toast.show({ type: 'error', text1: 'Cập nhật không thành công' });
+      }
     } finally {
       setLoading(false);
     }
@@ -119,16 +119,14 @@ const UpdateAddress = () => {
       if (res.status === 200) {
         Toast.show({ type: 'success', text1: 'Xóa thành công' });
         router.back();
-      } else {
-        Toast.show({
-          type: 'error',
-          text1: res.data?.message,
-        });
-        console.error(res.data?.message);
       }
-    } catch (error) {
-      Toast.show({ type: 'error', text1: 'Xóa không thành công' });
-      console.error('Xóa địa chỉ không thành công: ', error);
+    } catch (error: any) {
+      if (error.response && error.response.status === 401) {
+        await getNewToken();
+      } else {
+        Toast.show({ type: 'error', text1: 'Xóa không thành công' });
+        console.error('Xóa địa chỉ không thành công: ', error);
+      }
     } finally {
       setDelLoading(false);
     }

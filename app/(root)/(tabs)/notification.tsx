@@ -6,8 +6,8 @@ import { router } from 'expo-router';
 import moment from 'moment';
 import axios from 'axios';
 import ScreenHeader from '@/components/ScreenHeader';
+import getNewToken from '@/utils/getNewToken';
 import { RootState } from '@/redux/store';
-import SignOut from '@/utils/sign-out';
 import LoadingScreen from '../loading-screen';
 import NoProduct from '../no-product';
 
@@ -46,7 +46,7 @@ const Notification = () => {
       }
     } catch (error: any) {
       if (error.response && error.response.status === 401) {
-        SignOut();
+        await getNewToken();
       } else {
         console.error('Lỗi (NotificationScreen)', error);
       }

@@ -7,6 +7,7 @@ import LoadingScreen from './loading-screen';
 import NoProduct from './no-product';
 import ScreenHeader from '@/components/ScreenHeader';
 import ProductCard from '@/components/ProductCard';
+import getNewToken from '@/utils/getNewToken';
 import { Product } from '@/types/type';
 
 const Wishlist = () => {
@@ -27,12 +28,14 @@ const Wishlist = () => {
       if (res.status === 200) {
         const products = res.data.wishlist;
         setWishlist(products);
-      } else {
-        Toast.show({ type: 'error', text1: res.data?.message });
       }
-    } catch (error) {
-      console.error(error);
-      Toast.show({ type: 'error', text1: 'Lấy danh sách không thành công' });
+    } catch (error: any) {
+      if (error.response && error.response.status === 401) {
+        await getNewToken();
+      } else {
+        console.error(error);
+        Toast.show({ type: 'error', text1: 'Lấy danh sách không thành công' });
+      }
     } finally {
       setLoading(false);
     }

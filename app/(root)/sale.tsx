@@ -9,6 +9,7 @@ import axios from 'axios';
 import { Entypo, Ionicons } from '@expo/vector-icons';
 import { addToCart } from '@/redux/slices/cartSlice';
 import daisy from '@/assets/images/daisy.png';
+import getNewToken from '@/utils/getNewToken';
 import { RootState } from '@/redux/store';
 import { Product } from '@/types/type';
 import LoadingScreen from './loading-screen';
@@ -30,11 +31,13 @@ const Sale = () => {
       const res = await axios.get(url, config);
       if (res.status === 200) {
         setProducts(res.data);
-      } else {
-        Toast.show({ type: 'error', text1: res.data.message });
       }
-    } catch (error) {
-      console.error(error);
+    } catch (error: any) {
+      if (error.response && error.response.status === 401) {
+        await getNewToken();
+      } else {
+        console.error(error);
+      }
     } finally {
       setLoading(false);
     }

@@ -13,6 +13,7 @@ import RectangleButton from '@/components/RectangleButton';
 import { addToCart } from '@/redux/slices/cartSlice';
 import ScreenHeader from '@/components/ScreenHeader';
 import { Product, Review } from '@/types/type';
+import getNewToken from '@/utils/getNewToken';
 import openLink from '@/utils/openLink';
 import LoadingScreen from './loading-screen';
 
@@ -64,11 +65,13 @@ const ProductInfo = () => {
         const products: Product[] = res.data.wishlist;
         const filteredProducts = products.find((p) => p.product_id === itemId);
         setIsInWishlist(filteredProducts !== undefined);
-      } else {
-        console.error(res.data?.message);
       }
-    } catch (error) {
-      console.error('Lỗi check wishlist', error);
+    } catch (error: any) {
+      if (error.response && error.response.status === 401) {
+        await getNewToken();
+      } else {
+        console.error('Lỗi check wishlist', error);
+      }
     }
   };
 
@@ -113,12 +116,14 @@ const ProductInfo = () => {
       if (res.status === 201) {
         Toast.show({ text1: 'Đã thêm vào sản phẩm yêu thích' });
         checkWishlist();
-      } else {
-        Toast.show({ type: 'error', text1: res.data?.message });
       }
-    } catch (error) {
-      console.log('Lỗi không thêm được wishlist', error);
-      Toast.show({ type: 'error', text1: 'Thêm không thành công' });
+    } catch (error: any) {
+      if (error.response && error.response.status === 401) {
+        await getNewToken();
+      } else {
+        console.log('Lỗi không thêm được wishlist', error);
+        Toast.show({ type: 'error', text1: 'Thêm không thành công' });
+      }
     } finally {
       setWlLoading(false);
     }
@@ -132,12 +137,14 @@ const ProductInfo = () => {
       if (res.status === 200) {
         checkWishlist();
         Toast.show({ text1: 'Đã xóa khỏi sản phẩm yêu thích' });
-      } else {
-        Toast.show({ type: 'error', text1: res.data?.message });
       }
-    } catch (error) {
-      console.log('Lỗi không xóa được wishlist', error);
-      Toast.show({ type: 'error', text1: 'Xoá không thành công' });
+    } catch (error: any) {
+      if (error.response && error.response.status === 401) {
+        await getNewToken();
+      } else {
+        console.log('Lỗi không xóa được wishlist', error);
+        Toast.show({ type: 'error', text1: 'Xoá không thành công' });
+      }
     } finally {
       setWlLoading(false);
     }

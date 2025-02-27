@@ -8,6 +8,7 @@ import RectangleButton from '@/components/RectangleButton';
 import RectangleInput from '@/components/RectangleInput';
 import ScreenHeader from '@/components/ScreenHeader';
 import { FontAwesome } from '@expo/vector-icons';
+import getNewToken from '@/utils/getNewToken';
 
 const Review = () => {
   const { product_id, order_id, token } = useLocalSearchParams();
@@ -66,13 +67,14 @@ const Form = ({ product_id, order_id, token }: IProps) => {
       if (res.status === 201) {
         Toast.show({ text1: 'Gửi đánh giá thành công' });
         setDisabled(true);
-      } else {
-        console.error('Gửi đánh giá không thành công');
-        Toast.show({ type: 'error', text1: res.data?.message });
       }
-    } catch (error) {
-      console.log('Gửi đánh giá không thành công', error);
-      Toast.show({ type: 'error', text1: 'Gửi đánh giá không thành công' });
+    } catch (error: any) {
+      if (error.response && error.response.status === 401) {
+        await getNewToken();
+      } else {
+        console.log('Gửi đánh giá không thành công', error);
+        Toast.show({ type: 'error', text1: 'Gửi đánh giá không thành công' });
+      }
     } finally {
       setLoading(false);
     }

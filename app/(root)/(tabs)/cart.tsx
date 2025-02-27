@@ -18,8 +18,8 @@ import CheckedLabel from '@/components/CheckedLabel';
 import { MaterialIcons } from '@expo/vector-icons';
 import { CartItem, IAddress } from '@/types/type';
 import { FontAwesome } from '@expo/vector-icons';
+import getNewToken from '@/utils/getNewToken';
 import { RootState } from '@/redux/store';
-import SignOut from '@/utils/sign-out';
 import LoadingScreen from '../loading-screen';
 import NoProduct from '../no-product';
 
@@ -65,7 +65,7 @@ const Cart = () => {
       }
     } catch (error: any) {
       if (error.response && error.response.status === 401) {
-        SignOut();
+        await getNewToken();
       } else {
         console.error('Lỗi (NotificationScreen)', error);
       }
@@ -118,7 +118,7 @@ const Cart = () => {
       }
     } catch (error: any) {
       if (error.response && error.response.status === 401) {
-        SignOut();
+        await getNewToken();
       } else {
         Toast.show({ type: 'error', text1: 'Tạo đơn hàng không thành công' });
         console.error('Lỗi (CartScreen): ', error);

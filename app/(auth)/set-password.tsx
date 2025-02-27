@@ -45,8 +45,6 @@ const SetPassword = () => {
         dispatch(logout());
         Toast.show({ type: 'success', text1: 'Đổi mật khẩu thành công' });
         router.replace('/(auth)/sign-in');
-      } else {
-        Toast.show({ type: 'error', text1: res.data.message });
       }
     } catch (error) {
       Toast.show({ type: 'error', text1: 'Đổi mật khẩu không thành công' });

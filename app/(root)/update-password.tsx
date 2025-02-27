@@ -13,6 +13,7 @@ import generateOTP from '@/utils/generateOTP';
 import { Ionicons } from '@expo/vector-icons';
 import OTPModal from '@/components/OTPModal';
 import { ZaloToken } from '@/types/type';
+import getAT from '@/utils/getNewToken';
 
 const UpdatePassword = () => {
   const { token, account_phonenumber } = useLocalSearchParams();
@@ -103,9 +104,6 @@ const UpdatePassword = () => {
       if (res.status === 200) {
         refetch();
         Toast.show({ text1: 'Vui lòng thử lại lần nữa' });
-      } else {
-        console.error('Cập nhật token mới không thành công');
-        Toast.show({ type: 'error', text1: 'Vui lòng liên hệ bộ phận hỗ trợ' });
       }
     } catch (error) {
       console.error('Cập nhật token mới không thành công', error);
@@ -120,7 +118,6 @@ const UpdatePassword = () => {
       Toast.show({ type: 'error', text1: 'Mật khẩu không hợp lệ' });
       return;
     }
-
     try {
       getOtp();
     } catch (error) {
@@ -150,15 +147,16 @@ const UpdatePassword = () => {
         },
       };
       const res = await axios.put(url, data, config);
-
       if (res.status === 200) {
         Toast.show({ text1: 'Đổi mật khẩu thành công' });
         router.back();
-      } else {
-        Toast.show({ type: 'error', text1: res.data });
       }
-    } catch (error) {
-      Toast.show({ type: 'error', text1: 'Đổi mật khẩu không thành công' });
+    } catch (error: any) {
+      if (error.response && error.response.status === 401) {
+        await getAT();
+      } else {
+        Toast.show({ type: 'error', text1: 'Đổi mật khẩu không thành công' });
+      }
     } finally {
       setConfirmLoading(false);
     }

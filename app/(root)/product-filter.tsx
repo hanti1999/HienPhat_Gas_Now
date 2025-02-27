@@ -4,6 +4,7 @@ import { useLocalSearchParams } from 'expo-router';
 import axios from 'axios';
 import ScreenHeader from '@/components/ScreenHeader';
 import ProductCard from '@/components/ProductCard';
+import getNewToken from '@/utils/getNewToken';
 import { Product } from '@/types/type';
 import LoadingScreen from './loading-screen';
 import NoProduct from './no-product';
@@ -26,11 +27,13 @@ const ProductFilter = () => {
       if (res.status === 200) {
         const data = res?.data;
         setProducts(data);
-      } else {
-        console.error(res.data.message);
       }
-    } catch (error) {
-      console.error('Lỗi (Product-filter)', error);
+    } catch (error: any) {
+      if (error.response && error.response.status === 401) {
+        await getNewToken();
+      } else {
+        console.error('Lỗi (Product-filter)', error);
+      }
     } finally {
       setLoading(false);
     }

@@ -41,9 +41,6 @@ const Verify = () => {
       if (res.status === 201) {
         Toast.show({ type: 'success', text1: 'Đăng ký tài khoản thành công' });
         router.push('/(auth)/sign-in');
-      } else {
-        Toast.show({ type: 'error', text1: res.data?.message });
-        console.log(res);
       }
     } catch (error) {
       Toast.show({ type: 'error', text1: 'Đăng ký không thành công' });

@@ -11,6 +11,7 @@ import RectangleInput from '@/components/RectangleInput';
 import ScreenHeader from '@/components/ScreenHeader';
 import CustomButton from '@/components/CustomButton';
 import handleGetLocation from '@/utils/getLocation';
+import getNewToken from '@/utils/getNewToken';
 import { AntDesign } from '@expo/vector-icons';
 
 const AddAddress = () => {
@@ -53,13 +54,14 @@ const AddAddress = () => {
       if (res.status === 201) {
         Toast.show({ text1: 'Thêm địa chỉ thành công' });
         router.back();
-      } else {
-        Toast.show({ type: 'error', text1: res.data.message });
-        console.log(res.data.message);
       }
-    } catch (error) {
-      Toast.show({ type: 'error', text1: 'Lỗi khi thêm địa chỉ' });
-      console.log('Lỗi thêm địa chỉ: ' + error);
+    } catch (error: any) {
+      if (error.response && error.response.status === 401) {
+        await getNewToken();
+      } else {
+        Toast.show({ type: 'error', text1: 'Lỗi khi thêm địa chỉ' });
+        console.log('Lỗi thêm địa chỉ: ' + error);
+      }
     } finally {
       setLoading(false);
     }
