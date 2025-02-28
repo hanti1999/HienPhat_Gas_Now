@@ -13,7 +13,7 @@ import generateOTP from '@/utils/generateOTP';
 import { Ionicons } from '@expo/vector-icons';
 import OTPModal from '@/components/OTPModal';
 import { ZaloToken } from '@/types/type';
-import getAT from '@/utils/getNewToken';
+import getNewToken from '@/utils/getNewToken';
 
 const UpdatePassword = () => {
   const { token, account_phonenumber } = useLocalSearchParams();
@@ -52,7 +52,7 @@ const UpdatePassword = () => {
       setOtpCountdown(30);
     } else if (res.data.error === -124) {
       console.error('Access token hết hạn: ', res.data);
-      getNewToken();
+      await getNewZaloToken();
     } else {
       setLoading(false);
       Toast.show({
@@ -63,7 +63,7 @@ const UpdatePassword = () => {
     }
   };
 
-  const getNewToken = async () => {
+  const getNewZaloToken = async () => {
     // dùng refresh token để lấy access token mới từ server zalo
     setLoading(true);
     const zaloAppIdSecretKey = process.env.EXPO_PUBLIC_ZALO_APP_SECRET_KEY;
@@ -87,7 +87,7 @@ const UpdatePassword = () => {
       return;
     } else {
       console.log('Đã nhận token mới');
-      updateNewTokenToNode(res.data);
+      await updateNewTokenToNode(res.data);
     }
   };
 
@@ -153,7 +153,7 @@ const UpdatePassword = () => {
       }
     } catch (error: any) {
       if (error.response && error.response.status === 401) {
-        await getAT();
+        await getNewToken();
       } else {
         Toast.show({ type: 'error', text1: 'Đổi mật khẩu không thành công' });
       }
@@ -164,10 +164,6 @@ const UpdatePassword = () => {
 
   const onTogglePassword = () => {
     setShowPassword(!showPassword);
-  };
-
-  const handleCloseModal = () => {
-    setModalVisible(false);
   };
 
   useEffect(() => {
@@ -252,7 +248,7 @@ const UpdatePassword = () => {
             }
           />
           <OTPModal
-            onClose={handleCloseModal}
+            onClose={() => setModalVisible(false)}
             onConfirm={handleConfirm}
             onCodeChanged={setCode}
             modalVisible={modalVisible}

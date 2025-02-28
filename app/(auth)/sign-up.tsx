@@ -67,7 +67,7 @@ const SignUp = () => {
       });
     } else if (res.data.error === -124) {
       console.error('Access token hết hạn', res.data);
-      getNewToken();
+      await getNewZaloToken();
     } else {
       setLoading(false);
       Toast.show({
@@ -78,7 +78,7 @@ const SignUp = () => {
     }
   };
 
-  const getNewToken = async () => {
+  const getNewZaloToken = async () => {
     // dùng refresh token để lấy access token mới từ server zalo
     setLoading(true);
     const zaloAppIdSecretKey = process.env.EXPO_PUBLIC_ZALO_APP_SECRET_KEY;
@@ -102,7 +102,7 @@ const SignUp = () => {
       return;
     } else {
       console.log('Đã nhận token mới');
-      updateNewTokenToNode(res.data);
+      await updateNewTokenToNode(res.data);
     }
   };
 

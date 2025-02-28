@@ -25,8 +25,7 @@ const SearchResult = () => {
         };
         const res = await axios.get(url, config);
         if (res.status === 200) {
-          const data = res?.data;
-          setProducts(data);
+          setProducts(res?.data);
         }
       } catch (error: any) {
         if (error.response && error.response.status === 401) {

@@ -26,8 +26,7 @@ const Wishlist = () => {
       };
       const res = await axios.get(url, config);
       if (res.status === 200) {
-        const products = res.data.wishlist;
-        setWishlist(products);
+        setWishlist(res.data.wishlist);
       }
     } catch (error: any) {
       if (error.response && error.response.status === 401) {
