@@ -1,13 +1,14 @@
-import { View, Text, FlatList, Dimensions } from 'react-native';
+import { Image, ActivityIndicator, ImageBackground } from 'react-native';
 import { SafeAreaView, TouchableOpacity } from 'react-native';
-import { Image, ActivityIndicator } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
+import { View, Text, FlatList } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import Toast from 'react-native-toast-message';
-import { useDispatch, useSelector } from 'react-redux';
 import { router } from 'expo-router';
 import axios from 'axios';
 import { Entypo, Ionicons } from '@expo/vector-icons';
 import { addToCart } from '@/redux/slices/cartSlice';
+import saleBg from '@/assets/images/sale-bg.jpg';
 import daisy from '@/assets/images/daisy.png';
 import getNewToken from '@/utils/getNewToken';
 import { RootState } from '@/redux/store';
@@ -52,24 +53,26 @@ const Sale = () => {
   }
 
   return (
-    <SafeAreaView className='flex-1 bg-primary-pink'>
-      <Header />
-      <View className='px-3'>
-        <View className='flex-row items-center justify-center pb-3'>
-          <Image className='w-12 h-12' source={daisy} />
-          <Text className='font-bold text-2xl text-white '>
-            Ưu đãi quá trời!
-          </Text>
-          <Image className='w-12 h-12' source={daisy} />
+    <SafeAreaView className='flex-1'>
+      <ImageBackground source={saleBg} style={{ flex: 1 }}>
+        <Header />
+        <View className='px-3'>
+          <View className='flex-row items-center justify-center pb-3'>
+            <Image className='w-10 h-10' source={daisy} />
+            <Text className='font-bold text-2xl text-red-500'>
+              Ưu đãi đến 50%!!!
+            </Text>
+            <Image className='w-10 h-10' source={daisy} />
+          </View>
+          <FlatList
+            data={products}
+            keyExtractor={(item) => item?.product_id}
+            renderItem={({ item }) => <ProductCard item={item} token={token} />}
+            showsVerticalScrollIndicator={false}
+            className='mb-28'
+          />
         </View>
-        <FlatList
-          data={products}
-          keyExtractor={(item) => item?.product_id}
-          renderItem={({ item }) => <ProductCard item={item} token={token} />}
-          showsVerticalScrollIndicator={false}
-          className='mb-20'
-        />
-      </View>
+      </ImageBackground>
     </SafeAreaView>
   );
 };
@@ -86,7 +89,7 @@ const Header = () => {
         <Entypo
           name='chevron-thin-left'
           size={24}
-          color={'white'}
+          color={'red'}
           style={{ paddingHorizontal: 12, paddingVertical: 10 }}
         />
       </TouchableOpacity>
@@ -94,9 +97,9 @@ const Header = () => {
         className={`relative px-3 py-2.5`}
         onPress={() => router.push('/(root)/(tabs)/cart')}
       >
-        <Ionicons name='cart-outline' size={30} color={'white'} />
-        <View className='absolute w-5 h-5 bg-white rounded-full right-1 top-1'>
-          <Text className='text-center text-primary-pink leading-5'>
+        <Ionicons name='cart-outline' size={30} color={'red'} />
+        <View className='absolute w-5 h-5 bg-red-500 rounded-full right-1 top-1'>
+          <Text className='text-center text-white leading-5'>
             {displayValue}
           </Text>
         </View>
@@ -113,7 +116,6 @@ interface IProps {
 const ProductCard = ({ item, token }: IProps) => {
   const [isLoading, setLoading] = useState<boolean>(false);
   const dispatch = useDispatch();
-  const width = Dimensions.get('window').width;
 
   const addItemToCart = () => {
     dispatch(
@@ -161,18 +163,18 @@ const ProductCard = ({ item, token }: IProps) => {
             {item?.final_price?.toLocaleString()} đ
           </Text>
           <View className='flex-row items-end justify-between absolute bottom-2 left-2 right-2'>
-            <Text className='text-red-500 font-bold text-[18px]'>
-              🎉Giảm: {item?.product_discount} %
+            <Text className='text-red-500 font-bold text-[16px]'>
+              🎉Giảm: {item?.product_discount}%
             </Text>
             <TouchableOpacity
               onPress={addItemToCart}
-              className='bg-primary-pink p-2 rounded-lg mt-2'
+              className='bg-primary-pink px-2 py-1 rounded-lg mt-2'
               disabled={isLoading}
             >
               {isLoading ? (
                 <ActivityIndicator color='#fff' />
               ) : (
-                <Text className='text-white text-center text-[16px] font-medium uppercase'>
+                <Text className='text-white text-center text-[16px]'>
                   sắm ngay!
                 </Text>
               )}
