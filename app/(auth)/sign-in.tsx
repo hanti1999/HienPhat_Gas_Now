@@ -1,6 +1,6 @@
-import { View, ScrollView, StatusBar, TouchableOpacity } from 'react-native';
-import { TouchableWithoutFeedback, Keyboard, Text } from 'react-native';
+import { View, ScrollView, TouchableOpacity, Text } from 'react-native';
 import Toast from 'react-native-toast-message';
+import { StatusBar } from 'expo-status-bar';
 import { Link, router } from 'expo-router';
 import { useDispatch } from 'react-redux';
 import React, { useState } from 'react';
@@ -67,62 +67,59 @@ const SignIn = () => {
 
   return (
     <ScrollView className='flex-1 bg-white'>
-      <StatusBar />
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <View>
-          <HeaderImage text='Đăng nhập' />
-          <View className='px-5 pb-5'>
-            <InputField
-              onChangeText={(value) => setForm({ ...form, phonenumber: value })}
-              placeholder='Nhập số điện thoại của bạn'
-              value={form.phonenumber}
-              keyboardType='numeric'
-              label='Điện thoại'
-              icon='phone'
+      <StatusBar style='light' />
+      <HeaderImage text='Đăng nhập' />
+      <View className='px-5 pb-5'>
+        <InputField
+          onChangeText={(value) => setForm({ ...form, phonenumber: value })}
+          placeholder='Nhập số điện thoại của bạn'
+          value={form.phonenumber}
+          keyboardType='numeric'
+          label='Điện thoại'
+          icon='phone'
+        />
+        <InputField
+          onChangeText={(value) => setForm({ ...form, password: value })}
+          placeholder='Nhập mật khẩu của bạn'
+          secureTextEntry={!showPassword}
+          textContentType='password'
+          value={form.password}
+          autoCapitalize='none'
+          label='Mật khẩu'
+          icon='lock'
+          children={
+            <Ionicons
+              name={showPassword ? 'eye-off' : 'eye'}
+              onPress={onTogglePassword}
+              color='gray'
+              size={24}
             />
-            <InputField
-              onChangeText={(value) => setForm({ ...form, password: value })}
-              placeholder='Nhập mật khẩu của bạn'
-              secureTextEntry={!showPassword}
-              textContentType='password'
-              value={form.password}
-              label='Mật khẩu'
-              icon='lock'
-              children={
-                <Ionicons
-                  name={showPassword ? 'eye-off' : 'eye'}
-                  onPress={onTogglePassword}
-                  color='gray'
-                  size={24}
-                />
-              }
-            />
-            <View className='items-end'>
-              <TouchableOpacity
-                onPress={() => {
-                  router.push('/(auth)/reset-password');
-                }}
-              >
-                <Text className='text-blue-500'>Quên mật khẩu?</Text>
-              </TouchableOpacity>
-            </View>
-            <CustomButton
-              onPress={handleSignIn}
-              disabled={loading}
-              loading={loading}
-              title='Đăng nhập'
-              className='mt-5'
-            />
-            <Link
-              className='text-lg text-center mt-5 text-primary-black'
-              href={'/sign-up'}
-            >
-              <Text>Chưa có tài khoản? </Text>
-              <Text className='text-primary-pink'>Đăng ký ngay</Text>
-            </Link>
-          </View>
+          }
+        />
+        <View className='items-end'>
+          <TouchableOpacity
+            onPress={() => {
+              router.push('/(auth)/reset-password');
+            }}
+          >
+            <Text className='text-blue-500'>Quên mật khẩu?</Text>
+          </TouchableOpacity>
         </View>
-      </TouchableWithoutFeedback>
+        <CustomButton
+          onPress={handleSignIn}
+          disabled={loading}
+          loading={loading}
+          title='Đăng nhập'
+          className='mt-5'
+        />
+        <Link
+          className='text-lg text-center mt-5 text-primary-black'
+          href={'/sign-up'}
+        >
+          <Text>Chưa có tài khoản? </Text>
+          <Text className='text-primary-pink'>Đăng ký ngay</Text>
+        </Link>
+      </View>
     </ScrollView>
   );
 };

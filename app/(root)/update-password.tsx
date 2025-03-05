@@ -1,5 +1,6 @@
 import { View, Text, SafeAreaView, ScrollView } from 'react-native';
 import { Link, router, useLocalSearchParams } from 'expo-router';
+import { KeyboardAvoidingView, Platform } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import Toast from 'react-native-toast-message';
 import axios from 'axios';
@@ -182,93 +183,100 @@ const UpdatePassword = () => {
 
   return (
     <SafeAreaView className='flex-1 bg-white'>
-      <ScrollView stickyHeaderIndices={[0]}>
-        <ScreenHeader text='Thay đổi mật khẩu' />
-        <View className='p-3'>
-          <InputField
-            placeholder='Nhập mật khẩu hiện tại'
-            secureTextEntry={!showPassword}
-            onChangeText={setCurrentPass}
-            textContentType='password'
-            label='Mật khẩu hiện tại'
-            value={currentPass}
-            icon='lock'
-            children={
-              <Ionicons
-                name={showPassword ? 'eye-off' : 'eye'}
-                onPress={onTogglePassword}
-                color='gray'
-                size={24}
-              />
-            }
-          />
-          <Link href={'/(auth)/reset-password'}>
-            <Text className='text-blue-500 text-base'>Quên mật khẩu?</Text>
-          </Link>
-          <InputField
-            secureTextEntry={!showPassword}
-            placeholder='Nhập mật khẩu mới'
-            textContentType='password'
-            onChangeText={setNewPass}
-            label='Mật khẩu mới'
-            value={newPass}
-            icon='lock'
-            children={
-              <Ionicons
-                name={showPassword ? 'eye-off' : 'eye'}
-                onPress={onTogglePassword}
-                color='gray'
-                size={24}
-              />
-            }
-          />
-          <InputField
-            secureTextEntry={!showPassword}
-            placeholder='Xác nhận mật khẩu'
-            onChangeText={setConfirmPass}
-            textContentType='password'
-            label='Xác nhận mật khẩu'
-            value={confirmPass}
-            icon='lock'
-            children={
-              <Ionicons
-                name={showPassword ? 'eye-off' : 'eye'}
-                onPress={onTogglePassword}
-                color='gray'
-                size={24}
-              />
-            }
-          />
-          <PasswordValidate
-            confirmPassword={confirmPass}
-            newPassword={newPass}
-            validationRules={validationRules}
-            onPasswordValidateChange={(validatedBoolean) =>
-              setValidated(validatedBoolean)
-            }
-          />
-          <OTPModal
-            onClose={() => setModalVisible(false)}
-            onConfirm={handleConfirm}
-            onCodeChanged={setCode}
-            modalVisible={modalVisible}
-            phone={account_phonenumber}
-            loading={confirmLoading}
-            code={code}
-          />
-          {otpCountdown > 0 ? (
-            <Text className='my-5'>Gửi lại sau {otpCountdown}s</Text>
-          ) : (
-            <CustomButton
-              onPress={handleChangePass}
-              title='Đổi mật khẩu'
-              disabled={loading}
-              loading={loading}
-              className='my-5'
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        className='flex-1'
+      >
+        <ScrollView stickyHeaderIndices={[0]}>
+          <ScreenHeader text='Thay đổi mật khẩu' />
+          <View className='p-3'>
+            <InputField
+              placeholder='Nhập mật khẩu hiện tại'
+              secureTextEntry={!showPassword}
+              onChangeText={setCurrentPass}
+              textContentType='password'
+              label='Mật khẩu hiện tại'
+              autoCapitalize='none'
+              value={currentPass}
+              icon='lock'
+              children={
+                <Ionicons
+                  name={showPassword ? 'eye-off' : 'eye'}
+                  onPress={onTogglePassword}
+                  color='gray'
+                  size={24}
+                />
+              }
             />
-          )}
-        </View>
-      </ScrollView>
+            <Link href={'/(auth)/reset-password'}>
+              <Text className='text-blue-500 text-base'>Quên mật khẩu?</Text>
+            </Link>
+            <InputField
+              secureTextEntry={!showPassword}
+              placeholder='Nhập mật khẩu mới'
+              textContentType='password'
+              onChangeText={setNewPass}
+              autoCapitalize='none'
+              label='Mật khẩu mới'
+              value={newPass}
+              icon='lock'
+              children={
+                <Ionicons
+                  name={showPassword ? 'eye-off' : 'eye'}
+                  onPress={onTogglePassword}
+                  color='gray'
+                  size={24}
+                />
+              }
+            />
+            <InputField
+              secureTextEntry={!showPassword}
+              placeholder='Xác nhận mật khẩu'
+              onChangeText={setConfirmPass}
+              textContentType='password'
+              label='Xác nhận mật khẩu'
+              value={confirmPass}
+              icon='lock'
+              children={
+                <Ionicons
+                  name={showPassword ? 'eye-off' : 'eye'}
+                  onPress={onTogglePassword}
+                  color='gray'
+                  size={24}
+                />
+              }
+            />
+            <PasswordValidate
+              confirmPassword={confirmPass}
+              newPassword={newPass}
+              validationRules={validationRules}
+              onPasswordValidateChange={(validatedBoolean) =>
+                setValidated(validatedBoolean)
+              }
+            />
+            <OTPModal
+              onClose={() => setModalVisible(false)}
+              onConfirm={handleConfirm}
+              onCodeChanged={setCode}
+              modalVisible={modalVisible}
+              phone={account_phonenumber}
+              loading={confirmLoading}
+              code={code}
+            />
+            {otpCountdown > 0 ? (
+              <Text className='my-5'>Gửi lại sau {otpCountdown}s</Text>
+            ) : (
+              <CustomButton
+                onPress={handleChangePass}
+                title='Đổi mật khẩu'
+                disabled={loading}
+                loading={loading}
+                className='my-5'
+              />
+            )}
+          </View>
+        </ScrollView>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 };

@@ -1,8 +1,9 @@
-import { TouchableWithoutFeedback, Text } from 'react-native';
-import { View, ScrollView, Keyboard } from 'react-native';
 import React, { useEffect, useState } from 'react';
+import { View, ScrollView } from 'react-native';
 import Toast from 'react-native-toast-message';
+import { StatusBar } from 'expo-status-bar';
 import { router } from 'expo-router';
+import { Text } from 'react-native';
 import axios from 'axios';
 import useGetZaloToken from '@/customHooks/useGetZaloToken';
 import CustomButton from '@/components/CustomButton';
@@ -142,39 +143,36 @@ const ResetPassword = () => {
 
   return (
     <ScrollView className='flex-1 bg-white'>
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <View>
-          <HeaderImage text='Lấy lại mật khẩu' />
-          <View className='px-5 pb-5'>
-            <GoBack />
-            <InputField
-              label='Nhập số điện thoại cần lấy lại mật khẩu'
-              placeholder='Nhập số điện thoại...'
-              keyboardType='numeric'
-              value={phoneNumber as string}
-              onChangeText={setPhoneNumber}
-            />
-            {otpCountdown > 0 ? (
-              <Text className='my-5'>Gửi lại sau {otpCountdown}s</Text>
-            ) : (
-              <CustomButton
-                onPress={handleSendOtp}
-                className='mt-5'
-                title='Gửi mã xác nhận'
-              />
-            )}
-            <OTPModal
-              onClose={handleCloseModal}
-              onConfirm={handleConfirm}
-              onCodeChanged={setCode}
-              modalVisible={modalVisible}
-              phone={phoneNumber}
-              loading={loading}
-              code={code}
-            />
-          </View>
-        </View>
-      </TouchableWithoutFeedback>
+      <StatusBar style='light' />
+      <HeaderImage text='Lấy lại mật khẩu' />
+      <View className='px-5 pb-5'>
+        <GoBack />
+        <InputField
+          label='Nhập số điện thoại cần lấy lại mật khẩu'
+          placeholder='Nhập số điện thoại...'
+          keyboardType='numeric'
+          value={phoneNumber as string}
+          onChangeText={setPhoneNumber}
+        />
+        {otpCountdown > 0 ? (
+          <Text className='my-5'>Gửi lại sau {otpCountdown}s</Text>
+        ) : (
+          <CustomButton
+            onPress={handleSendOtp}
+            className='mt-5'
+            title='Gửi mã xác nhận'
+          />
+        )}
+        <OTPModal
+          onClose={handleCloseModal}
+          onConfirm={handleConfirm}
+          onCodeChanged={setCode}
+          modalVisible={modalVisible}
+          phone={phoneNumber}
+          loading={loading}
+          code={code}
+        />
+      </View>
     </ScrollView>
   );
 };

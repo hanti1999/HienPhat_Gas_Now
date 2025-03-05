@@ -1,7 +1,8 @@
+import { KeyboardAvoidingView, Platform } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
-import { View, ScrollView, Keyboard } from 'react-native';
-import { TouchableWithoutFeedback } from 'react-native';
+import { View, ScrollView } from 'react-native';
 import Toast from 'react-native-toast-message';
+import { StatusBar } from 'expo-status-bar';
 import { useDispatch } from 'react-redux';
 import React, { useState } from 'react';
 import axios from 'axios';
@@ -55,62 +56,66 @@ const SetPassword = () => {
   };
 
   return (
-    <ScrollView className='flex-1 bg-white'>
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <View>
-          <HeaderImage text='Lấy lại mật khẩu' />
-          <View className='px-5 pb-5'>
-            <GoBack />
-            <InputField
-              placeholder='Nhập mật khẩu mới...'
-              secureTextEntry={!showPassword}
-              textContentType='password'
-              label='Nhập mật khẩu mới'
-              onChangeText={setNewPass}
-              value={newPass}
-              children={
-                <Ionicons
-                  name={showPassword ? 'eye-off' : 'eye'}
-                  onPress={onTogglePassword}
-                  color='gray'
-                  size={24}
-                />
-              }
-            />
-            <InputField
-              placeholder='Nhập lại mật khẩu...'
-              secureTextEntry={!showPassword}
-              onChangeText={setConfirmPass}
-              textContentType='password'
-              label='Nhập lại mật khẩu'
-              value={confirmPass}
-              children={
-                <Ionicons
-                  name={showPassword ? 'eye-off' : 'eye'}
-                  onPress={onTogglePassword}
-                  color='gray'
-                  size={24}
-                />
-              }
-            />
-            <PasswordValidate
-              confirmPassword={confirmPass}
-              newPassword={newPass}
-              validationRules={validationRules}
-              onPasswordValidateChange={(validatedBoolean) =>
-                setValidated(validatedBoolean)
-              }
-            />
-            <CustomButton
-              title='Xác nhận mật khẩu mới'
-              onPress={handleSetPassword}
-              loading={loading}
-              className='mt-5'
-            />
-          </View>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      className='flex-1'
+    >
+      <ScrollView className='flex-1 bg-white'>
+        <StatusBar style='light' />
+        <HeaderImage text='Lấy lại mật khẩu' />
+        <View className='px-5 pb-5'>
+          <GoBack />
+          <InputField
+            placeholder='Nhập mật khẩu mới...'
+            secureTextEntry={!showPassword}
+            textContentType='password'
+            label='Nhập mật khẩu mới'
+            onChangeText={setNewPass}
+            autoCapitalize='none'
+            value={newPass}
+            children={
+              <Ionicons
+                name={showPassword ? 'eye-off' : 'eye'}
+                onPress={onTogglePassword}
+                color='gray'
+                size={24}
+              />
+            }
+          />
+          <InputField
+            placeholder='Nhập lại mật khẩu...'
+            secureTextEntry={!showPassword}
+            onChangeText={setConfirmPass}
+            textContentType='password'
+            label='Nhập lại mật khẩu'
+            autoCapitalize='none'
+            value={confirmPass}
+            children={
+              <Ionicons
+                name={showPassword ? 'eye-off' : 'eye'}
+                onPress={onTogglePassword}
+                color='gray'
+                size={24}
+              />
+            }
+          />
+          <PasswordValidate
+            confirmPassword={confirmPass}
+            newPassword={newPass}
+            validationRules={validationRules}
+            onPasswordValidateChange={(validatedBoolean) =>
+              setValidated(validatedBoolean)
+            }
+          />
+          <CustomButton
+            title='Xác nhận mật khẩu mới'
+            onPress={handleSetPassword}
+            loading={loading}
+            className='mt-5'
+          />
         </View>
-      </TouchableWithoutFeedback>
-    </ScrollView>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 };
 

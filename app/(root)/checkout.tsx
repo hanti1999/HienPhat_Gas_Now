@@ -41,11 +41,8 @@ const Checkout = () => {
     router.replace('/(root)/orders');
   };
 
-  const navToOrder = () => {
-    router.replace({
-      pathname: '/(root)/wishlist',
-      params: { token: token },
-    });
+  const navToHone = () => {
+    router.replace('/(root)/(tabs)/home');
   };
 
   if (paymentMethod === 'cod') {
@@ -109,13 +106,13 @@ const Checkout = () => {
         />
         <View className='bg-white flex-row items-center p-3' style={{ gap: 4 }}>
           <TouchableOpacity
-            onPress={navToOrder}
+            onPress={navToHone}
             className='bg-gray-300 rounded-lg py-3 px-6'
           >
             <Text className='text-gray-500 text-base font-medium'>Hủy bỏ</Text>
           </TouchableOpacity>
           <TouchableOpacity
-            onPress={navToOrder}
+            onPress={navToHone}
             className='bg-primary-pink rounded-lg p-3 flex-1'
           >
             <Text className='text-white text-base text-center font-medium'>

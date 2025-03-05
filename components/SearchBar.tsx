@@ -37,7 +37,7 @@ const SearchBar = ({ token }: { token: string | null }) => {
           value={input}
         />
         <Pressable onPress={searchHandler}>
-          <Image className='w-10 h-10' source={tulip} />
+          <Image className='w-9 h-9' source={tulip} />
         </Pressable>
       </View>
       <Pressable

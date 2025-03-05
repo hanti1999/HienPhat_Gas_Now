@@ -8,7 +8,7 @@ import notiImg from '@/assets/images/noti.png';
 
 interface IProps {
   text: string;
-  type?: string;
+  type?: 'cart' | 'noti';
 }
 
 const NoProduct = ({ text, type = 'cart' }: IProps) => {

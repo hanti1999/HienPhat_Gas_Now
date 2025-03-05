@@ -1,6 +1,7 @@
-import { Keyboard, TouchableWithoutFeedback, StatusBar } from 'react-native';
+import { Keyboard, TouchableWithoutFeedback } from 'react-native';
 import { Text, View, ScrollView, StyleSheet } from 'react-native';
 import { Link, useLocalSearchParams, router } from 'expo-router';
+import { StatusBar } from 'expo-status-bar';
 import Toast from 'react-native-toast-message';
 import React, { useState } from 'react';
 import axios from 'axios';
@@ -52,7 +53,7 @@ const Verify = () => {
 
   return (
     <ScrollView className='bg-white flex-1'>
-      <StatusBar />
+      <StatusBar style='light' />
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View className='flex'>
           <HeaderImage text='Xác minh OTP' />
