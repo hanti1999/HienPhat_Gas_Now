@@ -1,8 +1,9 @@
-import { ScrollView, RefreshControl, TouchableOpacity } from 'react-native';
+import { ScrollView, Modal, Dimensions, Image } from 'react-native';
 import { Text, View, SafeAreaView, Pressable } from 'react-native';
-import { Modal, StatusBar, Dimensions, Image } from 'react-native';
+import { RefreshControl, TouchableOpacity } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import React, { useEffect, useState } from 'react';
+import { StatusBar } from 'expo-status-bar';
 import { Link, router } from 'expo-router';
 import axios from 'axios';
 import { FontAwesome, AntDesign } from '@expo/vector-icons';
@@ -61,7 +62,7 @@ const Profile = () => {
 
   return (
     <SafeAreaView className='flex-1 bg-white'>
-      <StatusBar barStyle={'dark-content'} />
+      <StatusBar style='dark' />
       <ScrollView
         stickyHeaderIndices={[0]}
         className='bg-gray-100 flex-1'

@@ -1,8 +1,9 @@
-import { StatusBar, Dimensions, FlatList, Pressable } from 'react-native';
 import { Image, ScrollView, RefreshControl, View } from 'react-native';
 import { ActivityIndicator, SafeAreaView, Text } from 'react-native';
+import { Dimensions, FlatList, Pressable } from 'react-native';
 import { SwiperFlatList } from 'react-native-swiper-flatlist';
 import React, { useState, useEffect } from 'react';
+import { StatusBar } from 'expo-status-bar';
 import { useSelector } from 'react-redux';
 import { router } from 'expo-router';
 import axios from 'axios';
@@ -78,7 +79,7 @@ const Home = () => {
 
   return (
     <SafeAreaView className='flex-1 bg-primary-pink'>
-      <StatusBar />
+      <StatusBar style='dark' />
       <ScrollView
         stickyHeaderIndices={[0]}
         className='bg-gray-100'

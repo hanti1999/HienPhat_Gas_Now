@@ -4,6 +4,7 @@ import { useLocalSearchParams } from 'expo-router';
 import axios from 'axios';
 import ScreenHeader from '@/components/ScreenHeader';
 import ProductCard from '@/components/ProductCard';
+import SearchBar from '@/components/SearchBar';
 import getNewToken from '@/utils/getNewToken';
 import { Product } from '@/types/type';
 import LoadingScreen from './loading-screen';
@@ -57,11 +58,12 @@ const ProductFilter = () => {
   }
 
   return (
-    <SafeAreaView style={{ backgroundColor: '#fff' }}>
+    <SafeAreaView className='flex-1'>
+      <SearchBar token={token as string} />
       <ScreenHeader text={'Sản phẩm'} />
       <FlatList
         keyExtractor={(item) => item?.product_id}
-        style={{ height: '100%' }}
+        className='bg-white h-full'
         data={products}
         numColumns={2}
         renderItem={({ item }) => (

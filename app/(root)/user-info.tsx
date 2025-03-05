@@ -16,7 +16,6 @@ const UserInfo = () => {
             <Text className='text-base'>Số điện thoại</Text>
             <Text className='text-[#999]'>{account_phonenumber}</Text>
           </View>
-
           <Pressable
             onPress={() =>
               router.push({

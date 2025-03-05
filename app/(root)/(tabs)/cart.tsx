@@ -1,10 +1,10 @@
+import { Dimensions, TouchableOpacity, RefreshControl } from 'react-native';
 import { Image, TextInput, Text, View, Modal } from 'react-native';
 import { SafeAreaView, ScrollView, Switch } from 'react-native';
-import { Dimensions, TouchableOpacity } from 'react-native';
-import { StatusBar, RefreshControl } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import Toast from 'react-native-toast-message';
 import { useEffect, useState } from 'react';
+import { StatusBar } from 'expo-status-bar';
 import { router } from 'expo-router';
 import axios from 'axios';
 import { removeFromCart, clearCart } from '@/redux/slices/cartSlice';
@@ -158,7 +158,7 @@ const Cart = () => {
 
   return (
     <SafeAreaView className='flex-1 bg-white'>
-      <StatusBar barStyle='dark-content' />
+      <StatusBar style='dark' />
       <ScreenHeader text='Giỏ hàng' />
       <ScrollView
         showsVerticalScrollIndicator={false}
