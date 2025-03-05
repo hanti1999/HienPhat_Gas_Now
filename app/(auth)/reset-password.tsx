@@ -173,7 +173,6 @@ const ResetPassword = () => {
           modalVisible={modalVisible}
           phone={phoneNumber}
           loading={loading}
-          code={code}
         />
       </View>
     </ScrollView>

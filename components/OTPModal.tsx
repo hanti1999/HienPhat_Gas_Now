@@ -10,19 +10,11 @@ interface IProps {
   phone: string | string[];
   modalVisible: boolean;
   loading: boolean;
-  code: string;
 }
 
 const OTPModal = (props: IProps) => {
-  const {
-    onCodeChanged,
-    onConfirm,
-    onClose,
-    modalVisible,
-    loading,
-    phone,
-    code,
-  } = props;
+  const { onCodeChanged, onConfirm, onClose, modalVisible, loading, phone } =
+    props;
 
   return (
     <Modal

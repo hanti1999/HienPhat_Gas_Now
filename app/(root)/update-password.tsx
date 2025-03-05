@@ -263,7 +263,6 @@ const UpdatePassword = () => {
               modalVisible={modalVisible}
               phone={account_phonenumber}
               loading={confirmLoading}
-              code={code}
             />
             {otpCountdown > 0 ? (
               <Text className='my-5'>Gửi lại sau {otpCountdown}s</Text>
