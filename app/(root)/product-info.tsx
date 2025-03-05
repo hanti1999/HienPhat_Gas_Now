@@ -1,8 +1,9 @@
-import { View, Text, SafeAreaView, Dimensions } from 'react-native';
 import { TouchableOpacity, ActivityIndicator } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { SwiperFlatList } from 'react-native-swiper-flatlist';
 import { router, useLocalSearchParams } from 'expo-router';
 import { Image, FlatList, ScrollView } from 'react-native';
+import { View, Text, Dimensions } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import Toast from 'react-native-toast-message';
 import { useDispatch } from 'react-redux';

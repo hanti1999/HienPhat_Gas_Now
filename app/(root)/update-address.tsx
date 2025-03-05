@@ -1,7 +1,8 @@
 import { Text, Switch, Modal, TouchableOpacity } from 'react-native';
-import { View, ScrollView, SafeAreaView } from 'react-native';
 import { KeyboardAvoidingView, Platform } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { router, useLocalSearchParams } from 'expo-router';
+import { View, ScrollView } from 'react-native';
 import Toast from 'react-native-toast-message';
 import React, { useState } from 'react';
 import axios from 'axios';

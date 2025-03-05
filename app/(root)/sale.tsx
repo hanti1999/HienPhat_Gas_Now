@@ -1,8 +1,9 @@
 import { Image, ActivityIndicator, ImageBackground } from 'react-native';
-import { SafeAreaView, TouchableOpacity } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { useDispatch, useSelector } from 'react-redux';
 import { View, Text, FlatList } from 'react-native';
 import React, { useState, useEffect } from 'react';
+import { TouchableOpacity } from 'react-native';
 import Toast from 'react-native-toast-message';
 import { router } from 'expo-router';
 import axios from 'axios';

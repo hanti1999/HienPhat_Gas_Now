@@ -1,4 +1,5 @@
-import { FlatList, SafeAreaView, RefreshControl } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { FlatList, RefreshControl } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import { useLocalSearchParams } from 'expo-router';
 import axios from 'axios';

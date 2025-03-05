@@ -1,5 +1,6 @@
 import { KeyboardAvoidingView, TouchableOpacity } from 'react-native';
 import { Modal, Switch, Text, StatusBar } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { useLocalSearchParams, router } from 'expo-router';
 import { View, Platform, ScrollView } from 'react-native';
 import Toast from 'react-native-toast-message';
@@ -11,9 +12,8 @@ import RectangleInput from '@/components/RectangleInput';
 import ScreenHeader from '@/components/ScreenHeader';
 import CustomButton from '@/components/CustomButton';
 import handleGetLocation from '@/utils/getLocation';
-import getNewToken from '@/utils/getNewToken';
 import { AntDesign } from '@expo/vector-icons';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import getNewToken from '@/utils/getNewToken';
 
 const AddAddress = () => {
   const { token } = useLocalSearchParams();

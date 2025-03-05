@@ -1,5 +1,6 @@
-import { SafeAreaView, TouchableOpacity, Image } from 'react-native';
 import { RefreshControl, FlatList, View, Text } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { TouchableOpacity, Image } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { useSelector } from 'react-redux';

@@ -1,7 +1,7 @@
 import { TouchableOpacity, ActivityIndicator } from 'react-native';
 import { View, Text, Modal, StyleSheet } from 'react-native';
+import { OtpInput } from 'react-native-otp-entry';
 import React from 'react';
-import OTPInputView from '@twotalltotems/react-native-otp-input';
 
 interface IProps {
   onCodeChanged: (value: string) => void;
@@ -39,14 +39,16 @@ const OTPModal = (props: IProps) => {
           <Text className='text-center mt-4 text-[16px]'>
             Nhập OTP được gửi đến {phone} để tiếp tục
           </Text>
-          <OTPInputView
-            codeInputHighlightStyle={{ borderColor: '#fb77c5' }}
-            codeInputFieldStyle={styles.codeInputFieldStyle}
-            style={{ height: 100, width: '80%' }}
-            onCodeChanged={onCodeChanged}
-            autoFocusOnLoad={false}
-            pinCount={6}
-            code={code}
+          <OtpInput
+            numberOfDigits={6}
+            focusColor={'#fb77c5'}
+            autoFocus={false}
+            onTextChange={onCodeChanged}
+            type='numeric'
+            theme={{
+              pinCodeTextStyle: { fontSize: 20 },
+              containerStyle: { marginTop: 10, marginBottom: 10 },
+            }}
           />
           <View className='flex-row justify-evenly'>
             <TouchableOpacity

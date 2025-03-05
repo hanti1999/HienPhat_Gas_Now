@@ -26,6 +26,7 @@ const ResetPassword = () => {
 
   const getOtp = async () => {
     // Lấy OTP từ Zalo
+    setLoading(true);
     const otp = generateOTP();
     setOtp(otp);
     const formatedPhone = (phoneNumber as string).replace('0', '84');
@@ -159,8 +160,10 @@ const ResetPassword = () => {
         ) : (
           <CustomButton
             onPress={handleSendOtp}
-            className='mt-5'
             title='Gửi mã xác nhận'
+            disabled={loading}
+            loading={loading}
+            className='mt-5'
           />
         )}
         <OTPModal

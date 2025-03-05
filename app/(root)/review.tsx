@@ -1,5 +1,6 @@
 import { TouchableOpacity, TouchableWithoutFeedback } from 'react-native';
-import { SafeAreaView, Keyboard, View, Text } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { Keyboard, View, Text } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
 import Toast from 'react-native-toast-message';
 import React, { useState } from 'react';

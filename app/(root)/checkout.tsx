@@ -2,13 +2,13 @@ import { ActivityIndicator, TouchableOpacity } from 'react-native';
 import { View, Text, Image, SafeAreaView } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
 import React, { useEffect, useState } from 'react';
-import WebView from 'react-native-webview';
-import Constants from 'expo-constants';
-import img from '@/assets/images/delivery.png';
 import Toast from 'react-native-toast-message';
+import WebView from 'react-native-webview';
 import { useSelector } from 'react-redux';
-import { RootState } from '@/redux/store';
+import Constants from 'expo-constants';
 import RectangleButton from '@/components/RectangleButton';
+import img from '@/assets/images/delivery.png';
+import { RootState } from '@/redux/store';
 
 const Checkout = () => {
   const { paymentMethod, sum, description } = useLocalSearchParams();
@@ -65,7 +65,7 @@ const Checkout = () => {
               className='mt-5'
               onPress={() =>
                 router.replace({
-                  pathname: '/(root)/wishlist',
+                  pathname: '/(root)/orders',
                   params: { token: token },
                 })
               }

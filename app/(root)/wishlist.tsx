@@ -1,4 +1,5 @@
-import { SafeAreaView, FlatList, RefreshControl } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { FlatList, RefreshControl } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import Toast from 'react-native-toast-message';

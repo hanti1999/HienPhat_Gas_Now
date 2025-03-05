@@ -1,6 +1,7 @@
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { router, useLocalSearchParams } from 'expo-router';
-import { View, Text, SafeAreaView } from 'react-native';
 import { ScrollView, Pressable } from 'react-native';
+import { View, Text } from 'react-native';
 import ScreenHeader from '@/components/ScreenHeader';
 import { AntDesign } from '@expo/vector-icons';
 

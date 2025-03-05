@@ -49,6 +49,7 @@ const SignUp = () => {
 
   const getOtp = async () => {
     // Lấy OTP từ Zalo
+    setLoading(true);
     const otp = generateOTP();
     const formatedPhone = form.phonenumber.replace('0', '84');
     const url = 'https://business.openapi.zalo.me/message/template';

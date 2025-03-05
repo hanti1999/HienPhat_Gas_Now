@@ -1,4 +1,5 @@
-import { Text, View, SafeAreaView, Image } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { Text, View, Image } from 'react-native';
 import ScreenHeader from '@/components/ScreenHeader';
 import logo from '@/assets/images/logoHp.png';
 

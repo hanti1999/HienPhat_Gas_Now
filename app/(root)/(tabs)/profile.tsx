@@ -1,7 +1,8 @@
 import { ScrollView, Modal, Dimensions, Image } from 'react-native';
-import { Text, View, SafeAreaView, Pressable } from 'react-native';
 import { RefreshControl, TouchableOpacity } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { useDispatch, useSelector } from 'react-redux';
+import { Text, View, Pressable } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { Link, router } from 'expo-router';

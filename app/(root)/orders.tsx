@@ -1,8 +1,9 @@
 import { Dimensions, FlatList, RefreshControl } from 'react-native';
-import { SafeAreaView, Modal, Image } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { router, useLocalSearchParams } from 'expo-router';
 import React, { useState, useEffect } from 'react';
 import Toast from 'react-native-toast-message';
+import { Modal, Image } from 'react-native';
 import { Text, View } from 'react-native';
 import moment from 'moment';
 import axios from 'axios';

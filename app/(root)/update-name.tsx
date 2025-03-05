@@ -1,8 +1,9 @@
-import { TouchableWithoutFeedback, View, Text } from 'react-native';
-import { SafeAreaView, Keyboard, ScrollView } from 'react-native';
+import { TouchableWithoutFeedback, View, Platform } from 'react-native';
+import { SafeAreaView, Keyboard, ScrollView, Text } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
 import Toast from 'react-native-toast-message';
 import React, { useState } from 'react';
+import Constants from 'expo-constants';
 import axios from 'axios';
 import RectangleInput from '@/components/RectangleInput';
 import ScreenHeader from '@/components/ScreenHeader';
@@ -44,7 +45,13 @@ const UpdateName = () => {
     }
   };
   return (
-    <SafeAreaView className='flex-1 bg-white'>
+    <SafeAreaView
+      style={{
+        paddingTop: Platform.OS === 'android' ? Constants.statusBarHeight : 0,
+        flex: 1,
+        backgroundColor: 'white',
+      }}
+    >
       <ScrollView stickyHeaderIndices={[0]}>
         <ScreenHeader text='Cập nhật tên' />
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>

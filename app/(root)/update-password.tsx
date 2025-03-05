@@ -1,6 +1,7 @@
-import { View, Text, SafeAreaView, ScrollView } from 'react-native';
 import { Link, router, useLocalSearchParams } from 'expo-router';
 import { KeyboardAvoidingView, Platform } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { View, Text, ScrollView } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import Toast from 'react-native-toast-message';
 import axios from 'axios';
@@ -34,6 +35,7 @@ const UpdatePassword = () => {
 
   const getOtp = async () => {
     // Lấy OTP từ Zalo
+    setLoading(true);
     const otp = generateOTP();
     setOtp(otp);
     const formatedPhone = (account_phonenumber as string).replace('0', '84');

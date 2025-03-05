@@ -1,11 +1,11 @@
 import { Keyboard, TouchableWithoutFeedback } from 'react-native';
 import { Text, View, ScrollView, StyleSheet } from 'react-native';
 import { Link, useLocalSearchParams, router } from 'expo-router';
-import { StatusBar } from 'expo-status-bar';
+import { OtpInput } from 'react-native-otp-entry';
 import Toast from 'react-native-toast-message';
+import { StatusBar } from 'expo-status-bar';
 import React, { useState } from 'react';
 import axios from 'axios';
-import OTPInputView from '@twotalltotems/react-native-otp-input';
 import CustomButton from '@/components/CustomButton';
 import HeaderImage from '@/components/HeaderImage';
 import GoBack from '@/components/GoBack';
@@ -67,14 +67,16 @@ const Verify = () => {
                 Mở Zalo
               </Text>
             </Link>
-            <OTPInputView
-              codeInputHighlightStyle={{ borderColor: '#fb77c5' }}
-              codeInputFieldStyle={styles.codeInputFieldStyle}
-              onCodeChanged={(code) => setCode(code)}
-              autoFocusOnLoad={false}
-              style={{ height: 120 }}
-              pinCount={6}
-              code={code}
+            <OtpInput
+              numberOfDigits={6}
+              focusColor={'#fb77c5'}
+              autoFocus={false}
+              onTextChange={setCode}
+              type='numeric'
+              theme={{
+                pinCodeTextStyle: { fontSize: 20 },
+                containerStyle: { marginTop: 10, marginBottom: 10 },
+              }}
             />
             <CustomButton
               disabled={loading}

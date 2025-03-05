@@ -1,4 +1,5 @@
-import { StatusBar, FlatList, SafeAreaView } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { StatusBar, FlatList } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
@@ -49,7 +50,7 @@ const SearchResult = () => {
   }
 
   return (
-    <SafeAreaView>
+    <SafeAreaView className='bg-white flex-1'>
       <StatusBar />
       <ScreenHeader text={'Kết quả tìm kiếm'} />
       <FlatList

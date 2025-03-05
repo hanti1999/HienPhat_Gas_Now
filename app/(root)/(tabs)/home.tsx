@@ -1,7 +1,8 @@
 import { Image, ScrollView, RefreshControl, View } from 'react-native';
-import { ActivityIndicator, SafeAreaView, Text } from 'react-native';
 import { Dimensions, FlatList, Pressable } from 'react-native';
 import { SwiperFlatList } from 'react-native-swiper-flatlist';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { ActivityIndicator, Text } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { useSelector } from 'react-redux';

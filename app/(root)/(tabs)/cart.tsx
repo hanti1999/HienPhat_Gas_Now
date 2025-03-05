@@ -1,7 +1,8 @@
 import { Dimensions, TouchableOpacity, RefreshControl } from 'react-native';
 import { Image, TextInput, Text, View, Modal } from 'react-native';
-import { SafeAreaView, ScrollView, Switch } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { useDispatch, useSelector } from 'react-redux';
+import { ScrollView, Switch } from 'react-native';
 import Toast from 'react-native-toast-message';
 import { useEffect, useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
@@ -107,7 +108,7 @@ const Cart = () => {
         dispatch(clearCart());
         const data: string = res.data?.order_id;
         const description: string = data.slice(-12);
-        router.replace({
+        router.push({
           pathname: '/(root)/checkout',
           params: {
             paymentMethod,
