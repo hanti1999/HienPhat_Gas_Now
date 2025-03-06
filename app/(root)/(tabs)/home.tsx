@@ -79,9 +79,10 @@ const Home = () => {
   }
 
   return (
-    <SafeAreaView className='flex-1 bg-primary-pink'>
+    <SafeAreaView edges={['top']} className='flex-1 bg-primary-pink'>
       <StatusBar style='dark' />
       <ScrollView
+        showsVerticalScrollIndicator={false}
         stickyHeaderIndices={[0]}
         className='bg-gray-100'
         refreshControl={

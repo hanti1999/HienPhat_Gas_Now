@@ -50,7 +50,7 @@ const SearchResult = () => {
   }
 
   return (
-    <SafeAreaView className='bg-white flex-1'>
+    <SafeAreaView edges={['top']} className='bg-white flex-1'>
       <StatusBar />
       <ScreenHeader text={'Kết quả tìm kiếm'} />
       <FlatList

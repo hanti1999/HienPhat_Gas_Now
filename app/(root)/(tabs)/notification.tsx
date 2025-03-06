@@ -70,7 +70,7 @@ const Notification = () => {
   }
 
   return (
-    <SafeAreaView className='flex-1 bg-white'>
+    <SafeAreaView edges={['top']} className='flex-1 bg-white'>
       <StatusBar style='dark' />
       <ScreenHeader text={'Thông báo'} showBack={false} />
       <FlatList

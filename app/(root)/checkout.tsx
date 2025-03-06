@@ -1,20 +1,29 @@
-import { ActivityIndicator, TouchableOpacity } from 'react-native';
-import { View, Text, Image, SafeAreaView } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { router, useLocalSearchParams } from 'expo-router';
 import React, { useEffect, useState } from 'react';
-import Toast from 'react-native-toast-message';
-import WebView from 'react-native-webview';
+import { View, Text, Image } from 'react-native';
+import * as WebBrowser from 'expo-web-browser';
 import { useSelector } from 'react-redux';
-import Constants from 'expo-constants';
 import RectangleButton from '@/components/RectangleButton';
+import CustomButton from '@/components/CustomButton';
+import ScreenHeader from '@/components/ScreenHeader';
 import img from '@/assets/images/delivery.png';
 import { RootState } from '@/redux/store';
 
 const Checkout = () => {
   const { paymentMethod, sum, description } = useLocalSearchParams();
   const [countdown, setCountdown] = useState<number>(5);
-  const [loading, setLoading] = useState<boolean>(true);
   const token = useSelector((state: RootState) => state.auth.accessToken);
+
+  const handleOpenWeb = async () => {
+    await WebBrowser.openBrowserAsync(
+      `https://img.vietqr.io/image/Vietcombank-9986359498-print.jpg?amount=${sum}&addInfo=${description}&accountName=Nguyen%20Thong%20Hoang%20Anh`
+    );
+  };
+
+  const navToHone = () => {
+    router.replace('/(root)/(tabs)/home');
+  };
 
   useEffect(() => {
     if (paymentMethod == 'cod') {
@@ -30,20 +39,10 @@ const Checkout = () => {
         clearInterval(interval);
         clearTimeout(timer);
       };
+    } else if (paymentMethod == 'banking') {
+      handleOpenWeb();
     }
   }, []);
-
-  const onError = () => {
-    Toast.show({
-      type: 'error',
-      text1: 'Có lỗi xảy ra, vui lòng liên hệ với bộ phận hỗ trợ!',
-    });
-    router.replace('/(root)/orders');
-  };
-
-  const navToHone = () => {
-    router.replace('/(root)/(tabs)/home');
-  };
 
   if (paymentMethod === 'cod') {
     return (
@@ -77,48 +76,25 @@ const Checkout = () => {
   }
 
   return (
-    <SafeAreaView className='flex-1 bg-primary-pink'>
+    <SafeAreaView className='flex-1 bg-white'>
+      <ScreenHeader showBack={false} text='Quét mã QR để thanh toán' />
       <View
-        className='flex-1 rounded-tl-xl rounded-tr-xl overflow-hidden'
-        style={{ marginTop: Constants.statusBarHeight }}
+        className='flex items-center justify-center p-3'
+        style={{ gap: 20 }}
       >
-        <View className='bg-gray-200 p-3'>
-          <Text className='text-[18px] text-center font-semibold'>
-            Quét mã QR để thanh toán
-          </Text>
-        </View>
-        {loading && (
-          <View className='flex-1 items-center justify-center bg-white'>
-            <View className='flex-row gap-1 items-center'>
-              <Text className='text-[20px] font-semibold'>Vui lòng chờ...</Text>
-              <ActivityIndicator size={'large'} />
-            </View>
-          </View>
-        )}
-        <WebView
-          onLoad={() => setLoading(false)}
-          source={{
-            uri: `https://img.vietqr.io/image/Vietcombank-9986359498-print.jpg?amount=${sum}&addInfo=${description}&accountName=Nguyen%20Thong%20Hoang%20Anh`,
-          }}
-          style={{ flex: 1 }}
-          onError={onError}
-          onHttpError={onError}
-        />
-        <View className='bg-white flex-row items-center p-3' style={{ gap: 4 }}>
-          <TouchableOpacity
+        <CustomButton title='Mở lại mã QR' onPress={handleOpenWeb} />
+
+        <View className='flex-row items-center' style={{ gap: 8 }}>
+          <RectangleButton
+            title='Bỏ qua'
+            bgVariant='outline'
+            textVariant='primary'
             onPress={navToHone}
-            className='bg-gray-300 rounded-lg py-3 px-6'
-          >
-            <Text className='text-gray-500 text-base font-medium'>Hủy bỏ</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
+          />
+          <RectangleButton
+            title='Xác nhận đã chuyển khoản'
             onPress={navToHone}
-            className='bg-primary-pink rounded-lg p-3 flex-1'
-          >
-            <Text className='text-white text-base text-center font-medium'>
-              Xác nhận đã chuyển khoản
-            </Text>
-          </TouchableOpacity>
+          />
         </View>
       </View>
     </SafeAreaView>

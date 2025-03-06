@@ -296,12 +296,12 @@ const ProductInfo = () => {
       </ScrollView>
 
       <View
-        className='flex-row items-center bg-white pt-1 px-3 h-[60px]'
+        className='flex-row items-center bg-white py-2 px-3 h-[60px]'
         style={{ gap: 12 }}
       >
         <TouchableOpacity
           onPress={() => openLink('https://zalo.me/0975841582')}
-          className='flex items-center justify-center rounded-full border border-[#0068ff] h-14 w-14'
+          className='flex items-center justify-center rounded-full border border-[#0068ff] h-12 w-12'
         >
           <AntDesign name='customerservice' size={22} color='#0068ff' />
           <Text className='text-[12px] text-[#0068ff]'>Chat</Text>

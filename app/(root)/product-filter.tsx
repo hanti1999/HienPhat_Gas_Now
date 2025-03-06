@@ -59,7 +59,7 @@ const ProductFilter = () => {
   }
 
   return (
-    <SafeAreaView className='flex-1'>
+    <SafeAreaView edges={['top']} className='flex-1 bg-primary-pink'>
       <SearchBar token={token as string} />
       <ScreenHeader text={'Sản phẩm'} />
       <FlatList
