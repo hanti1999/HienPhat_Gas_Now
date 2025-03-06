@@ -119,6 +119,13 @@ const SignIn = () => {
           <Text>Chưa có tài khoản? </Text>
           <Text className='text-primary-pink'>Đăng ký ngay</Text>
         </Link>
+        <Link
+          className='text-lg text-center mt-1 text-primary-black'
+          href={'tel:0986359498'}
+        >
+          <Text>Cần hỗ trợ? </Text>
+          <Text className='text-primary-pink'>Gọi ngay</Text>
+        </Link>
       </View>
     </ScrollView>
   );
