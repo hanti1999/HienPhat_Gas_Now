@@ -1,9 +1,8 @@
-import { TouchableWithoutFeedback, View, Platform } from 'react-native';
-import { SafeAreaView, Keyboard, ScrollView, Text } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { router, useLocalSearchParams } from 'expo-router';
+import { ScrollView, Text, View } from 'react-native';
 import Toast from 'react-native-toast-message';
 import React, { useState } from 'react';
-import Constants from 'expo-constants';
 import axios from 'axios';
 import RectangleInput from '@/components/RectangleInput';
 import ScreenHeader from '@/components/ScreenHeader';
@@ -45,34 +44,26 @@ const UpdateName = () => {
     }
   };
   return (
-    <SafeAreaView
-      style={{
-        paddingTop: Platform.OS === 'android' ? Constants.statusBarHeight : 0,
-        flex: 1,
-        backgroundColor: 'white',
-      }}
-    >
-      <ScrollView stickyHeaderIndices={[0]}>
+    <SafeAreaView edges={['top']} className='bg-primary-pink flex-1'>
+      <ScrollView stickyHeaderIndices={[0]} className='bg-gray-100'>
         <ScreenHeader text='Cập nhật tên' />
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-          <View className='p-3 bg-white'>
-            <Text className='font-semibold'>Tên hiện tại</Text>
-            <Text className='my-3'>{user_fullname}</Text>
-            <RectangleInput
-              placeholder='Nhập tên mới...'
-              onChangeText={setName}
-              label='Tên mới'
-              value={name}
-            />
-            <CustomButton
-              onPress={handleUpdateName}
-              disabled={loading}
-              loading={loading}
-              className='mt-3'
-              title='Lưu'
-            />
-          </View>
-        </TouchableWithoutFeedback>
+        <View className='p-3 bg-white'>
+          <Text className='font-semibold'>Tên hiện tại</Text>
+          <Text className='my-3'>{user_fullname}</Text>
+          <RectangleInput
+            placeholder='Nhập tên mới...'
+            onChangeText={setName}
+            label='Tên mới'
+            value={name}
+          />
+          <CustomButton
+            onPress={handleUpdateName}
+            disabled={loading}
+            loading={loading}
+            className='mt-3'
+            title='Lưu'
+          />
+        </View>
       </ScrollView>
     </SafeAreaView>
   );

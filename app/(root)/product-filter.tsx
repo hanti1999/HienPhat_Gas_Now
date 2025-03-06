@@ -61,7 +61,7 @@ const ProductFilter = () => {
   return (
     <SafeAreaView edges={['top']} className='flex-1 bg-primary-pink'>
       <SearchBar token={token as string} />
-      <ScreenHeader text={'Sản phẩm'} />
+      <ScreenHeader text={'Sản phẩm'} bg='white' textColor='black' />
       <FlatList
         keyExtractor={(item) => item?.product_id}
         className='bg-white'

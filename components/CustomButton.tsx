@@ -46,7 +46,7 @@ const CustomButton = ({
   return (
     <TouchableOpacity
       onPress={onPress}
-      className={`w-full rounded-full p-3 flex flex-row justify-center items-center shadow-md shadow-neutral-400/70 ${getBgVariantStyle(
+      className={`w-full rounded-full p-3 flex flex-row justify-center items-center ${getBgVariantStyle(
         bgVariant
       )} ${className}`}
       {...props}
@@ -56,7 +56,9 @@ const CustomButton = ({
         <ActivityIndicator color={'white'} />
       ) : (
         <Text
-          className={`text-lg font-bold ${getTextVariantStyle(textVariant)}`}
+          className={`text-lg font-semibold ${getTextVariantStyle(
+            textVariant
+          )}`}
         >
           {title}
         </Text>

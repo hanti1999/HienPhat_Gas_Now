@@ -202,7 +202,12 @@ const ProductInfo = () => {
         stickyHeaderIndices={[0]}
         className='bg-gray-100'
       >
-        <ScreenHeader text={'Chi tiết sản phẩm'} showCart={true} />
+        <ScreenHeader
+          text={'Chi tiết sản phẩm'}
+          showCart={true}
+          bg='white'
+          textColor='black'
+        />
         <SwiperFlatList
           showPagination={true}
           data={carousel}

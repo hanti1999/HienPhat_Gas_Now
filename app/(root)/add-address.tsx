@@ -125,12 +125,12 @@ const AddAddress = () => {
   };
 
   return (
-    <SafeAreaView className='flex-1 bg-white'>
+    <SafeAreaView edges={['top']} className='flex-1 bg-primary-pink'>
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         className='flex-1'
       >
-        <ScrollView stickyHeaderIndices={[0]}>
+        <ScrollView stickyHeaderIndices={[0]} className='bg-gray-100'>
           <StatusBar />
           <ScreenHeader text='Thêm địa chỉ' />
           <View className='p-3 bg-white'>
@@ -185,15 +185,14 @@ const AddAddress = () => {
               >
                 <View
                   className='bg-white rounded-lg w-full p-2 h-[80%]'
-                  style={{ marginBottom: Platform.OS == 'ios' ? 14 : 0 }}
+                  style={{ paddingBottom: Platform.OS == 'ios' ? 14 : 0 }}
                 >
-                  <View className='flex-row justify-between items-center'>
-                    <Text className='text-left font-bold mb-2 mr-1 text-lg'>
+                  <View className='flex-row justify-between items-center mb-2'>
+                    <Text className='text-left font-bold text-[18px]'>
                       Chọn địa chỉ
                     </Text>
-
                     <TouchableOpacity onPress={onCloseModal}>
-                      <AntDesign name='close' size={24} color='black' />
+                      <AntDesign name='close' size={26} color='black' />
                     </TouchableOpacity>
                   </View>
                   <ScrollView showsHorizontalScrollIndicator={false}>
@@ -257,7 +256,7 @@ const AddAddress = () => {
               }
             />
           </View>
-          <View className='p-3 flex-row items-center justify-between border-y border-gray-200'>
+          <View className='p-3 flex-row items-center justify-between border-y bg-white border-gray-200'>
             <Text>Đặt làm địa chỉ mặc định</Text>
             <Switch
               trackColor={{ false: '#767577', true: '#fb77c5' }}
@@ -266,7 +265,7 @@ const AddAddress = () => {
               disabled={true}
             />
           </View>
-          <View className='m-3'>
+          <View className='bg-white p-3'>
             <CustomButton
               onPress={handleAddAddress}
               disabled={loading}

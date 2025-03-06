@@ -184,14 +184,14 @@ const UpdatePassword = () => {
   }, [otpCountdown]);
 
   return (
-    <SafeAreaView className='flex-1 bg-white'>
+    <SafeAreaView edges={['top']} className='flex-1 bg-primary-pink'>
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         className='flex-1'
       >
-        <ScrollView stickyHeaderIndices={[0]}>
+        <ScrollView stickyHeaderIndices={[0]} className='bg-gray-100'>
           <ScreenHeader text='Thay đổi mật khẩu' />
-          <View className='p-3'>
+          <View className='p-3 bg-white'>
             <InputField
               placeholder='Nhập mật khẩu hiện tại'
               secureTextEntry={!showPassword}

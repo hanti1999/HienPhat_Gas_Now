@@ -5,9 +5,9 @@ import logo from '@/assets/images/logoHp.png';
 
 const About = () => {
   return (
-    <SafeAreaView className='flex-1 bg-white'>
+    <SafeAreaView edges={['top']} className='flex-1 bg-primary-pink'>
       <ScreenHeader text={'Thông tin công ty'} />
-      <View className='px-3 py-2'>
+      <View className='px-3 py-2 bg-white flex-1'>
         <Image className='w-24 h-24' source={logo} />
         <Text>CÔNG TY TNHH HIỀN PHÁT VI NA</Text>
         <Text>

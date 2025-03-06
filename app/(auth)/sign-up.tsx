@@ -256,15 +256,14 @@ const SignUp = () => {
             >
               <View
                 className='bg-white rounded-lg w-full p-2 h-[80%]'
-                style={{ marginBottom: Platform.OS == 'ios' ? 14 : 0 }}
+                style={{ paddingBottom: Platform.OS == 'ios' ? 14 : 0 }}
               >
                 <View className='flex-row justify-between items-center mb-2'>
                   <Text className='text-left font-bold text-[18px]'>
                     Chọn địa chỉ
                   </Text>
-
                   <TouchableOpacity onPress={onCloseModal}>
-                    <AntDesign name='close' size={24} color='black' />
+                    <AntDesign name='close' size={26} color='black' />
                   </TouchableOpacity>
                 </View>
                 <ScrollView showsHorizontalScrollIndicator={false}>

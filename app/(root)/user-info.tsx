@@ -1,7 +1,6 @@
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router, useLocalSearchParams } from 'expo-router';
 import { View, Text, Pressable } from 'react-native';
-import { ScrollView } from 'react-native';
 import React from 'react';
 import ScreenHeader from '@/components/ScreenHeader';
 import { AntDesign } from '@expo/vector-icons';
@@ -10,10 +9,10 @@ const UserInfo = () => {
   const { token, account_phonenumber, user_fullname } = useLocalSearchParams();
 
   return (
-    <SafeAreaView className='flex-1 bg-white'>
-      <ScrollView stickyHeaderIndices={[0]}>
+    <SafeAreaView edges={['top']} className='flex-1 bg-primary-pink'>
+      <View className='flex-1 bg-gray-100'>
         <ScreenHeader text={'Thông tin người dùng'} />
-        <View className='p-3'>
+        <View className='p-3 bg-white'>
           <View className='flex-row items-center justify-between py-3'>
             <Text className='text-base'>Số điện thoại</Text>
             <Text className='text-[#999]'>{account_phonenumber}</Text>
@@ -55,7 +54,7 @@ const UserInfo = () => {
             <AntDesign name='right' size={16} color='black' />
           </Pressable>
         </View>
-      </ScrollView>
+      </View>
     </SafeAreaView>
   );
 };

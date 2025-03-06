@@ -7,6 +7,7 @@ import { RootState } from '@/redux/store';
 
 interface IProps {
   text?: string;
+  textColor?: string;
   showCart?: boolean;
   showBack?: boolean;
   bg?: string;
@@ -15,9 +16,10 @@ interface IProps {
 
 const ScreenHeader = ({
   text,
+  textColor = 'white',
   showCart = false,
   showBack = true,
-  bg = 'white',
+  bg = 'primary-pink',
   className,
 }: IProps) => {
   const cartQuantity = useSelector(
@@ -37,11 +39,16 @@ const ScreenHeader = ({
           <Entypo
             name='chevron-thin-left'
             size={24}
+            color={textColor}
             style={{ paddingHorizontal: 12, paddingVertical: 10 }}
           />
         </TouchableOpacity>
         {text && (
-          <Text className='font-bold text-[20px] px-3 py-2.5'>{text}</Text>
+          <Text
+            className={`font-bold text-[20px] px-3 py-2.5 text-${textColor}`}
+          >
+            {text}
+          </Text>
         )}
       </View>
       <TouchableOpacity

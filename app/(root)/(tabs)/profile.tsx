@@ -62,7 +62,7 @@ const Profile = () => {
   }
 
   return (
-    <SafeAreaView edges={['top']} className='flex-1 bg-white'>
+    <SafeAreaView edges={['top']} className='flex-1 bg-primary-pink'>
       <StatusBar style='dark' />
       <ScrollView
         stickyHeaderIndices={[0]}
@@ -71,25 +71,27 @@ const Profile = () => {
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
       >
-        <View className='p-3 flex-row items-center bg-white'>
+        <View className='p-3 flex-row items-center bg-primary-pink'>
           {user?.user?.user_img_url != null ? (
             <Image
-              className='w-20 h-20 rounded-full border border-primary-pink'
+              className='w-20 h-20 rounded-full border border-white'
               source={{ uri: user?.user?.user_img_url }}
             />
           ) : (
-            <FontAwesome name='user-circle' size={80} color='#fb77c5' />
+            <FontAwesome name='user-circle' size={60} color='white' />
           )}
-          <View className='ml-2'>
-            <Text className='text-xl font-semibold'>
+          <View className='ml-2 flex-1'>
+            <Text className='text-xl font-semibold text-white'>
               {user?.user?.user_fullname}
             </Text>
-            <Text className='font-semibold'>
-              {user?.points?.total_points.toLocaleString()} điểm
-            </Text>
-            <Text className='text-gray-500'>
-              {user?.account?.account_phonenumber}
-            </Text>
+            <View className='flex-row flex justify-between items-center'>
+              <Text className='text-white'>
+                {user?.account?.account_phonenumber}
+              </Text>
+              <Text className='font-semibold text-white'>
+                {user?.points?.total_points.toLocaleString()} điểm
+              </Text>
+            </View>
           </View>
         </View>
 

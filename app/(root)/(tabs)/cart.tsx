@@ -1,8 +1,8 @@
 import { Dimensions, TouchableOpacity, RefreshControl } from 'react-native';
 import { Image, TextInput, Text, View, Modal } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { ScrollView, Switch, Platform } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
+import { ScrollView, Switch } from 'react-native';
 import Toast from 'react-native-toast-message';
 import { useEffect, useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
@@ -158,7 +158,7 @@ const Cart = () => {
   }
 
   return (
-    <SafeAreaView edges={['top']} className='flex-1 bg-white'>
+    <SafeAreaView edges={['top']} className='flex-1 bg-primary-pink'>
       <StatusBar style='dark' />
       <ScreenHeader text='Giỏ hàng' />
       <ScrollView
@@ -316,10 +316,7 @@ const Cart = () => {
             style={{ backgroundColor: 'rgba( 0, 0, 0, 0.3)' }}
             className='flex-1 items-center justify-end'
           >
-            <View
-              className='p-3 shadow-lg w-full bg-pink-100 rounded-lg relative'
-              style={{ marginBottom: Platform.OS == 'ios' ? 14 : 0 }}
-            >
+            <View className='p-3 shadow-lg w-full bg-pink-100 rounded-lg relative pb-3.5'>
               <Text className='text-left font-bold text-[18px] mb-2'>
                 Chọn địa chỉ
               </Text>

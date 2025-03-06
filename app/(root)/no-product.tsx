@@ -13,9 +13,9 @@ interface IProps {
 
 const NoProduct = ({ text, type = 'cart' }: IProps) => {
   return (
-    <SafeAreaView className='flex-1 bg-white'>
-      <ScreenHeader text={text} />
-      <View className='flex items-center h-full bg-gray-100 px-3'>
+    <SafeAreaView className='flex-1 bg-primary-pink'>
+      <ScreenHeader />
+      <View className='flex items-center h-full bg-white px-3'>
         <Image
           style={{ maxWidth: 400, maxHeight: 400 }}
           source={type === 'cart' ? cartImg : notiImg}

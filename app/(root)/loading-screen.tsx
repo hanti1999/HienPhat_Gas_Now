@@ -9,7 +9,7 @@ interface IProps {
 
 const LoadingScreen = ({ showBack = true }: IProps) => {
   return (
-    <SafeAreaView className='bg-white flex-1'>
+    <SafeAreaView edges={['top']} className='bg-primary-pink flex-1'>
       {showBack && <ScreenHeader text='Trở lại' />}
       <View
         style={{ gap: 10 }}

@@ -57,8 +57,8 @@ const Address = () => {
   }
 
   return (
-    <SafeAreaView className='flex-1 bg-white'>
-      <ScrollView stickyHeaderIndices={[0]}>
+    <SafeAreaView edges={['top']} className='flex-1 bg-primary-pink'>
+      <ScrollView stickyHeaderIndices={[0]} className='bg-gray-100'>
         <ScreenHeader text='Địa chỉ nhận hàng' />
         <View className='p-3 bg-white'>
           <RectangleButton

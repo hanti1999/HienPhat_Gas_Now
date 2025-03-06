@@ -46,8 +46,8 @@ const Checkout = () => {
 
   if (paymentMethod === 'cod') {
     return (
-      <SafeAreaView className='flex-1 bg-white'>
-        <View className='flex-1 items-center justify-center p-3'>
+      <SafeAreaView edges={['top']} className='flex-1 bg-primary-pink'>
+        <View className='flex-1 items-center justify-center p-3 bg-white'>
           <Image source={img} style={{ maxWidth: 400, maxHeight: 400 }} />
           <Text className='text-lg mt-2'>
             Cảm ơn bạn đã tin tưởng và ủng hộ!
@@ -76,25 +76,23 @@ const Checkout = () => {
   }
 
   return (
-    <SafeAreaView className='flex-1 bg-white'>
+    <SafeAreaView edges={['top']} className='flex-1 bg-primary-pink'>
       <ScreenHeader showBack={false} text='Quét mã QR để thanh toán' />
-      <View
-        className='flex items-center justify-center p-3'
-        style={{ gap: 20 }}
-      >
-        <CustomButton title='Mở lại mã QR' onPress={handleOpenWeb} />
-
-        <View className='flex-row items-center' style={{ gap: 8 }}>
-          <RectangleButton
-            title='Bỏ qua'
-            bgVariant='outline'
-            textVariant='primary'
-            onPress={navToHone}
-          />
-          <RectangleButton
-            title='Xác nhận đã chuyển khoản'
-            onPress={navToHone}
-          />
+      <View className='flex-1 bg-gray-100'>
+        <View className='flex p-3 bg-white' style={{ gap: 20 }}>
+          <CustomButton title='Mở lại mã QR' onPress={handleOpenWeb} />
+          <View className='flex-row items-center' style={{ gap: 8 }}>
+            <RectangleButton
+              title='Bỏ qua'
+              bgVariant='outline'
+              textVariant='primary'
+              onPress={navToHone}
+            />
+            <RectangleButton
+              title='Xác nhận đã chuyển khoản'
+              onPress={navToHone}
+            />
+          </View>
         </View>
       </View>
     </SafeAreaView>

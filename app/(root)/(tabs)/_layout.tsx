@@ -1,18 +1,12 @@
-import {
-  Pressable,
-  View,
-  Text,
-  Modal,
-  TouchableOpacity,
-  Platform,
-} from 'react-native';
+import { Pressable, View, Text, Modal } from 'react-native';
+import { TouchableOpacity } from 'react-native';
 import { useSelector } from 'react-redux';
 import { Tabs } from 'expo-router';
+import { useState } from 'react';
 import { AntDesign, Ionicons } from '@expo/vector-icons';
+import CustomButton from '@/components/CustomButton';
 import { RootState } from '@/redux/store';
 import openLink from '@/utils/openLink';
-import { useState } from 'react';
-import CustomButton from '@/components/CustomButton';
 
 interface ITabIcon {
   icon1: any;
@@ -126,27 +120,32 @@ const Layout = () => {
           style={{ backgroundColor: 'rgba( 0, 0, 0, 0.3)' }}
           className='flex-1 items-center justify-end'
         >
-          <View
-            className='bg-white rounded-lg w-full p-2'
-            style={{ marginBottom: Platform.OS == 'ios' ? 14 : 0 }}
-          >
+          <View className='bg-white rounded-lg w-full p-2 pb-3.5'>
             <View className='flex-row justify-between items-center mb-2'>
               <Text className='text-left font-bold text-[18px]'>
                 Chọn hình thức tư vấn
               </Text>
               <TouchableOpacity onPress={() => setModalVisible(false)}>
-                <AntDesign name='close' size={24} color='black' />
+                <AntDesign name='close' size={26} color='black' />
               </TouchableOpacity>
             </View>
             <View className='flex' style={{ gap: 8 }}>
               <CustomButton
-                IconLeft={<AntDesign name='message1' size={20} color='white' />}
+                IconLeft={
+                  <AntDesign name='message1' size={20} color={primaryPink} />
+                }
                 title=' Nhắn Zalo (0975841582)'
+                bgVariant='outline'
+                textVariant='secondary'
                 onPress={() => openLink(`https://zalo.me/0975841582`)}
               />
               <CustomButton
-                IconLeft={<AntDesign name='phone' size={20} color='white' />}
-                title=' Gọi di động (0975841582)'
+                IconLeft={
+                  <AntDesign name='phone' size={20} color={primaryPink} />
+                }
+                bgVariant='outline'
+                textVariant='secondary'
+                title=' Gọi di động (0986573072)'
                 onPress={() => openLink(`tel:0986573072`)}
               />
             </View>

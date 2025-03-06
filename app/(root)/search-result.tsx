@@ -50,12 +50,13 @@ const SearchResult = () => {
   }
 
   return (
-    <SafeAreaView edges={['top']} className='bg-white flex-1'>
+    <SafeAreaView edges={['top']} className='bg-primary-pink flex-1'>
       <StatusBar />
       <ScreenHeader text={'Kết quả tìm kiếm'} />
       <FlatList
         keyExtractor={(item) => item.product_id}
         style={{ height: '100%' }}
+        className='bg-gray-100'
         data={products}
         numColumns={2}
         renderItem={({ item }) => (

@@ -64,10 +64,10 @@ const Orders = () => {
   }
 
   return (
-    <SafeAreaView edges={['top']} className='flex-1 bg-white'>
+    <SafeAreaView edges={['top']} className='flex-1 bg-primary-pink'>
       <ScreenHeader text='Lịch sử đơn hàng' />
       <FlatList
-        style={{ backgroundColor: '#fff' }}
+        className='bg-gray-100'
         keyExtractor={(item) => item.order_id}
         data={orders}
         renderItem={({ item }) => (
@@ -105,7 +105,7 @@ const RenderOrders = ({ item, fetchOrders, token }: IProps) => {
   };
 
   return (
-    <View className='p-3 mb-2 bg-pink-100'>
+    <View className='p-3 mb-2 bg-white'>
       <Text className='text-[16px] text-gray-500 font-semibold italic'>
         <AntDesign name='calendar' size={16} />
         Thời gian: {moment(item?.created_at).format('DD/MM/YYYY _ HH:mm')}

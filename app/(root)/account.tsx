@@ -1,7 +1,6 @@
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router, useLocalSearchParams } from 'expo-router';
-import { ScrollView, Pressable } from 'react-native';
-import { View, Text } from 'react-native';
+import { Pressable, View, Text } from 'react-native';
 import ScreenHeader from '@/components/ScreenHeader';
 import { AntDesign } from '@expo/vector-icons';
 
@@ -10,10 +9,10 @@ const Account = () => {
     useLocalSearchParams();
 
   return (
-    <SafeAreaView className='flex-1 bg-white'>
-      <ScrollView stickyHeaderIndices={[0]}>
+    <SafeAreaView edges={['top']} className='flex-1 bg-primary-pink'>
+      <View className='flex-1 bg-gray-100'>
         <ScreenHeader text={'Tài khoản'} />
-        <View className='p-3'>
+        <View className='p-3 bg-white'>
           <Pressable
             onPress={() =>
               router.push({
@@ -45,7 +44,7 @@ const Account = () => {
             <AntDesign name='right' size={16} color='black' />
           </Pressable>
         </View>
-      </ScrollView>
+      </View>
     </SafeAreaView>
   );
 };

@@ -3,6 +3,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useDispatch, useSelector } from 'react-redux';
 import { View, Text, FlatList } from 'react-native';
 import React, { useState, useEffect } from 'react';
+import Constants from 'expo-constants';
 import { TouchableOpacity } from 'react-native';
 import Toast from 'react-native-toast-message';
 import { router } from 'expo-router';
@@ -54,27 +55,25 @@ const Sale = () => {
   }
 
   return (
-    <SafeAreaView className='flex-1'>
-      <ImageBackground source={saleBg} style={{ flex: 1 }}>
-        <Header />
-        <View className='px-3'>
-          <View className='flex-row items-center justify-center pb-3'>
-            <Image className='w-10 h-10' source={daisy} />
-            <Text className='font-bold text-2xl text-red-500'>
-              Ưu đãi đến 50%!!!
-            </Text>
-            <Image className='w-10 h-10' source={daisy} />
-          </View>
-          <FlatList
-            data={products}
-            keyExtractor={(item) => item?.product_id}
-            renderItem={({ item }) => <ProductCard item={item} token={token} />}
-            showsVerticalScrollIndicator={false}
-            className='mb-28'
-          />
+    <ImageBackground source={saleBg} style={{ flex: 1 }}>
+      <Header />
+      <View className='px-3'>
+        <View className='flex-row items-center justify-center pb-3'>
+          <Image className='w-10 h-10' source={daisy} />
+          <Text className='font-bold text-2xl text-red-500'>
+            Ưu đãi đến 50%!!!
+          </Text>
+          <Image className='w-10 h-10' source={daisy} />
         </View>
-      </ImageBackground>
-    </SafeAreaView>
+        <FlatList
+          data={products}
+          keyExtractor={(item) => item?.product_id}
+          renderItem={({ item }) => <ProductCard item={item} token={token} />}
+          showsVerticalScrollIndicator={false}
+          className='mb-28'
+        />
+      </View>
+    </ImageBackground>
   );
 };
 
@@ -85,7 +84,10 @@ const Header = () => {
   const displayValue = cartQuantity > 9 ? '9+' : cartQuantity;
 
   return (
-    <View className='flex-row justify-between items-center'>
+    <View
+      className='flex-row justify-between items-center'
+      style={{ marginTop: Constants.statusBarHeight }}
+    >
       <TouchableOpacity onPress={() => router.back()}>
         <Entypo
           name='chevron-thin-left'
