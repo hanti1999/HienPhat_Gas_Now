@@ -64,7 +64,7 @@ const ProductFilter = () => {
       <ScreenHeader text={'Sản phẩm'} />
       <FlatList
         keyExtractor={(item) => item?.product_id}
-        className='bg-white h-full'
+        className='bg-white'
         data={products}
         numColumns={2}
         renderItem={({ item }) => (

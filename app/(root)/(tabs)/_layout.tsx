@@ -1,5 +1,18 @@
+import {
+  Pressable,
+  View,
+  Text,
+  Modal,
+  TouchableOpacity,
+  Platform,
+} from 'react-native';
+import { useSelector } from 'react-redux';
 import { Tabs } from 'expo-router';
-import { Ionicons } from '@expo/vector-icons';
+import { AntDesign, Ionicons } from '@expo/vector-icons';
+import { RootState } from '@/redux/store';
+import openLink from '@/utils/openLink';
+import { useState } from 'react';
+import CustomButton from '@/components/CustomButton';
 
 interface ITabIcon {
   icon1: any;
@@ -16,64 +29,131 @@ const TabIcon = ({ icon1, icon2, focused }: ITabIcon) => (
 );
 
 const Layout = () => {
+  const quantity = useSelector((state: RootState) => state.cart.totalQuantity);
   const primaryPink = '#fb77c5';
+  const [modalVisible, setModalVisible] = useState<boolean>(false);
+
   return (
-    <Tabs
-      screenOptions={{
-        tabBarActiveTintColor: primaryPink,
-        tabBarInactiveTintColor: '#333',
-        tabBarStyle: {
-          shadowColor: '#333',
-          shadowOpacity: 0.1,
-          shadowRadius: 5,
-        },
-      }}
-    >
-      <Tabs.Screen
-        name='home'
-        options={{
-          title: 'Trang chủ',
+    <>
+      <Tabs
+        screenOptions={{
+          tabBarActiveTintColor: primaryPink,
+          tabBarInactiveTintColor: '#333',
           headerShown: false,
-          tabBarIcon: ({ focused }) => (
-            <TabIcon icon1='home' icon2='home-outline' focused={focused} />
-          ),
+          tabBarStyle: {
+            shadowColor: '#333',
+            shadowOpacity: 0.1,
+            shadowRadius: 5,
+          },
         }}
-      />
-      <Tabs.Screen
-        name='notification'
-        options={{
-          title: 'Thông báo',
-          headerShown: false,
-          tabBarIcon: ({ focused }) => (
-            <TabIcon
-              icon1='notifications'
-              icon2='notifications-outline'
-              focused={focused}
-            />
-          ),
+      >
+        <Tabs.Screen
+          name='home'
+          options={{
+            title: 'Trang chủ',
+            tabBarIcon: ({ focused }) => (
+              <TabIcon icon1='home' icon2='home-outline' focused={focused} />
+            ),
+          }}
+        />
+        <Tabs.Screen
+          name='notification'
+          options={{
+            title: 'Thông báo',
+            tabBarIcon: ({ focused }) => (
+              <TabIcon
+                icon1='notifications'
+                icon2='notifications-outline'
+                focused={focused}
+              />
+            ),
+          }}
+        />
+        <Tabs.Screen
+          name='call'
+          options={{
+            title: '',
+            tabBarButton: () => (
+              <View className='flex items-center justify-center -top-4'>
+                <Pressable
+                  onPress={() => setModalVisible(true)}
+                  className='items-center justify-center h-[50px] w-[50px] rounded-full bg-primary-pink'
+                >
+                  <AntDesign name='customerservice' size={24} color='white' />
+                </Pressable>
+                <Text className='text-[12px]'>Gọi gas</Text>
+              </View>
+            ),
+          }}
+        />
+        <Tabs.Screen
+          name='cart'
+          options={{
+            title: 'Giỏ hàng',
+            tabBarBadge: quantity,
+            tabBarBadgeStyle: {
+              color: 'white',
+              backgroundColor: '#fb77c5',
+            },
+            tabBarIcon: ({ focused }) => (
+              <TabIcon icon1='cart' icon2='cart-outline' focused={focused} />
+            ),
+          }}
+        />
+        <Tabs.Screen
+          name='profile'
+          options={{
+            title: 'Tài khoản',
+            tabBarIcon: ({ focused }) => (
+              <TabIcon
+                icon1='person'
+                icon2='person-outline'
+                focused={focused}
+              />
+            ),
+          }}
+        />
+      </Tabs>
+      <Modal
+        visible={modalVisible}
+        animationType='fade'
+        transparent={true}
+        onRequestClose={() => {
+          setModalVisible(!modalVisible);
         }}
-      />
-      <Tabs.Screen
-        name='cart'
-        options={{
-          title: 'Giỏ hàng',
-          headerShown: false,
-          tabBarIcon: ({ focused }) => (
-            <TabIcon icon1='cart' icon2='cart-outline' focused={focused} />
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name='profile'
-        options={{
-          title: 'Hồ sơ',
-          headerShown: false,
-          tabBarIcon: ({ focused }) => (
-            <TabIcon icon1='person' icon2='person-outline' focused={focused} />
-          ),
-        }}
-      />
-    </Tabs>
+      >
+        <View
+          style={{ backgroundColor: 'rgba( 0, 0, 0, 0.3)' }}
+          className='flex-1 items-center justify-end'
+        >
+          <View
+            className='bg-white rounded-lg w-full p-2'
+            style={{ marginBottom: Platform.OS == 'ios' ? 14 : 0 }}
+          >
+            <View className='flex-row justify-between items-center mb-2'>
+              <Text className='text-left font-bold text-[18px]'>
+                Chọn hình thức tư vấn
+              </Text>
+              <TouchableOpacity onPress={() => setModalVisible(false)}>
+                <AntDesign name='close' size={24} color='black' />
+              </TouchableOpacity>
+            </View>
+            <View className='flex' style={{ gap: 8 }}>
+              <CustomButton
+                IconLeft={<AntDesign name='message1' size={20} color='white' />}
+                title=' Nhắn Zalo (0975841582)'
+                onPress={() => openLink(`https://zalo.me/0975841582`)}
+              />
+              <CustomButton
+                IconLeft={<AntDesign name='phone' size={20} color='white' />}
+                title=' Gọi di động (0975841582)'
+                onPress={() => openLink(`tel:0986573072`)}
+              />
+            </View>
+          </View>
+        </View>
+      </Modal>
+    </>
   );
 };
 

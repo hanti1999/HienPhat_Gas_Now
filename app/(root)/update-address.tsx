@@ -206,7 +206,7 @@ const UpdateAddress = () => {
               children={<GetLocationButton onPress={handleGetLocationPress} />}
             />
             <Modal
-              animationType='slide'
+              animationType='fade'
               visible={modalVisible}
               transparent={true}
               onRequestClose={() => {
@@ -217,7 +217,10 @@ const UpdateAddress = () => {
                 style={{ backgroundColor: 'rgba( 0, 0, 0, 0.3)' }}
                 className='flex-1 items-center justify-end'
               >
-                <View className='bg-white mb-3.5 rounded-lg w-full p-2 h-[80%]'>
+                <View
+                  className='bg-white rounded-lg w-full p-2 h-[80%]'
+                  style={{ marginBottom: Platform.OS == 'ios' ? 14 : 0 }}
+                >
                   <View className='flex-row justify-between items-center'>
                     <Text className='text-left font-bold mb-2 mr-1 text-lg'>
                       Chọn địa chỉ

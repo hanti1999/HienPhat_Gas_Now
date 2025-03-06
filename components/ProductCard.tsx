@@ -47,48 +47,46 @@ const ProductCard = ({ item, token, size }: IProductCard) => {
   };
 
   return (
-    <View
-      className='m-1 border border-gray-200 rounded-md overflow-hidden'
-      style={{ width: width * size - 8 }}
-    >
+    <View className='m-1' style={{ width: width * size - 8 }}>
       <Pressable onPress={navToInfo}>
-        <Image
-          className='aspect-square'
-          source={{ uri: item?.product_image_url }}
-        />
-        <View className='p-1.5 h-[120px] justify-between bg-pink-100'>
-          <Text>{item?.product_name}</Text>
+        <View className='border-x border-t rounded-tl-md rounded-tr-md border-gray-200'>
+          <Image
+            className='aspect-square rounded-md'
+            source={{ uri: item?.product_image_url }}
+          />
+        </View>
+        <View className='p-1.5 justify-between bg-pink-100 border-x border-b rounded-bl-md rounded-br-md border-gray-200'>
+          <Text numberOfLines={2}>{item?.product_name}</Text>
           {item?.product_discount != 0 && (
             <View className='flex-row items-center' style={{ gap: 4 }}>
               <View className='px-0.5 rounded bg-red-500'>
-                <Text className='text-white '>-{item?.product_discount}%</Text>
+                <Text className='text-white text-[12px]'>
+                  -{item?.product_discount}%
+                </Text>
               </View>
-              <Text className='line-through text-gray-500'>
+              <Text className='line-through text-gray-500 text-[12px]'>
                 {item?.product_price?.toLocaleString()}
               </Text>
             </View>
           )}
-          <Text className='font-semibold text-red-500 text-[18px]'>
-            {item?.final_price.toLocaleString()}đ
+          <Text className='font-semibold text-red-500'>
+            {item?.final_price.toLocaleString()} đ
           </Text>
           <Text className='text-gray-500 text-[12px]'>
             Đã bán: {item?.product_sold}
           </Text>
+          <TouchableOpacity
+            onPress={() => addItemToCart()}
+            disabled={isLoading}
+            className='bg-primary-pink m-0.5 h-[40px] flex items-center rounded-md justify-center'
+          >
+            {isLoading ? (
+              <ActivityIndicator color='#fff' />
+            ) : (
+              <Text className='text-white font-medium'>Sắm ngay nào!</Text>
+            )}
+          </TouchableOpacity>
         </View>
-
-        <TouchableOpacity
-          onPress={() => addItemToCart()}
-          disabled={isLoading}
-          className=' bg-primary-pink h-[48px] flex items-center rounded-bl-md rounded-br-md justify-center'
-        >
-          {isLoading ? (
-            <ActivityIndicator color='#fff' />
-          ) : (
-            <Text className=' text-white text-[16px] font-medium uppercase'>
-              sắm ngay nào!
-            </Text>
-          )}
-        </TouchableOpacity>
       </Pressable>
     </View>
   );

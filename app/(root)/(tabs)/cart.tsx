@@ -1,8 +1,8 @@
 import { Dimensions, TouchableOpacity, RefreshControl } from 'react-native';
 import { Image, TextInput, Text, View, Modal } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { ScrollView, Switch, Platform } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
-import { ScrollView, Switch } from 'react-native';
 import Toast from 'react-native-toast-message';
 import { useEffect, useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
@@ -306,7 +306,7 @@ const Cart = () => {
         {/* Modal chọn địa chỉ */}
         <Modal
           visible={modalVisible}
-          animationType='slide'
+          animationType='fade'
           transparent={true}
           onRequestClose={() => {
             setModalVisible(!modalVisible);
@@ -316,7 +316,10 @@ const Cart = () => {
             style={{ backgroundColor: 'rgba( 0, 0, 0, 0.3)' }}
             className='flex-1 items-center justify-end'
           >
-            <View className='p-3 mb-2.5 shadow-lg w-full bg-pink-100 rounded-lg relative'>
+            <View
+              className='p-3 shadow-lg w-full bg-pink-100 rounded-lg relative'
+              style={{ marginBottom: Platform.OS == 'ios' ? 14 : 0 }}
+            >
               <Text className='text-left font-bold text-[18px] mb-2'>
                 Chọn địa chỉ
               </Text>
@@ -374,7 +377,7 @@ const Cart = () => {
       </ScrollView>
 
       <View
-        className='p-3 bg-white flex-row border-t border-gray-200 justify-end'
+        className='py-4 px-3 bg-white flex-row border-t border-gray-200 justify-end'
         style={{ gap: 8 }}
       >
         <View>

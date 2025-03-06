@@ -18,7 +18,7 @@ import openLink from '@/utils/openLink';
 import LoadingScreen from '../loading-screen';
 
 const Profile = () => {
-  const version: string = 'v25.03.01';
+  const version: string = 'v25.03.06';
   const token = useSelector((state: RootState) => state?.auth.accessToken);
   const [refreshing, setRefreshing] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);

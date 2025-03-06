@@ -51,7 +51,7 @@ const CustomButton = ({
       )} ${className}`}
       {...props}
     >
-      {IconLeft && <IconLeft />}
+      {IconLeft && IconLeft}
       {loading ? (
         <ActivityIndicator color={'white'} />
       ) : (
@@ -61,7 +61,7 @@ const CustomButton = ({
           {title}
         </Text>
       )}
-      {IconRight && <IconRight />}
+      {IconRight && IconRight}
     </TouchableOpacity>
   );
 };
