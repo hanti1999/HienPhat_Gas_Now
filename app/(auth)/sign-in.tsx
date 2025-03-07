@@ -1,6 +1,5 @@
 import { View, ScrollView, TouchableOpacity, Text } from 'react-native';
 import Toast from 'react-native-toast-message';
-import { StatusBar } from 'expo-status-bar';
 import { Link, router } from 'expo-router';
 import { useDispatch } from 'react-redux';
 import React, { useState } from 'react';
@@ -67,7 +66,6 @@ const SignIn = () => {
 
   return (
     <ScrollView className='flex-1 bg-white'>
-      <StatusBar style='light' />
       <HeaderImage text='Đăng nhập' />
       <View className='px-5 pb-5'>
         <InputField
@@ -112,20 +110,18 @@ const SignIn = () => {
           title='Đăng nhập'
           className='mt-5'
         />
-        <Link
-          className='text-lg text-center mt-5 text-primary-black'
-          href={'/sign-up'}
-        >
-          <Text>Chưa có tài khoản? </Text>
-          <Text className='text-primary-pink'>Đăng ký ngay</Text>
-        </Link>
-        <Link
-          className='text-lg text-center mt-1 text-primary-black'
-          href={'tel:0986359498'}
-        >
-          <Text>Cần hỗ trợ? </Text>
-          <Text className='text-primary-pink'>Gọi ngay</Text>
-        </Link>
+        <Text className='text-lg text-center mt-5 text-primary-black'>
+          Chưa có tài khoản?
+          <Link href={'/sign-up'}>
+            <Text className='text-primary-pink'>Đăng ký ngay</Text>
+          </Link>
+        </Text>
+        <Text className='text-lg text-center mt-1 text-primary-black'>
+          Cần hỗ trợ?{' '}
+          <Link href={'tel:0986359498'}>
+            <Text className='text-primary-pink'>Gọi ngay</Text>
+          </Link>
+        </Text>
       </View>
     </ScrollView>
   );

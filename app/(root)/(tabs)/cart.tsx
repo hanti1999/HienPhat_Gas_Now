@@ -5,7 +5,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { ScrollView, Switch } from 'react-native';
 import Toast from 'react-native-toast-message';
 import { useEffect, useState } from 'react';
-import { StatusBar } from 'expo-status-bar';
 import { router } from 'expo-router';
 import axios from 'axios';
 import { removeFromCart, clearCart } from '@/redux/slices/cartSlice';
@@ -159,7 +158,6 @@ const Cart = () => {
 
   return (
     <SafeAreaView edges={['top']} className='flex-1 bg-primary-pink'>
-      <StatusBar style='dark' />
       <ScreenHeader text='Giỏ hàng' />
       <ScrollView
         showsVerticalScrollIndicator={false}

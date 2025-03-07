@@ -3,7 +3,6 @@ import { Text, View, ScrollView, StyleSheet } from 'react-native';
 import { Link, useLocalSearchParams, router } from 'expo-router';
 import { OtpInput } from 'react-native-otp-entry';
 import Toast from 'react-native-toast-message';
-import { StatusBar } from 'expo-status-bar';
 import React, { useState } from 'react';
 import axios from 'axios';
 import CustomButton from '@/components/CustomButton';
@@ -53,7 +52,6 @@ const Verify = () => {
 
   return (
     <ScrollView className='bg-white flex-1'>
-      <StatusBar style='light' />
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View className='flex'>
           <HeaderImage text='Xác minh OTP' />

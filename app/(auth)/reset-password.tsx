@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { View, ScrollView } from 'react-native';
 import Toast from 'react-native-toast-message';
-import { StatusBar } from 'expo-status-bar';
 import { router } from 'expo-router';
 import { Text } from 'react-native';
 import axios from 'axios';
@@ -144,7 +143,6 @@ const ResetPassword = () => {
 
   return (
     <ScrollView className='flex-1 bg-white'>
-      <StatusBar style='light' />
       <HeaderImage text='Lấy lại mật khẩu' />
       <View className='px-5 pb-5'>
         <GoBack />

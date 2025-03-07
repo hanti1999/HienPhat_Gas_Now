@@ -1,7 +1,7 @@
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { StatusBar, FlatList } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
 import React, { useEffect, useState } from 'react';
+import { FlatList } from 'react-native';
 import axios from 'axios';
 import ScreenHeader from '@/components/ScreenHeader';
 import ProductCard from '@/components/ProductCard';
@@ -51,7 +51,6 @@ const SearchResult = () => {
 
   return (
     <SafeAreaView edges={['top']} className='bg-primary-pink flex-1'>
-      <StatusBar />
       <ScreenHeader text={'Kết quả tìm kiếm'} />
       <FlatList
         keyExtractor={(item) => item.product_id}

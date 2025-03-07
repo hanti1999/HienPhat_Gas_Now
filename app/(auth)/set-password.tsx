@@ -2,7 +2,6 @@ import { KeyboardAvoidingView, Platform } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
 import { View, ScrollView } from 'react-native';
 import Toast from 'react-native-toast-message';
-import { StatusBar } from 'expo-status-bar';
 import { useDispatch } from 'react-redux';
 import React, { useState } from 'react';
 import axios from 'axios';
@@ -61,7 +60,6 @@ const SetPassword = () => {
       className='flex-1'
     >
       <ScrollView className='flex-1 bg-white'>
-        <StatusBar style='light' />
         <HeaderImage text='Lấy lại mật khẩu' />
         <View className='px-5 pb-5'>
           <GoBack />

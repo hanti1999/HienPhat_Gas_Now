@@ -2,7 +2,6 @@ import { KeyboardAvoidingView, Platform } from 'react-native';
 import { Text, ScrollView, View, Modal } from 'react-native';
 import { TouchableOpacity } from 'react-native';
 import Toast from 'react-native-toast-message';
-import { StatusBar } from 'expo-status-bar';
 import { Link, router } from 'expo-router';
 import React, { useState } from 'react';
 import axios from 'axios';
@@ -208,7 +207,6 @@ const SignUp = () => {
       className='flex-1'
     >
       <ScrollView className='flex-1 bg-white'>
-        <StatusBar style='light' />
         <HeaderImage text='Đăng ký' />
         <View className='px-5 pb-5'>
           <GoBack />
@@ -350,13 +348,12 @@ const SignUp = () => {
             loading={loading}
             title='Đăng ký'
           />
-          <Link
-            className='text-lg text-center my-5 text-primary-black'
-            href={'/sign-in'}
-          >
-            <Text>Đã có tài khoản? </Text>
-            <Text className='text-primary-pink'>Đăng nhập ngay</Text>
-          </Link>
+          <Text className='text-lg text-center mt-5 text-primary-black'>
+            Đã có tài khoản?
+            <Link href={'/sign-up'}>
+              <Text className='text-primary-pink'>Đăng nhập ngay</Text>
+            </Link>
+          </Text>
         </View>
       </ScrollView>
     </KeyboardAvoidingView>

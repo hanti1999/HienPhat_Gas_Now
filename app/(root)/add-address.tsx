@@ -1,8 +1,8 @@
 import { KeyboardAvoidingView, TouchableOpacity } from 'react-native';
-import { Modal, Switch, Text, StatusBar } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useLocalSearchParams, router } from 'expo-router';
 import { View, Platform, ScrollView } from 'react-native';
+import { Modal, Switch, Text } from 'react-native';
 import Toast from 'react-native-toast-message';
 import React, { useState } from 'react';
 import axios from 'axios';
@@ -131,7 +131,6 @@ const AddAddress = () => {
         className='flex-1'
       >
         <ScrollView stickyHeaderIndices={[0]} className='bg-gray-100'>
-          <StatusBar />
           <ScreenHeader text='Thêm địa chỉ' />
           <View className='p-3 bg-white'>
             <RectangleInput

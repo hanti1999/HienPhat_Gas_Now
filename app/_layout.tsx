@@ -1,4 +1,3 @@
-import { Platform, StyleSheet, TouchableOpacity, View } from 'react-native';
 import * as SplashScreen from 'expo-splash-screen';
 import Toast from 'react-native-toast-message';
 import React, { useEffect } from 'react';
@@ -6,8 +5,6 @@ import { Provider } from 'react-redux';
 import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
 import 'react-native-reanimated';
-import { AntDesign } from '@expo/vector-icons';
-import openLink from '@/utils/openLink';
 import { store } from '@/redux/store';
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
