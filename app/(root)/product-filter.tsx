@@ -2,6 +2,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { FlatList, RefreshControl } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import { useLocalSearchParams } from 'expo-router';
+import { StatusBar } from 'expo-status-bar';
 import axios from 'axios';
 import ScreenHeader from '@/components/ScreenHeader';
 import ProductCard from '@/components/ProductCard';
@@ -60,6 +61,7 @@ const ProductFilter = () => {
 
   return (
     <SafeAreaView edges={['top']} className='flex-1 bg-primary-pink'>
+      <StatusBar backgroundColor='#fb77c5' style='light' />
       <SearchBar token={token as string} />
       <ScreenHeader text={'Sản phẩm'} bg='white' textColor='black' />
       <FlatList

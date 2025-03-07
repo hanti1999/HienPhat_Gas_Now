@@ -4,6 +4,7 @@ import { SwiperFlatList } from 'react-native-swiper-flatlist';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ActivityIndicator, Text } from 'react-native';
 import React, { useState, useEffect } from 'react';
+import { StatusBar } from 'expo-status-bar';
 import { useSelector } from 'react-redux';
 import { router } from 'expo-router';
 import axios from 'axios';
@@ -87,6 +88,7 @@ const Home = () => {
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
       >
+        <StatusBar backgroundColor='#fb77c5' style='light' />
         <SearchBar token={token} />
         <HorizontalCategory token={token} />
         <SwiperFlatList

@@ -3,6 +3,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ScrollView, Pressable } from 'react-native';
 import Toast from 'react-native-toast-message';
+import { StatusBar } from 'expo-status-bar';
 import { View, Text } from 'react-native';
 import axios from 'axios';
 import RectangleButton from '@/components/RectangleButton';
@@ -59,6 +60,7 @@ const Address = () => {
   return (
     <SafeAreaView edges={['top']} className='flex-1 bg-primary-pink'>
       <ScrollView stickyHeaderIndices={[0]} className='bg-gray-100'>
+        <StatusBar backgroundColor='#fb77c5' />
         <ScreenHeader text='Địa chỉ nhận hàng' />
         <View className='p-3 bg-white'>
           <RectangleButton

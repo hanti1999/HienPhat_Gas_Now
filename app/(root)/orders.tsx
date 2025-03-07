@@ -4,6 +4,7 @@ import { router, useLocalSearchParams } from 'expo-router';
 import React, { useState, useEffect } from 'react';
 import Toast from 'react-native-toast-message';
 import { Modal, Image } from 'react-native';
+import { StatusBar } from 'expo-status-bar';
 import { Text, View } from 'react-native';
 import moment from 'moment';
 import axios from 'axios';
@@ -65,6 +66,7 @@ const Orders = () => {
 
   return (
     <SafeAreaView edges={['top']} className='flex-1 bg-primary-pink'>
+      <StatusBar backgroundColor='#fb77c5' style='light' />
       <ScreenHeader text='Lịch sử đơn hàng' />
       <FlatList
         className='bg-gray-100'

@@ -3,6 +3,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Keyboard, View, Text } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
 import Toast from 'react-native-toast-message';
+import { StatusBar } from 'expo-status-bar';
 import React, { useState } from 'react';
 import axios from 'axios';
 import RectangleButton from '@/components/RectangleButton';
@@ -17,6 +18,7 @@ const Review = () => {
 
   return (
     <SafeAreaView edges={['top']} className='bg-primary-pink flex-1'>
+      <StatusBar backgroundColor='#fb77c5' style='light' />
       <ScreenHeader text='Trở lại' />
       {productArr.map((item, index) => (
         <Form

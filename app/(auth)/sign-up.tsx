@@ -348,8 +348,8 @@ const SignUp = () => {
             loading={loading}
             title='Đăng ký'
           />
-          <Text className='text-lg text-center mt-5 text-primary-black'>
-            Đã có tài khoản?
+          <Text className='text-base text-center mt-5 text-primary-black'>
+            Đã có tài khoản?{' '}
             <Link href={'/sign-up'}>
               <Text className='text-primary-pink'>Đăng nhập ngay</Text>
             </Link>

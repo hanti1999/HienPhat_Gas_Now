@@ -1,5 +1,6 @@
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Text, View, ActivityIndicator } from 'react-native';
+import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import ScreenHeader from '@/components/ScreenHeader';
 
@@ -10,6 +11,7 @@ interface IProps {
 const LoadingScreen = ({ showBack = true }: IProps) => {
   return (
     <SafeAreaView edges={['top']} className='bg-primary-pink flex-1'>
+      <StatusBar backgroundColor='#fb77c5' style='light' />
       {showBack && <ScreenHeader text='Trở lại' />}
       <View
         style={{ gap: 10 }}

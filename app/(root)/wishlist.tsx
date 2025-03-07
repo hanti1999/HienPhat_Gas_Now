@@ -3,6 +3,7 @@ import { FlatList, RefreshControl } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import Toast from 'react-native-toast-message';
+import { StatusBar } from 'expo-status-bar';
 import axios from 'axios';
 import LoadingScreen from './loading-screen';
 import NoProduct from './no-product';
@@ -61,6 +62,7 @@ const Wishlist = () => {
 
   return (
     <SafeAreaView edges={['top']} className='flex-1 bg-primary-pink'>
+      <StatusBar backgroundColor='#fb77c5' style='light' />
       <ScreenHeader text={'Danh sách yêu thích'} />
       <FlatList
         keyExtractor={(item) => item?.product_id}

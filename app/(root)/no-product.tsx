@@ -1,5 +1,6 @@
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Image, View, Text } from 'react-native';
+import { StatusBar } from 'expo-status-bar';
 import { router } from 'expo-router';
 import ScreenHeader from '@/components/ScreenHeader';
 import CustomButton from '@/components/CustomButton';
@@ -14,6 +15,7 @@ interface IProps {
 const NoProduct = ({ text, type = 'cart' }: IProps) => {
   return (
     <SafeAreaView className='flex-1 bg-primary-pink'>
+      <StatusBar backgroundColor='#fb77c5' style='light' />
       <ScreenHeader />
       <View className='flex items-center h-full bg-white px-3'>
         <Image

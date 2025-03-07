@@ -4,6 +4,7 @@ import { useLocalSearchParams, router } from 'expo-router';
 import { View, Platform, ScrollView } from 'react-native';
 import { Modal, Switch, Text } from 'react-native';
 import Toast from 'react-native-toast-message';
+import { StatusBar } from 'expo-status-bar';
 import React, { useState } from 'react';
 import axios from 'axios';
 import { District, IAddress, Province, Ward } from '@/types/type';
@@ -131,6 +132,7 @@ const AddAddress = () => {
         className='flex-1'
       >
         <ScrollView stickyHeaderIndices={[0]} className='bg-gray-100'>
+          <StatusBar backgroundColor='#fb77c5' style='light' />
           <ScreenHeader text='Thêm địa chỉ' />
           <View className='p-3 bg-white'>
             <RectangleInput

@@ -17,6 +17,7 @@ import { Product, Review } from '@/types/type';
 import getNewToken from '@/utils/getNewToken';
 import openLink from '@/utils/openLink';
 import LoadingScreen from './loading-screen';
+import { StatusBar } from 'expo-status-bar';
 
 interface IDes {
   description: string;
@@ -202,6 +203,7 @@ const ProductInfo = () => {
         stickyHeaderIndices={[0]}
         className='bg-gray-100'
       >
+        <StatusBar backgroundColor='white' style='dark' />
         <ScreenHeader
           text={'Chi tiết sản phẩm'}
           showCart={true}

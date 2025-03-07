@@ -1,6 +1,7 @@
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router, useLocalSearchParams } from 'expo-router';
 import { Pressable, View, Text } from 'react-native';
+import { StatusBar } from 'expo-status-bar';
 import ScreenHeader from '@/components/ScreenHeader';
 import { AntDesign } from '@expo/vector-icons';
 
@@ -11,6 +12,7 @@ const Account = () => {
   return (
     <SafeAreaView edges={['top']} className='flex-1 bg-primary-pink'>
       <View className='flex-1 bg-gray-100'>
+        <StatusBar backgroundColor='#fb77c5' style='light' />
         <ScreenHeader text={'Tài khoản'} />
         <View className='p-3 bg-white'>
           <Pressable

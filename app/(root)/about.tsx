@@ -1,11 +1,13 @@
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Text, View, Image } from 'react-native';
+import { StatusBar } from 'expo-status-bar';
 import ScreenHeader from '@/components/ScreenHeader';
 import logo from '@/assets/images/logoHp.png';
 
 const About = () => {
   return (
     <SafeAreaView edges={['top']} className='flex-1 bg-primary-pink'>
+      <StatusBar backgroundColor='#fb77c5' style='light' />
       <ScreenHeader text={'Thông tin công ty'} />
       <View className='px-3 py-2 bg-white flex-1'>
         <Image className='w-24 h-24' source={logo} />

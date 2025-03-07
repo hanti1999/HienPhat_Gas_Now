@@ -4,6 +4,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { View, Text, ScrollView } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import Toast from 'react-native-toast-message';
+import { StatusBar } from 'expo-status-bar';
 import axios from 'axios';
 import PasswordValidate from '@/components/PasswordValidate';
 import useGetZaloToken from '@/customHooks/useGetZaloToken';
@@ -190,6 +191,7 @@ const UpdatePassword = () => {
         className='flex-1'
       >
         <ScrollView stickyHeaderIndices={[0]} className='bg-gray-100'>
+          <StatusBar backgroundColor='#fb77c5' style='light' />
           <ScreenHeader text='Thay đổi mật khẩu' />
           <View className='p-3 bg-white'>
             <InputField

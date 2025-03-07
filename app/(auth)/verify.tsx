@@ -84,7 +84,7 @@ const Verify = () => {
             />
             <Link
               href={'/sign-in'}
-              className='text-center text-lg mt-5 text-primary-black'
+              className='text-center text-base mt-5 text-primary-black'
             >
               <Text>Quay về đăng nhập</Text>
             </Link>

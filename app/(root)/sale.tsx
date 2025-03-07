@@ -1,8 +1,8 @@
 import { Image, ActivityIndicator, ImageBackground } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { useDispatch, useSelector } from 'react-redux';
 import { View, Text, FlatList } from 'react-native';
 import React, { useState, useEffect } from 'react';
+import { StatusBar } from 'expo-status-bar';
 import Constants from 'expo-constants';
 import { TouchableOpacity } from 'react-native';
 import Toast from 'react-native-toast-message';
@@ -56,6 +56,7 @@ const Sale = () => {
 
   return (
     <ImageBackground source={saleBg} style={{ flex: 1 }}>
+      <StatusBar backgroundColor='transparent' />
       <Header />
       <View className='px-3'>
         <View className='flex-row items-center justify-center pb-3'>

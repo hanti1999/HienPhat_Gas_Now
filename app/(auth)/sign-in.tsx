@@ -110,13 +110,13 @@ const SignIn = () => {
           title='Đăng nhập'
           className='mt-5'
         />
-        <Text className='text-lg text-center mt-5 text-primary-black'>
-          Chưa có tài khoản?
+        <Text className='text-base text-center mt-5 text-primary-black'>
+          Chưa có tài khoản?{' '}
           <Link href={'/sign-up'}>
             <Text className='text-primary-pink'>Đăng ký ngay</Text>
           </Link>
         </Text>
-        <Text className='text-lg text-center mt-1 text-primary-black'>
+        <Text className='text-base text-center mt-1 text-primary-black'>
           Cần hỗ trợ?{' '}
           <Link href={'tel:0986359498'}>
             <Text className='text-primary-pink'>Gọi ngay</Text>
