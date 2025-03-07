@@ -130,21 +130,11 @@ const Home = () => {
 
         <View className='border-t-2 border-primary-pink mt-5 relative bg-white'>
           <ProductTitle text={'Bếp gas'} />
-
-          <FlatList
-            data={gasStove?.slice(0, 6)}
-            style={{
-              backgroundColor: 'white',
-              paddingHorizontal: 4,
-              marginTop: 20,
-            }}
-            renderItem={({ item }) => (
-              <ProductCard token={token} item={item} size={0.45} />
-            )}
-            keyExtractor={(item) => item?.product_id}
-            showsHorizontalScrollIndicator={false}
-            horizontal
-          />
+          <View className='flex-row flex-wrap mt-5'>
+            {gasStove.slice(0, 8).map((item, index) => (
+              <ProductCard key={index} token={token} item={item} size={0.5} />
+            ))}
+          </View>
           <SeeMoreCard
             token={token}
             categoryId={'90ebec20-4240-446c-a6ef-856b0c7fc730'}
@@ -158,22 +148,11 @@ const Home = () => {
 
         <View className='border-t-2 border-primary-pink mt-5 relative bg-white'>
           <ProductTitle text={'Bếp điện'} />
-
-          <FlatList
-            style={{
-              backgroundColor: 'white',
-              paddingHorizontal: 4,
-              marginTop: 20,
-            }}
-            renderItem={({ item }) => (
-              <ProductCard token={token} item={item} size={0.45} />
-            )}
-            keyExtractor={(item) => item?.product_id}
-            data={electricStove?.slice(0, 6)}
-            showsHorizontalScrollIndicator={false}
-            horizontal
-          />
-
+          <View className='flex-row flex-wrap mt-5'>
+            {electricStove.slice(0, 8).map((item, index) => (
+              <ProductCard key={index} token={token} item={item} size={0.5} />
+            ))}
+          </View>
           <SeeMoreCard
             token={token}
             categoryId={'17c6fd3b-ab50-4d21-a94e-0269495f0937'}
@@ -187,22 +166,11 @@ const Home = () => {
 
         <View className='border-t-2 border-primary-pink mt-5 relative bg-white'>
           <ProductTitle text={'Gia dụng'} />
-
-          <FlatList
-            style={{
-              backgroundColor: 'white',
-              paddingHorizontal: 4,
-              marginTop: 20,
-            }}
-            renderItem={({ item }) => (
-              <ProductCard token={token} item={item} size={0.45} />
-            )}
-            keyExtractor={(item) => item?.product_id}
-            data={kitchenAppli?.slice(0, 6)}
-            showsHorizontalScrollIndicator={false}
-            horizontal
-          />
-
+          <View className='flex-row flex-wrap mt-5'>
+            {kitchenAppli.slice(0, 8).map((item, index) => (
+              <ProductCard key={index} token={token} item={item} size={0.5} />
+            ))}
+          </View>
           <SeeMoreCard
             token={token}
             categoryId={'553cfa8a-5bb6-4b48-a253-a9460a5c8922'}
@@ -212,22 +180,11 @@ const Home = () => {
 
         <View className='border-t-2 border-primary-pink mt-5 relative bg-white'>
           <ProductTitle text={'Phụ kiện'} />
-
-          <FlatList
-            style={{
-              backgroundColor: 'white',
-              paddingHorizontal: 4,
-              marginTop: 20,
-            }}
-            renderItem={({ item }) => (
-              <ProductCard token={token} item={item} size={0.45} />
-            )}
-            keyExtractor={(item) => item?.product_id}
-            data={accessories?.slice(0, 6)}
-            showsHorizontalScrollIndicator={false}
-            horizontal
-          />
-
+          <View className='flex-row flex-wrap mt-5'>
+            {accessories.slice(0, 8).map((item, index) => (
+              <ProductCard key={index} token={token} item={item} size={0.5} />
+            ))}
+          </View>
           <SeeMoreCard
             token={token}
             categoryId={'1f967d66-4955-4542-ad89-37458d8e1365'}
