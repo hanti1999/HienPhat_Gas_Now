@@ -1,4 +1,5 @@
 import { Pressable, View, Text, Modal } from 'react-native';
+import * as Animatable from 'react-native-animatable';
 import { TouchableOpacity } from 'react-native';
 import { useSelector } from 'react-redux';
 import { Tabs } from 'expo-router';
@@ -68,14 +69,21 @@ const Layout = () => {
           options={{
             title: '',
             tabBarButton: () => (
-              <View className='flex items-center justify-center -top-4'>
+              <View className='flex items-center justify-center  -top-4'>
                 <Pressable
                   onPress={() => setModalVisible(true)}
                   className='items-center justify-center h-[50px] w-[50px] rounded-full bg-primary-pink'
                 >
-                  <AntDesign name='customerservice' size={24} color='white' />
+                  <Animatable.View
+                    animation='pulse'
+                    iterationCount='infinite'
+                    duration={1000}
+                    delay={2500}
+                  >
+                    <AntDesign name='customerservice' size={30} color='white' />
+                  </Animatable.View>
                 </Pressable>
-                <Text className='text-[12px]'>Gọi gas</Text>
+                <Text className='text-[13px]'>Gọi gas</Text>
               </View>
             ),
           }}

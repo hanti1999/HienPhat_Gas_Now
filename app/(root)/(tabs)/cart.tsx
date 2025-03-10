@@ -299,7 +299,7 @@ const Cart = () => {
             >
               {paymentMethod === 'banking' && <CheckedLabel />}
               <Image source={bankIcon} className='w-12 h-12' />
-              <Text className='text-[16px]'>Chuyển khoản</Text>
+              <Text className='text-[16px]'>Quét mã</Text>
             </TouchableOpacity>
           </View>
         </View>
