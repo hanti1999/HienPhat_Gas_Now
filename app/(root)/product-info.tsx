@@ -198,18 +198,14 @@ const ProductInfo = () => {
 
   return (
     <SafeAreaView className='flex-1 bg-white'>
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        stickyHeaderIndices={[0]}
-        className='bg-gray-100'
-      >
-        <StatusBar backgroundColor='white' style='dark' />
-        <ScreenHeader
-          text={'Chi tiết sản phẩm'}
-          showCart={true}
-          bg='white'
-          textColor='black'
-        />
+      <StatusBar backgroundColor='white' style='dark' />
+      <ScreenHeader
+        text={'Chi tiết sản phẩm'}
+        showCart={true}
+        bg='white'
+        textColor='black'
+      />
+      <ScrollView showsVerticalScrollIndicator={false} className='bg-gray-100'>
         <SwiperFlatList
           showPagination={true}
           data={carousel}

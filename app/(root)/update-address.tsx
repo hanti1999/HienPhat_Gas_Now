@@ -157,9 +157,9 @@ const UpdateAddress = () => {
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         className='flex-1'
       >
-        <ScrollView stickyHeaderIndices={[0]} className='bg-gray-100'>
-          <StatusBar backgroundColor='#fb77c5' style='light' />
-          <ScreenHeader text='Chỉnh sửa địa chỉ' />
+        <StatusBar backgroundColor='#fb77c5' style='light' />
+        <ScreenHeader text='Chỉnh sửa địa chỉ' />
+        <ScrollView className='bg-gray-100'>
           <View className='p-3 bg-white'>
             <RectangleInput
               label='Tên người nhận'

@@ -190,9 +190,9 @@ const UpdatePassword = () => {
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         className='flex-1'
       >
-        <ScrollView stickyHeaderIndices={[0]} className='bg-gray-100'>
-          <StatusBar backgroundColor='#fb77c5' style='light' />
-          <ScreenHeader text='Thay đổi mật khẩu' />
+        <StatusBar backgroundColor='#fb77c5' style='light' />
+        <ScreenHeader text='Thay đổi mật khẩu' />
+        <ScrollView className='bg-gray-100'>
           <View className='p-3 bg-white'>
             <InputField
               placeholder='Nhập mật khẩu hiện tại'

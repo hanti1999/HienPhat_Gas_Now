@@ -1,8 +1,8 @@
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router, useLocalSearchParams } from 'expo-router';
-import { ScrollView, Text, View } from 'react-native';
 import Toast from 'react-native-toast-message';
 import { StatusBar } from 'expo-status-bar';
+import { Text, View } from 'react-native';
 import React, { useState } from 'react';
 import axios from 'axios';
 import RectangleInput from '@/components/RectangleInput';
@@ -46,9 +46,9 @@ const UpdateName = () => {
   };
   return (
     <SafeAreaView edges={['top']} className='bg-primary-pink flex-1'>
-      <ScrollView stickyHeaderIndices={[0]} className='bg-gray-100'>
-        <StatusBar backgroundColor='#fb77c5' style='light' />
-        <ScreenHeader text='Cập nhật tên' />
+      <StatusBar backgroundColor='#fb77c5' style='light' />
+      <ScreenHeader text='Cập nhật tên' />
+      <View className='flex-1 bg-gray-100'>
         <View className='p-3 bg-white'>
           <Text className='font-semibold'>Tên hiện tại</Text>
           <Text className='my-3'>{user_fullname}</Text>
@@ -66,7 +66,7 @@ const UpdateName = () => {
             title='Lưu'
           />
         </View>
-      </ScrollView>
+      </View>
     </SafeAreaView>
   );
 };

@@ -7,12 +7,14 @@ const Layout = () => {
       <Stack.Screen name='loading-screen' options={{ headerShown: false }} />
       <Stack.Screen name='update-address' options={{ headerShown: false }} />
       <Stack.Screen name='product-filter' options={{ headerShown: false }} />
+      <Stack.Screen name='privacy-policy' options={{ headerShown: false }} />
       <Stack.Screen name='search-result' options={{ headerShown: false }} />
       <Stack.Screen name='product-info' options={{ headerShown: false }} />
       <Stack.Screen name='update-name' options={{ headerShown: false }} />
       <Stack.Screen name='add-address' options={{ headerShown: false }} />
       <Stack.Screen name='no-product' options={{ headerShown: false }} />
       <Stack.Screen name='user-info' options={{ headerShown: false }} />
+      <Stack.Screen name='about-app' options={{ headerShown: false }} />
       <Stack.Screen name='wishlist' options={{ headerShown: false }} />
       <Stack.Screen name='checkout' options={{ headerShown: false }} />
       <Stack.Screen name='address' options={{ headerShown: false }} />
