@@ -22,8 +22,8 @@ const SearchBar = ({ token }: { token: string | null }) => {
   return (
     <View className='bg-primary-pink flex-row items-center'>
       <View
-        style={{ gap: 10 }}
-        className='px-2.5 flex-row flex-1 items-center bg-white h-10 rounded-full ml-4 my-2.5'
+        style={{ gap: 8 }}
+        className='px-3 flex-row flex-1 items-center bg-white h-10 rounded-full ml-3 my-3'
       >
         <Pressable onPress={searchHandler}>
           <Ionicons name='search' size={24} />
@@ -41,7 +41,7 @@ const SearchBar = ({ token }: { token: string | null }) => {
         </Pressable>
       </View>
       <Pressable
-        className='relative px-2.5'
+        className='relative px-3'
         onPress={() => router.push('/(root)/(tabs)/cart')}
       >
         <Ionicons name='cart-outline' size={30} />

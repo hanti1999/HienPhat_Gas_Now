@@ -88,7 +88,7 @@ const ResetPassword = () => {
     try {
       setLoading(true);
       // Lưu access token lên node server cho người dùng sau
-      const url = `${process.env.EXPO_PUBLIC_API}/zalo-tokens/b0455d2d-d138-46ad-b6c7-42aab30acf4b`;
+      const url = `${process.env.EXPO_PUBLIC_API}/zalo-tokens/${process.env.EXPO_PUBLIC_ZALO_ID}`;
       const data = {
         accessToken: props.access_token,
         refreshToken: props.refresh_token,

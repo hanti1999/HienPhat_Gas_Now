@@ -15,10 +15,8 @@ const PrivacyPolicy = () => {
             1. Thông tin chúng tôi thu thập:
           </Text>
           <Text style={styles.textContent}>
-            Thông tin cá nhân:{'\n'}- Họ và tên.{'\n'}- Số điện thoại.{'\n'}-
-            Địa chỉ giao hàng.
+            Thông tin cá nhân: Tên, số điện thoại, địa chỉ giao hàng.
           </Text>
-
           <Text style={styles.headerText}>2. Mục đích thu thập thông tin:</Text>
           <Text style={styles.textContent}>
             - Xử lý đơn hàng và giao hàng.{'\n'}- Cung cấp dịch vụ hỗ trợ khách
@@ -27,7 +25,6 @@ const PrivacyPolicy = () => {
             trường.
             {'\n'}- Tuân thủ quy định pháp luật.
           </Text>
-
           <Text style={styles.headerText}>
             3. Cách thức thu thập và lưu trữ thông tin:
           </Text>
@@ -37,7 +34,6 @@ const PrivacyPolicy = () => {
             với các biện pháp bảo mật phù hợp.{'\n'}- Sử dụng các phương thức mã
             hóa dữ liệu.
           </Text>
-
           <Text style={styles.headerText}>
             4. Việc chia sẻ thông tin với bên thứ ba:
           </Text>
@@ -47,7 +43,6 @@ const PrivacyPolicy = () => {
             mà không có sự đồng ý của người dùng.{'\n'}- Tuân thủ theo yêu cầu
             của cơ quan pháp luật có thẩm quyền.
           </Text>
-
           <Text style={styles.headerText}>5. Quyền của người dùng:</Text>
           <Text style={styles.textContent}>
             - Người dùng có quyền truy cập, chỉnh sửa hoặc xóa thông tin cá nhân
@@ -58,7 +53,6 @@ const PrivacyPolicy = () => {
             {'\n'}- Liên hệ với chúng tôi qua thông tin liên hệ được cung cấp ở
             phần cuối của chính sách này.
           </Text>
-
           <Text style={styles.headerText}>6. Thay đổi chính sách bảo mật:</Text>
           <Text style={styles.textContent}>
             - Chúng tôi có quyền thay đổi chính sách bảo mật này vào bất kỳ lúc
@@ -66,7 +60,6 @@ const PrivacyPolicy = () => {
             quan trọng.{'\n'}- Người sử dụng có trách nhiệm thường xuyên xem lại
             chính sách này để cập nhật các thay đổi.
           </Text>
-
           <Text style={styles.headerText}>7. Thông tin liên hệ:</Text>
           <Text style={styles.textContent}>
             - Tên công ty: CÔNG TY TNHH HIỀN PHÁT VI NA.{'\n'}- Địa chỉ: Quốc lộ

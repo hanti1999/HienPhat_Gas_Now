@@ -15,7 +15,7 @@ const useFetch = (url?: string) => {
 
     try {
       const res = await axios.get(
-        `${process.env.EXPO_PUBLIC_API}/zalo-tokens/b0455d2d-d138-46ad-b6c7-42aab30acf4b`
+        `${process.env.EXPO_PUBLIC_API}/zalo-tokens/${process.env.EXPO_PUBLIC_ZALO_ID}`
       );
 
       if (res.status === 200) {

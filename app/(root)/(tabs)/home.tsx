@@ -80,16 +80,15 @@ const Home = () => {
 
   return (
     <SafeAreaView edges={['top']} className='flex-1 bg-primary-pink'>
+      <StatusBar backgroundColor='#fb77c5' style='light' />
+      <SearchBar token={token} />
       <ScrollView
         showsVerticalScrollIndicator={false}
-        stickyHeaderIndices={[0]}
         className='bg-gray-100'
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
       >
-        <StatusBar backgroundColor='#fb77c5' style='light' />
-        <SearchBar token={token} />
         <HorizontalCategory token={token} />
         <SwiperFlatList
           autoplay
