@@ -51,7 +51,7 @@ const ProductCard = ({ item, token, size }: IProductCard) => {
       <Pressable onPress={navToInfo}>
         <View className='border-x border-t rounded-tl-md rounded-tr-md border-gray-200'>
           <Image
-            className='aspect-square rounded-md'
+            className='aspect-square rounded-tl-md rounded-tr-md'
             source={{ uri: item?.product_image_url }}
           />
         </View>

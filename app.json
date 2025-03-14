@@ -2,7 +2,7 @@
   "expo": {
     "name": "HienPhatGasNow",
     "slug": "hienphatgasnow",
-    "version": "25.03.10",
+    "version": "25.03.15",
     "orientation": "portrait",
     "icon": "./assets/icons/icon.png",
     "scheme": "myapp",
@@ -41,9 +41,17 @@
       [
         "expo-location",
         {
-          "locationAlwaysAndWhenInUsePermission": "Chấp nhận ứng dụng sử dụng vị trí của bạn?",
-          "locationAlwaysPermission": "Chấp nhận ứng dụng sử dụng vị trí của bạn?",
-          "locationWhenInUsePermission": "Chấp nhận ứng dụng sử dụng vị trí của bạn?"
+          "locationAlwaysAndWhenInUsePermission": "Cho phép ứng dụng sử dụng vị trí của bạn?",
+          "locationAlwaysPermission": "Cho phép ứng dụng sử dụng vị trí của bạn?",
+          "locationWhenInUsePermission": "Cho phép ứng dụng sử dụng vị trí của bạn?"
+        }
+      ],
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Cho phép ứng dụng truy cập máy ảnh của bạn?",
+          "microphonePermission": "Cho phép ứng dụng truy cập microphone của bạn?",
+          "recordAudioAndroid": true
         }
       ],
       "expo-secure-store"

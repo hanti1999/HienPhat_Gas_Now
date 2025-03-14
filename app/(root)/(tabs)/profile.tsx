@@ -19,7 +19,7 @@ import openLink from '@/utils/openLink';
 import LoadingScreen from '../loading-screen';
 
 const Profile = () => {
-  const version: string = '25.03.10';
+  const version: string = '25.03.15';
   const token = useSelector((state: RootState) => state?.auth.accessToken);
   const [refreshing, setRefreshing] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
@@ -99,6 +99,27 @@ const Profile = () => {
           <Pressable
             onPress={() =>
               router.push({
+                pathname: '/(root)/qr-code',
+                params: {
+                  phonenumber: user?.account?.account_phonenumber,
+                  name: user?.user?.user_fullname,
+                },
+              })
+            }
+            className='flex-row items-center justify-between py-3'
+          >
+            <View style={{ gap: 8 }} className='flex-row items-center'>
+              <View className='w-6'>
+                <AntDesign name='qrcode' size={24} color='black' />
+              </View>
+              <Text className='text-base'>Mã QR của bạn</Text>
+            </View>
+            <AntDesign name='right' size={16} color='black' />
+          </Pressable>
+
+          <Pressable
+            onPress={() =>
+              router.push({
                 pathname: '/(root)/account',
                 params: {
                   token: token,
@@ -112,7 +133,7 @@ const Profile = () => {
           >
             <View style={{ gap: 8 }} className='flex-row items-center'>
               <View className='w-6'>
-                <AntDesign name='user' size={24} color='black' />
+                <FontAwesome name='user-o' size={24} color='black' />
               </View>
               <Text className='text-base'>Tài khoản</Text>
             </View>
@@ -234,11 +255,11 @@ const Profile = () => {
           </Pressable>
         </View>
 
-        <View className='p-3 bg-white mt-2'>
+        <View className='bg-white mt-2'>
           <LogoutButton />
         </View>
 
-        <View className='mt-5'>
+        <View className='mt-5 pb-5'>
           <View className='flex items-center'>
             <View
               className='flex-row items-center justify-center'
