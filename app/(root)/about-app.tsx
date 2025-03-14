@@ -12,19 +12,23 @@ const AboutApp = () => {
       <StatusBar backgroundColor='#fb77c5' style='light' />
       <ScreenHeader text={'Thông tin ứng dụng'} />
       <View className='p-3 bg-white flex-1'>
-        <Text>Phiên bản: {version}</Text>
-        <Text className='mt-4 '>Thiết kế và phát triển bởi:</Text>
-        <Text className='text-primary-pink'>Tú Nhi (Manager | Tester)</Text>
-        <Link href={'https://github.com/hanti1999'}>
-          <Text className='text-blue-400 underline'>
-            Hoàng Anh (Front-end | Media)
-          </Text>
-        </Link>
-        <Link href={'https://github.com/vtit6109'}>
-          <Text className='text-blue-400 underline'>Vũ Thắng (Back-end)</Text>
-        </Link>
-        <Text className='mt-4 '>Assets:</Text>
-        <Text>
+        <Text className='text-[18px]'>Phiên bản: {version}</Text>
+        <Text className='mt-4 text-[16px]'>
+          Thiết kế và phát triển bởi:{'\n'}
+          <Text className='text-primary-pink'>Tú Nhi (Manager | Tester)</Text>
+          {'\n'}
+          <Link href={'https://github.com/hanti1999'}>
+            <Text className='text-blue-400 underline'>
+              Hoàng Anh (Front-end | Media)
+            </Text>
+          </Link>
+          {'\n'}
+          <Link href={'https://github.com/vtit6109'}>
+            <Text className='text-blue-400 underline'>Vũ Thắng (Back-end)</Text>
+          </Link>
+        </Text>
+        <Text className='mt-4 text-[16px]'>
+          Assets:{'\n'}
           Hình ảnh:{' '}
           <Link
             className='text-blue-400 underline'
@@ -39,8 +43,7 @@ const AboutApp = () => {
           >
             Flaticon
           </Link>
-        </Text>
-        <Text>
+          {'\n'}
           Icons:{' '}
           <Link
             className='text-blue-400 underline'

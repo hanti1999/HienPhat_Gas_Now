@@ -14,9 +14,9 @@ import CustomButton from '@/components/CustomButton';
 import InputField from '@/components/InputField';
 import generateOTP from '@/utils/generateOTP';
 import { Ionicons } from '@expo/vector-icons';
+import getNewToken from '@/utils/getNewToken';
 import OTPModal from '@/components/OTPModal';
 import { ZaloToken } from '@/types/type';
-import getNewToken from '@/utils/getNewToken';
 
 const UpdatePassword = () => {
   const { token, account_phonenumber } = useLocalSearchParams();

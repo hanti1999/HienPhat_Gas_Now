@@ -4,11 +4,7 @@ import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import ScreenHeader from '@/components/ScreenHeader';
 
-interface IProps {
-  showBack?: boolean;
-}
-
-const LoadingScreen = ({ showBack = true }: IProps) => {
+const LoadingScreen = ({ showBack = true }: { showBack?: boolean }) => {
   return (
     <SafeAreaView edges={['top']} className='bg-primary-pink flex-1'>
       <StatusBar backgroundColor='#fb77c5' style='light' />

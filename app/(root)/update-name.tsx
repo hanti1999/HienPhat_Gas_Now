@@ -28,7 +28,6 @@ const UpdateName = () => {
         user_fullname: name,
       };
       const res = await axios.put(url, data, config);
-
       if (res.status === 200) {
         Toast.show({ type: 'success', text1: 'Cập nhật tên thành công' });
         router.back();

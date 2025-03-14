@@ -36,6 +36,12 @@ const Home = () => {
       Authorization: `Bearer ${token}`,
     },
   };
+  const idList = {
+    bepGas: '68816608-610f-4397-8209-b5f42dbd106d',
+    bepDien: '600b7132-7f8e-47a3-8758-bcdb435932ed',
+    giaDung: '0c970a55-5b82-4c64-94a9-ab2491a2ef67',
+    phuKien: '763594b1-d20f-455d-8371-efc71f63c490',
+  };
 
   const onRefresh = async () => {
     setRefreshing(true);
@@ -46,10 +52,10 @@ const Home = () => {
   const fetchProducts = async () => {
     try {
       setLoading(true);
-      const url1 = `${process.env.EXPO_PUBLIC_API}/product/category/90ebec20-4240-446c-a6ef-856b0c7fc730`;
-      const url2 = `${process.env.EXPO_PUBLIC_API}/product/category/17c6fd3b-ab50-4d21-a94e-0269495f0937`;
-      const url3 = `${process.env.EXPO_PUBLIC_API}/product/category/553cfa8a-5bb6-4b48-a253-a9460a5c8922`;
-      const url4 = `${process.env.EXPO_PUBLIC_API}/product/category/1f967d66-4955-4542-ad89-37458d8e1365`;
+      const url1 = `${process.env.EXPO_PUBLIC_API}/product/category/${idList.bepGas}`;
+      const url2 = `${process.env.EXPO_PUBLIC_API}/product/category/${idList.bepDien}`;
+      const url3 = `${process.env.EXPO_PUBLIC_API}/product/category/${idList.giaDung}`;
+      const url4 = `${process.env.EXPO_PUBLIC_API}/product/category/${idList.phuKien}`;
       const url5 = `${process.env.EXPO_PUBLIC_API}/product/top-discount`;
       const [res1, res2, res3, res4, res5] = await Promise.all([
         axios.get(url1, config),
@@ -138,7 +144,7 @@ const Home = () => {
           </View>
           <SeeMoreCard
             token={token}
-            categoryId={'90ebec20-4240-446c-a6ef-856b0c7fc730'}
+            categoryId={idList.bepGas}
             extraText={'Bếp gas'}
           />
         </View>
@@ -156,7 +162,7 @@ const Home = () => {
           </View>
           <SeeMoreCard
             token={token}
-            categoryId={'17c6fd3b-ab50-4d21-a94e-0269495f0937'}
+            categoryId={idList.bepDien}
             extraText={'Bếp điện'}
           />
         </View>
@@ -174,7 +180,7 @@ const Home = () => {
           </View>
           <SeeMoreCard
             token={token}
-            categoryId={'553cfa8a-5bb6-4b48-a253-a9460a5c8922'}
+            categoryId={idList.giaDung}
             extraText={'Gia dụng'}
           />
         </View>
@@ -188,7 +194,7 @@ const Home = () => {
           </View>
           <SeeMoreCard
             token={token}
-            categoryId={'1f967d66-4955-4542-ad89-37458d8e1365'}
+            categoryId={idList.phuKien}
             extraText={'Phụ kiện'}
           />
         </View>

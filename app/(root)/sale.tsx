@@ -1,11 +1,11 @@
-import { Image, ActivityIndicator, ImageBackground } from 'react-native';
+import { ActivityIndicator, ImageBackground } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
+import { TouchableOpacity, Image } from 'react-native';
 import { View, Text, FlatList } from 'react-native';
 import React, { useState, useEffect } from 'react';
+import Toast from 'react-native-toast-message';
 import { StatusBar } from 'expo-status-bar';
 import Constants from 'expo-constants';
-import { TouchableOpacity } from 'react-native';
-import Toast from 'react-native-toast-message';
 import { router } from 'expo-router';
 import axios from 'axios';
 import { Entypo, Ionicons } from '@expo/vector-icons';
@@ -19,7 +19,6 @@ import LoadingScreen from './loading-screen';
 
 const Sale = () => {
   const token = useSelector((state: RootState) => state.auth.accessToken);
-
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 

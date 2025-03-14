@@ -6,6 +6,7 @@ import { Image, FlatList, ScrollView } from 'react-native';
 import { View, Text, Dimensions } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import Toast from 'react-native-toast-message';
+import { StatusBar } from 'expo-status-bar';
 import { useDispatch } from 'react-redux';
 import moment from 'moment';
 import axios from 'axios';
@@ -17,20 +18,19 @@ import { Product, Review } from '@/types/type';
 import getNewToken from '@/utils/getNewToken';
 import openLink from '@/utils/openLink';
 import LoadingScreen from './loading-screen';
-import { StatusBar } from 'expo-status-bar';
 
 interface IDes {
-  description: string;
   description_id: string;
   product_id: string;
+  description: string;
   title: string;
 }
 
 interface IFeature {
   feature_id: string;
+  product_id: string;
   feature_name: string;
   feature_des: string;
-  product_id: string;
 }
 
 interface ICarousel {
@@ -209,7 +209,7 @@ const ProductInfo = () => {
         <SwiperFlatList
           showPagination={true}
           data={carousel}
-          renderItem={({ item }) => (
+          renderItem={({ item }: { item: ICarousel }) => (
             <Image
               source={{ uri: item?.image_url }}
               style={{ height: width, width: width }}
