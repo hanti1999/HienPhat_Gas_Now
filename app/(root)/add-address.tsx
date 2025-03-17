@@ -263,7 +263,6 @@ const AddAddress = () => {
               trackColor={{ false: '#767577', true: '#fb77c5' }}
               onValueChange={toggleSwitch}
               value={data?.is_default}
-              disabled={true}
             />
           </View>
           <View className='bg-white p-3'>

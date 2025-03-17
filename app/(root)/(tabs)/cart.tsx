@@ -1,12 +1,12 @@
 import { Dimensions, TouchableOpacity, RefreshControl } from 'react-native';
 import { Image, TextInput, Text, View, Modal } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { router, useFocusEffect } from 'expo-router';
 import { ScrollView, Switch } from 'react-native';
 import Toast from 'react-native-toast-message';
-import { useEffect, useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { router } from 'expo-router';
 import axios from 'axios';
 import { removeFromCart, clearCart } from '@/redux/slices/cartSlice';
 import { FontAwesome6, AntDesign } from '@expo/vector-icons';
@@ -148,6 +148,12 @@ const Cart = () => {
     const filteredAddress = address.find((address) => address.is_default);
     setSelectedAddress(filteredAddress);
   }, [address]);
+
+  useFocusEffect(
+    useCallback(() => {
+      fetchAddress();
+    }, [])
+  );
 
   if (cartQuantity === 0) {
     return <NoProduct text={'Giỏ hàng trống!'} />;

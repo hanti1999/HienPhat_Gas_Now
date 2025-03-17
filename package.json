@@ -19,7 +19,6 @@
       "reactNativeDirectoryCheck": {
         "enabled": true,
         "exclude": [
-          "@twotalltotems/react-native-otp-input",
           "moment"
         ],
         "listUnknownPackages": true

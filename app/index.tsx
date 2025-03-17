@@ -17,11 +17,11 @@ const Page = () => {
     try {
       const accessTokenExpiry = SecureStore.getItem('accessTokenExpiry');
       const expiryTime = parseInt(accessTokenExpiry as string);
-      console.log(
-        'Hết hạn : ' + moment.unix(expiryTime).format('DD/MM/YYYY HH:mm')
-      );
 
       if (expiryTime) {
+        console.log(
+          'Hết hạn : ' + moment.unix(expiryTime).format('DD/MM/YYYY HH:mm')
+        );
         if (expiryTime < moment().unix()) {
           const refreshToken = SecureStore.getItem('refreshToken');
           getNewToken(refreshToken);
