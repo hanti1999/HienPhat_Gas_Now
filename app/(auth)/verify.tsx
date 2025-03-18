@@ -10,7 +10,7 @@ import HeaderImage from '@/components/HeaderImage';
 import GoBack from '@/components/GoBack';
 
 const Verify = () => {
-  const { phonenumber, user_fullname, address_detail, password, otp } =
+  const { phonenumber, user_fullname, address_full, password, otp } =
     useLocalSearchParams();
   const [loading, setLoading] = useState<boolean>(false);
   const [code, setCode] = useState<string>('');
@@ -33,7 +33,7 @@ const Verify = () => {
           user_fullname: user_fullname,
         },
         address: {
-          address_detail: address_detail,
+          address_full: address_full,
         },
       };
 

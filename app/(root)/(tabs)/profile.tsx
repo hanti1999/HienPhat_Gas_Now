@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Text, View, Pressable } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { router } from 'expo-router';
+import { router, Link } from 'expo-router';
 import axios from 'axios';
 import { FontAwesome, AntDesign } from '@expo/vector-icons';
 import RectangleButton from '@/components/RectangleButton';
@@ -15,7 +15,6 @@ import getNewToken from '@/utils/getNewToken';
 import logo from '@/assets/images/logoHp.png';
 import { ProfileType } from '@/types/type';
 import { RootState } from '@/redux/store';
-import openLink from '@/utils/openLink';
 import LoadingScreen from '../loading-screen';
 
 const Profile = () => {
@@ -209,33 +208,29 @@ const Profile = () => {
             <AntDesign name='right' size={16} color='black' />
           </Pressable>
 
-          <Pressable
-            onPress={() =>
-              openLink('https://maps.app.goo.gl/vuDnSzWLxUj12afd7')
-            }
-            className='flex-row items-center justify-between py-3'
-          >
-            <View style={{ gap: 8 }} className='flex-row items-center'>
-              <View className='w-6'>
-                <Foundation name='map' size={24} color='black' />
+          <Link href={'https://maps.app.goo.gl/vuDnSzWLxUj12afd7'}>
+            <View className='flex-row w-full items-center justify-between py-3'>
+              <View style={{ gap: 8 }} className='flex-row items-center'>
+                <View className='w-6'>
+                  <Foundation name='map' size={24} color='black' />
+                </View>
+                <Text className='text-base'>Tìm cửa hàng</Text>
               </View>
-              <Text className='text-base'>Tìm cửa hàng</Text>
+              <AntDesign name='right' size={16} color='black' />
             </View>
-            <AntDesign name='right' size={16} color='black' />
-          </Pressable>
+          </Link>
 
-          <Pressable
-            onPress={() => openLink('https://zalo.me/0986359498')}
-            className='flex-row items-center justify-between py-3'
-          >
-            <View style={{ gap: 8 }} className='flex-row items-center'>
-              <View className='w-6'>
-                <FontAwesome name='bug' size={24} color='black' />
+          <Link href={'https://zalo.me/0986359498'}>
+            <View className='flex-row w-full items-center justify-between py-3'>
+              <View style={{ gap: 8 }} className='flex-row items-center'>
+                <View className='w-6'>
+                  <FontAwesome name='bug' size={24} color='black' />
+                </View>
+                <Text className='text-base'>Báo lỗi ứng dụng/Hỗ trợ</Text>
               </View>
-              <Text className='text-base'>Báo lỗi ứng dụng/Hỗ trợ</Text>
+              <AntDesign name='right' size={16} color='black' />
             </View>
-            <AntDesign name='right' size={16} color='black' />
-          </Pressable>
+          </Link>
 
           <Pressable
             onPress={() => router.push('/(root)/privacy-policy')}

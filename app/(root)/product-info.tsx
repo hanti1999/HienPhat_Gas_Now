@@ -1,7 +1,7 @@
 import { TouchableOpacity, ActivityIndicator } from 'react-native';
+import { Link, router, useLocalSearchParams } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { SwiperFlatList } from 'react-native-swiper-flatlist';
-import { router, useLocalSearchParams } from 'expo-router';
 import { Image, FlatList, ScrollView } from 'react-native';
 import { View, Text, Dimensions } from 'react-native';
 import React, { useState, useEffect } from 'react';
@@ -16,7 +16,6 @@ import { addToCart } from '@/redux/slices/cartSlice';
 import ScreenHeader from '@/components/ScreenHeader';
 import { Product, Review } from '@/types/type';
 import getNewToken from '@/utils/getNewToken';
-import openLink from '@/utils/openLink';
 import LoadingScreen from './loading-screen';
 
 interface IDes {
@@ -302,13 +301,12 @@ const ProductInfo = () => {
         className='flex-row items-center bg-white py-2 px-3 h-[60px]'
         style={{ gap: 12 }}
       >
-        <TouchableOpacity
-          onPress={() => openLink('https://zalo.me/0975841582')}
-          className='flex items-center justify-center rounded-full border border-[#0068ff] h-12 w-12'
-        >
-          <AntDesign name='customerservice' size={22} color='#0068ff' />
-          <Text className='text-[12px] text-[#0068ff]'>Chat</Text>
-        </TouchableOpacity>
+        <Link href={'https://zalo.me/0975841582'}>
+          <View className='flex items-center justify-center rounded-full border border-[#0068ff] h-10 w-10'>
+            <AntDesign name='customerservice' size={20} color='#0068ff' />
+            <Text className='text-[10px] text-[#0068ff]'>Chat</Text>
+          </View>
+        </Link>
         <View className='flex-1'>
           <RectangleButton
             onPress={handleAddToCart}

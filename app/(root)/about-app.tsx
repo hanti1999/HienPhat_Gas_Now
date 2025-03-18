@@ -13,7 +13,7 @@ const AboutApp = () => {
   return (
     <SafeAreaView edges={['top']} className='flex-1 bg-primary-pink'>
       <StatusBar backgroundColor='#fb77c5' style='light' />
-      <ScreenHeader text={'Thông tin ứng dụng'} />
+      <ScreenHeader text='Thông tin ứng dụng' />
       <View className='p-3 bg-white flex-1'>
         <Text className='text-[18px]'>Phiên bản: {version}</Text>
         <Text className='mt-4 text-[16px]'>

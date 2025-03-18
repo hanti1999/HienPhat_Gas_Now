@@ -21,7 +21,7 @@ import GoBack from '@/components/GoBack';
 interface SignupData {
   user_fullname: string;
   phonenumber: string;
-  address_detail: string;
+  address_full: string;
   password: string;
   confirmPass: string;
 }
@@ -30,7 +30,7 @@ const SignUp = () => {
   const [form, setForm] = useState<SignupData>({
     user_fullname: '',
     phonenumber: '',
-    address_detail: '',
+    address_full: '',
     password: '',
     confirmPass: '',
   });
@@ -136,7 +136,7 @@ const SignUp = () => {
       Toast.show({ type: 'error', text1: 'Mật khẩu hợp lệ' });
       return;
     }
-    if (form.address_detail === '') {
+    if (form.address_full === '') {
       Toast.show({ type: 'error', text1: 'Vui lòng nhập địa chỉ' });
       return;
     }
@@ -156,7 +156,7 @@ const SignUp = () => {
       const res = await handleGetLocation();
       setForm({
         ...form,
-        address_detail: res,
+        address_full: res,
       });
     } catch (error) {
       console.error('Lỗi lấy vị trí:', error);
@@ -190,7 +190,7 @@ const SignUp = () => {
     setWards([]);
     setForm((prev) => ({
       ...prev,
-      address_detail: `${name}, ${selectedDistrict}, ${selectedProvince}`,
+      address_full: `${name}, ${selectedDistrict}, ${selectedProvince}`,
     }));
   };
 
@@ -226,11 +226,9 @@ const SignUp = () => {
             icon='user'
           />
           <InputField
-            onChangeText={(value) =>
-              setForm({ ...form, address_detail: value })
-            }
+            onChangeText={(value) => setForm({ ...form, address_full: value })}
             placeholder='Nhập địa chỉ nhận hàng'
-            value={form.address_detail}
+            value={form.address_full}
             label='Địa chỉ nhận hàng'
             onFocus={() => {
               setModalVisible(!modalVisible);

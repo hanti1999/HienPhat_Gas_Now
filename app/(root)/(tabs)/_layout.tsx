@@ -1,13 +1,11 @@
-import { Pressable, View, Text, Modal } from 'react-native';
+import { Pressable, View, Text, Modal, StyleSheet } from 'react-native';
 import * as Animatable from 'react-native-animatable';
 import { TouchableOpacity } from 'react-native';
 import { useSelector } from 'react-redux';
-import { Tabs } from 'expo-router';
+import { Tabs, Link } from 'expo-router';
 import { useState } from 'react';
 import { AntDesign, Ionicons } from '@expo/vector-icons';
-import CustomButton from '@/components/CustomButton';
 import { RootState } from '@/redux/store';
-import openLink from '@/utils/openLink';
 
 interface ITabIcon {
   icon1: any;
@@ -138,24 +136,17 @@ const Layout = () => {
               </TouchableOpacity>
             </View>
             <View className='flex' style={{ gap: 8 }}>
-              <CustomButton
-                IconLeft={
-                  <AntDesign name='message1' size={20} color={primaryPink} />
-                }
-                title=' Nhắn Zalo (0975841582)'
-                bgVariant='outline'
-                textVariant='secondary'
-                onPress={() => openLink(`https://zalo.me/0975841582`)}
-              />
-              <CustomButton
-                IconLeft={
-                  <AntDesign name='phone' size={20} color={primaryPink} />
-                }
-                bgVariant='outline'
-                textVariant='secondary'
-                title=' Gọi di động (0986573072)'
-                onPress={() => openLink(`tel:0986573072`)}
-              />
+              <Link href={`https://zalo.me/0975841582`} style={style.hyperLink}>
+                <AntDesign name='message1' size={20} color={primaryPink} />
+                <Text style={style.hyperLinkText}> Nhắn Zalo (0975841582)</Text>
+              </Link>
+              <Link href={`tel:0986573072`} style={style.hyperLink}>
+                <AntDesign name='phone' size={20} color={primaryPink} />
+                <Text style={style.hyperLinkText}>
+                  {' '}
+                  Gọi di động (0986573072)
+                </Text>
+              </Link>
             </View>
           </View>
         </View>
@@ -163,5 +154,24 @@ const Layout = () => {
     </>
   );
 };
+
+const style = StyleSheet.create({
+  hyperLink: {
+    width: '100%',
+    borderRadius: 9999,
+    padding: 12,
+    display: 'flex',
+    flexDirection: 'row',
+    textAlign: 'center',
+    backgroundColor: 'transparent',
+    borderWidth: 1,
+    borderColor: '#fb77c5',
+  },
+  hyperLinkText: {
+    fontSize: 18,
+    fontWeight: 600,
+    color: '#fb77c5',
+  },
+});
 
 export default Layout;
