@@ -2,7 +2,7 @@
   "expo": {
     "name": "HienPhatGasNow",
     "slug": "hienphatgasnow",
-    "version": "25.03.17",
+    "version": "25.03.18",
     "orientation": "portrait",
     "icon": "./assets/icons/icon.png",
     "scheme": "myapp",
@@ -20,7 +20,8 @@
         "android.permission.ACCESS_COARSE_LOCATION",
         "android.permission.ACCESS_FINE_LOCATION"
       ],
-      "package": "com.nthanh99.hienphatgasnow"
+      "package": "com.nthanh99.hienphatgasnow",
+      "googleServicesFile": "./google-services.json"
     },
     "web": {
       "bundler": "metro",

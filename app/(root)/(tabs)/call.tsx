@@ -1,12 +1,8 @@
-import { View, Text } from 'react-native';
+import { Redirect } from 'expo-router';
 import React from 'react';
 
 const Call = () => {
-  return (
-    <View>
-      <Text>Call</Text>
-    </View>
-  );
+  return <Redirect href='/(root)/(tabs)/home' />;
 };
 
 export default Call;

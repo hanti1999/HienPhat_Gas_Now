@@ -3,10 +3,13 @@ import { useLocalSearchParams } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { Text, View } from 'react-native';
 import { Link } from 'expo-router';
+import { usePushNotifications } from '@/customHooks/useGetPushNotiToken';
+import RectangleInput from '@/components/RectangleInput';
 import ScreenHeader from '@/components/ScreenHeader';
 
 const AboutApp = () => {
   const { version } = useLocalSearchParams();
+  const { expoPushToken } = usePushNotifications();
   return (
     <SafeAreaView edges={['top']} className='flex-1 bg-primary-pink'>
       <StatusBar backgroundColor='#fb77c5' style='light' />
@@ -51,7 +54,17 @@ const AboutApp = () => {
           >
             @expo/vector-icons
           </Link>
+          {'\n'}
+          Danh sách tỉnh thành:{' '}
+          <Link
+            className='text-blue-400 underline'
+            href={'https://provinces.open-api.vn/'}
+          >
+            Province Open API
+          </Link>
         </Text>
+        <Text className='mt-4 text-[16px]'>Mã thông báo (dành cho test)</Text>
+        <RectangleInput value={expoPushToken?.data} />
       </View>
     </SafeAreaView>
   );

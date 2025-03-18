@@ -128,7 +128,10 @@ const RenderOrders = ({ item, fetchOrders, token }: IProps) => {
                   style={{ width: 90, height: 90 }}
                   source={{ uri: item?.product_image }}
                 />
-                <Text className='text-[16px] italic font-semibold'>
+                <Text
+                  numberOfLines={3}
+                  className='text-[16px] flex-1 italic font-semibold'
+                >
                   {item.product_name}
                 </Text>
               </View>

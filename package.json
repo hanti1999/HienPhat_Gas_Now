@@ -63,7 +63,9 @@
     "react-native-web": "~0.19.13",
     "react-native-webview": "13.12.5",
     "react-redux": "9.1.2",
-    "expo-camera": "~16.0.18"
+    "expo-camera": "~16.0.18",
+    "expo-notifications": "~0.29.14",
+    "expo-device": "~7.0.2"
   },
   "devDependencies": {
     "@babel/core": "7.25.2",

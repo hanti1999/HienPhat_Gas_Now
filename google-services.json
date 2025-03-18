@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "300209770841",
+    "project_id": "expopushnotification-871ae",
+    "storage_bucket": "expopushnotification-871ae.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:300209770841:android:725335832dfd10cf26bc48",
+        "android_client_info": {
+          "package_name": "com.nthanh99.hienphatgasnow"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCNSyg7-AX7rBfBzDtZLBBwU6JZvnzAkb8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
