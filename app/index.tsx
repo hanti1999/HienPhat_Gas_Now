@@ -5,6 +5,7 @@ import { useDispatch } from 'react-redux';
 import { Redirect } from 'expo-router';
 import moment from 'moment';
 import axios from 'axios';
+import { usePushNotifications } from '@/customHooks/useGetPushNotiToken';
 import { loginSuccess, logout } from '@/redux/slices/authSlice';
 import LoadingScreen from './(root)/loading-screen';
 
@@ -12,6 +13,7 @@ const Page = () => {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const dispatch = useDispatch();
+  const { expoPushToken } = usePushNotifications();
 
   const checkLoginStatus = () => {
     try {
