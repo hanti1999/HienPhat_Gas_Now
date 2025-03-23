@@ -37,10 +37,10 @@ const Home = () => {
     },
   };
   const idList = {
-    bepGas: '68816608-610f-4397-8209-b5f42dbd106d',
-    bepDien: '600b7132-7f8e-47a3-8758-bcdb435932ed',
-    giaDung: '0c970a55-5b82-4c64-94a9-ab2491a2ef67',
-    phuKien: '763594b1-d20f-455d-8371-efc71f63c490',
+    bepGas: '28f860e1-fd20-4a43-9625-e1278506f7b4',
+    bepDien: '317b0305-3afe-4102-8dd9-71b9a70a8ad4',
+    giaDung: 'fa9569fc-c014-4f96-82c7-3d9530dd0561',
+    phuKien: '812acba5-6456-4901-9b94-abf78a45531d',
   };
 
   const onRefresh = async () => {
