@@ -100,7 +100,6 @@ const Home = () => {
           autoplay
           autoplayDelay={5}
           autoplayLoop
-          showPagination={true}
           data={slider}
           renderItem={({ item }) => (
             <Pressable onPress={() => router.push('/sale')}>

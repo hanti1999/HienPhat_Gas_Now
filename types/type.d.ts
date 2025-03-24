@@ -132,8 +132,15 @@ declare interface ButtonProps extends TouchableOpacityProps {
     | 'outline-blue'
     | 'danger'
     | 'outline'
-    | 'success';
-  textVariant?: 'primary' | 'default' | 'secondary' | 'danger' | 'success';
+    | 'pink'
+    | 'disabled';
+  textVariant?:
+    | 'primary'
+    | 'default'
+    | 'secondary'
+    | 'danger'
+    | 'success'
+    | 'disabled';
   IconLeft?: any;
   IconRight?: any;
   className?: string;

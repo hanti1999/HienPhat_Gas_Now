@@ -171,14 +171,25 @@ const ProductCard = ({ item, token }: IProps) => {
             </Text>
             <TouchableOpacity
               onPress={addItemToCart}
-              className='bg-primary-pink px-2 py-1 rounded-lg mt-2'
+              className='px-2 py-1 rounded-lg mt-2'
+              style={{
+                borderColor: item?.product_instock ? '' : '#d9d9d9',
+                backgroundColor: item?.product_instock
+                  ? '#fb77c5'
+                  : 'rgba(0,0,0,0.04)',
+              }}
               disabled={isLoading}
             >
               {isLoading ? (
                 <ActivityIndicator color='#fff' />
               ) : (
-                <Text className='text-white text-center text-[16px]'>
-                  sắm ngay!
+                <Text
+                  className='text-center text-[16px]'
+                  style={{
+                    color: item?.product_instock ? '#fff' : 'rgba(0,0,0,0.25)',
+                  }}
+                >
+                  {item?.product_instock ? 'Sắm ngay nào!' : 'Hết hàng'}
                 </Text>
               )}
             </TouchableOpacity>

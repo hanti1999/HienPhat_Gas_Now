@@ -206,7 +206,6 @@ const ProductInfo = () => {
       />
       <ScrollView showsVerticalScrollIndicator={false} className='bg-gray-100'>
         <SwiperFlatList
-          showPagination={true}
           data={carousel}
           renderItem={({ item }: { item: ICarousel }) => (
             <Image
@@ -298,7 +297,7 @@ const ProductInfo = () => {
       </ScrollView>
 
       <View
-        className='flex-row items-center bg-white py-2 px-3 h-[60px]'
+        className='flex-row items-center py-2 px-3 h-[60px]'
         style={{ gap: 12 }}
       >
         <Link href={'https://zalo.me/0975841582'}>
@@ -310,15 +309,24 @@ const ProductInfo = () => {
         <View className='flex-1'>
           <RectangleButton
             onPress={handleAddToCart}
-            textVariant='primary'
-            title='Thêm vào giỏ'
-            bgVariant='outline'
-            disabled={isLoading}
+            textVariant={data?.product_instock ? 'primary' : 'disabled'}
+            title={data?.product_instock ? 'Thêm vào giỏ' : 'Hết hàng'}
+            bgVariant={data?.product_instock ? 'outline' : 'disabled'}
+            disabled={isLoading || data?.product_instock === false}
             loading={isLoading}
           />
         </View>
-        <View className='flex-1'>
-          <RectangleButton onPress={handleBuyNow} title='Mua ngay' />
+        <View
+          className='flex-1'
+          style={{ display: data?.product_instock ? 'flex' : 'none' }}
+        >
+          <RectangleButton
+            onPress={handleBuyNow}
+            textVariant={data?.product_instock ? 'danger' : 'disabled'}
+            bgVariant={data?.product_instock ? 'pink' : 'disabled'}
+            title={data?.product_instock ? 'Mua ngay' : 'Hết hàng'}
+            disabled={data?.product_instock === false}
+          />
         </View>
       </View>
     </SafeAreaView>

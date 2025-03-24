@@ -77,13 +77,26 @@ const ProductCard = ({ item, token, size }: IProductCard) => {
           </Text>
           <TouchableOpacity
             onPress={() => addItemToCart()}
-            disabled={isLoading}
-            className='bg-primary-pink m-0.5 h-[40px] flex items-center rounded-md justify-center'
+            disabled={isLoading || item?.product_instock === false}
+            className='m-0.5 h-[40px] flex items-center rounded-md justify-center'
+            style={{
+              borderColor: item?.product_instock ? '' : '#d9d9d9',
+              backgroundColor: item?.product_instock
+                ? '#fb77c5'
+                : 'rgba(0,0,0,0.04)',
+            }}
           >
             {isLoading ? (
               <ActivityIndicator color='#fff' />
             ) : (
-              <Text className='text-white font-medium'>Sắm ngay nào!</Text>
+              <Text
+                className='font-medium'
+                style={{
+                  color: item?.product_instock ? '#fff' : 'rgba(0,0,0,0.25)',
+                }}
+              >
+                {item?.product_instock ? 'Sắm ngay nào!' : 'Hết hàng'}
+              </Text>
             )}
           </TouchableOpacity>
         </View>

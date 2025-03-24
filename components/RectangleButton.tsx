@@ -8,12 +8,14 @@ const getBgVariantStyle = (variant: ButtonProps['bgVariant']) => {
       return 'bg-white';
     case 'danger':
       return 'bg-red-400';
-    case 'success':
-      return 'bg-green-500';
+    case 'pink':
+      return 'bg-primary-pink';
     case 'outline':
       return 'bg-transparent border-primary-pink border';
     case 'outline-blue':
       return 'bg-transparent border-[#0068ff] border';
+    case 'disabled':
+      return 'bg-[rgba(0 0 0 0.04)] border-[#d9d9d9] border';
     default:
       return 'bg-primary-pink';
   }
@@ -29,6 +31,8 @@ const getTextVariantStyle = (variant: ButtonProps['textVariant']) => {
       return 'text-white';
     case 'success':
       return 'text-green-100';
+    case 'disabled':
+      return 'text-[rgba(0 0 0 0.25)]';
     default:
       return 'text-white';
   }
