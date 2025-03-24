@@ -309,9 +309,9 @@ const ProductInfo = () => {
         <View className='flex-1'>
           <RectangleButton
             onPress={handleAddToCart}
-            textVariant={data?.product_instock ? 'primary' : 'disabled'}
+            textVariant={data?.product_instock ? 'danger' : 'disabled'}
             title={data?.product_instock ? 'Thêm vào giỏ' : 'Hết hàng'}
-            bgVariant={data?.product_instock ? 'outline' : 'disabled'}
+            bgVariant={data?.product_instock ? 'primary' : 'disabled'}
             disabled={isLoading || data?.product_instock === false}
             loading={isLoading}
           />
@@ -322,10 +322,9 @@ const ProductInfo = () => {
         >
           <RectangleButton
             onPress={handleBuyNow}
-            textVariant={data?.product_instock ? 'danger' : 'disabled'}
-            bgVariant={data?.product_instock ? 'pink' : 'disabled'}
-            title={data?.product_instock ? 'Mua ngay' : 'Hết hàng'}
-            disabled={data?.product_instock === false}
+            title={'Mua ngay'}
+            textVariant='primary'
+            bgVariant='outline'
           />
         </View>
       </View>
