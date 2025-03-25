@@ -90,10 +90,11 @@ const ProductCard = ({ item, token, size }: IProductCard) => {
               <ActivityIndicator color='#fff' />
             ) : (
               <Text
-                className='font-medium'
-                style={{
-                  color: item?.product_instock ? '#fff' : 'rgba(0,0,0,0.25)',
-                }}
+                className={`${
+                  item?.product_instock
+                    ? 'text-white'
+                    : 'text-[rgba(0 0 0 0.25)]'
+                } font-medium`}
               >
                 {item?.product_instock ? 'Sắm ngay nào!' : 'Hết hàng'}
               </Text>

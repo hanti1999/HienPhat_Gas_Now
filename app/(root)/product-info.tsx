@@ -316,10 +316,7 @@ const ProductInfo = () => {
             loading={isLoading}
           />
         </View>
-        <View
-          className='flex-1'
-          style={{ display: data?.product_instock ? 'flex' : 'none' }}
-        >
+        <View className={`${data?.product_instock ? 'flex-1' : 'hidden'}`}>
           <RectangleButton
             onPress={handleBuyNow}
             title={'Mua ngay'}
