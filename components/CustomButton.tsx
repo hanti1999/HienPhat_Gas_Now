@@ -8,8 +8,8 @@ const getBgVariantStyle = (variant: ButtonProps['bgVariant']) => {
       return 'bg-white';
     case 'danger':
       return 'bg-red-500';
-    case 'success':
-      return 'bg-green-500';
+    case 'pink':
+      return 'bg-primary-pink';
     case 'outline':
       return 'bg-transparent border-primary-pink border';
     default:
