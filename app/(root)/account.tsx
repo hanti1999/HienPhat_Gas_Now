@@ -29,7 +29,7 @@ const Account = () => {
   const handleDeleteAccount = async () => {
     try {
       setLoading(true);
-      const url = `${process.env.EXPO_PUBLIC_API}/account`;
+      const url = `${process.env.EXPO_PUBLIC_API}/account/delete-account`;
       const config = {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -42,7 +42,7 @@ const Account = () => {
           text1: 'Xóa tài khoản thành công',
         });
         dispatch(logout());
-        router.replace('/(auth)/sign-in');
+        router.replace('/(root)/(tabs)/home');
       }
     } catch (error: any) {
       Toast.show({
@@ -52,7 +52,6 @@ const Account = () => {
     } finally {
       setLoading(false);
     }
-    console.log('delete');
   };
 
   return (

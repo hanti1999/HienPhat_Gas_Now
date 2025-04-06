@@ -5,9 +5,9 @@ import { ButtonProps } from '@/types/type';
 const getBgVariantStyle = (variant: ButtonProps['bgVariant']) => {
   switch (variant) {
     case 'secondary':
-      return 'bg-white';
+      return 'bg-primary-blue';
     case 'danger':
-      return 'bg-red-400';
+      return 'bg-primary-red';
     case 'pink':
       return 'bg-primary-pink';
     case 'outline':

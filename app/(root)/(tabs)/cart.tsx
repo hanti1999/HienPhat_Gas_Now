@@ -23,6 +23,7 @@ import getNewToken from '@/utils/getNewToken';
 import { RootState } from '@/redux/store';
 import LoadingScreen from '../loading-screen';
 import NoProduct from '../no-product';
+import SigninRequired from '@/components/signin-required';
 
 const Cart = () => {
   const cartQuantity = useSelector(
@@ -76,8 +77,7 @@ const Cart = () => {
   };
 
   const handleUseVoucher = async () => {
-    // test
-    Toast.show({ type: 'error', text1: `Voucher ${voucher} không tồn tại` });
+    Toast.show({ type: 'info', text1: `Tính năng đang phát triển` });
     setVoucherAmount(0);
   };
 
@@ -137,7 +137,9 @@ const Cart = () => {
   };
 
   useEffect(() => {
-    fetchAddress();
+    if (token) {
+      fetchAddress();
+    }
   }, []);
 
   useEffect(() => {
@@ -151,9 +153,15 @@ const Cart = () => {
 
   useFocusEffect(
     useCallback(() => {
-      fetchAddress();
+      if (token) {
+        fetchAddress();
+      }
     }, [])
   );
+
+  if (!token) {
+    return <SigninRequired />;
+  }
 
   if (cartQuantity === 0) {
     return <NoProduct text={'Giỏ hàng trống!'} />;

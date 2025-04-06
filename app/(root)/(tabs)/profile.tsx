@@ -16,22 +16,30 @@ import logo from '@/assets/images/logoHp.png';
 import { ProfileType } from '@/types/type';
 import { RootState } from '@/redux/store';
 import LoadingScreen from '../loading-screen';
+import RectangleButton from '@/components/RectangleButton';
 
 const Profile = () => {
   const version: string = '25.04.06';
   const token = useSelector((state: RootState) => state?.auth.accessToken);
   const [refreshing, setRefreshing] = useState<boolean>(false);
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(false);
   const [user, setUser] = useState<ProfileType>();
 
   const onRefresh = async () => {
     setRefreshing(true);
-    await fetchUserProfile();
+    if (token) {
+      await fetchUserProfile();
+    }
     setRefreshing(false);
+  };
+
+  const clearData = () => {
+    setUser(undefined);
   };
 
   const fetchUserProfile = async () => {
     try {
+      setLoading(true);
       const url = `${process.env.EXPO_PUBLIC_API}/user`;
       const config = {
         headers: {
@@ -54,7 +62,9 @@ const Profile = () => {
   };
 
   useEffect(() => {
-    fetchUserProfile();
+    if (token) {
+      fetchUserProfile();
+    }
   }, []);
 
   if (loading) {
@@ -65,27 +75,49 @@ const Profile = () => {
     <SafeAreaView edges={['top']} className='flex-1 bg-primary-pink'>
       <StatusBar backgroundColor='#fb77c5' style='light' />
       <View className='p-3 flex-row items-center bg-primary-pink'>
-        {user?.user?.user_img_url != null ? (
-          <Image
-            className='w-20 h-20 rounded-full border border-white'
-            source={{ uri: user?.user?.user_img_url }}
-          />
+        {user ? (
+          <>
+            <FontAwesome name='user-circle' size={60} color='white' />
+            <View className='ml-2 flex-1'>
+              <Text className='text-xl font-semibold text-white'>
+                {user?.user?.user_fullname}
+              </Text>
+              <View className='flex-row flex justify-between items-center'>
+                <Text className='text-white'>
+                  {user?.account?.account_phonenumber}
+                </Text>
+                <Text className='font-semibold text-white'>
+                  {user?.points?.total_points.toLocaleString()} điểm
+                </Text>
+              </View>
+            </View>
+          </>
         ) : (
-          <FontAwesome name='user-circle' size={60} color='white' />
-        )}
-        <View className='ml-2 flex-1'>
-          <Text className='text-xl font-semibold text-white'>
-            {user?.user?.user_fullname}
-          </Text>
-          <View className='flex-row flex justify-between items-center'>
-            <Text className='text-white'>
-              {user?.account?.account_phonenumber}
+          <View className='flex-1'>
+            <Text className='text-lg text-center text-white'>
+              Đăng nhập ngay nhận nghìn ưu đãi!
             </Text>
-            <Text className='font-semibold text-white'>
-              {user?.points?.total_points.toLocaleString()} điểm
-            </Text>
+            <View
+              className='flex-row items-center py-2 px-3 h-[60px]'
+              style={{ gap: 12 }}
+            >
+              <View className='flex-1'>
+                <RectangleButton
+                  title='Đăng nhập'
+                  bgVariant='danger'
+                  onPress={() => router.push('/(auth)/sign-in')}
+                />
+              </View>
+              <View className='flex-1'>
+                <RectangleButton
+                  onPress={() => router.push('/(auth)/sign-up')}
+                  title='Đăng ký'
+                  bgVariant='secondary'
+                />
+              </View>
+            </View>
           </View>
-        </View>
+        )}
       </View>
 
       <ScrollView
@@ -94,7 +126,7 @@ const Profile = () => {
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
       >
-        <View className='p-3 mt-2 bg-white'>
+        <View className={`${user ? 'p-3 mt-2 bg-white' : 'hidden'} `}>
           <Pressable
             onPress={() =>
               router.push({
@@ -250,8 +282,8 @@ const Profile = () => {
           </Pressable>
         </View>
 
-        <View className='bg-white mt-2'>
-          <LogoutButton />
+        <View className={`${user ? 'mt-2 bg-white' : 'hidden'} `}>
+          <LogoutButton clearData={clearData} />
         </View>
 
         <View className='mt-5 pb-5'>
@@ -274,13 +306,14 @@ const Profile = () => {
   );
 };
 
-const LogoutButton = () => {
+const LogoutButton = ({ clearData }: { clearData: () => void }) => {
   const [modalVisible, setModalVisible] = useState<boolean>(false);
   const dispatch = useDispatch();
 
   const handleLogout = () => {
     dispatch(logout());
-    router.replace('/(auth)/sign-in');
+    setModalVisible(false);
+    clearData();
   };
 
   return (

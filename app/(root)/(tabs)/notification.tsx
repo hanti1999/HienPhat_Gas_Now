@@ -7,6 +7,7 @@ import { useSelector } from 'react-redux';
 import { router } from 'expo-router';
 import moment from 'moment';
 import axios from 'axios';
+import SigninRequired from '@/components/signin-required';
 import ScreenHeader from '@/components/ScreenHeader';
 import getNewToken from '@/utils/getNewToken';
 import { RootState } from '@/redux/store';
@@ -58,8 +59,14 @@ const Notification = () => {
   };
 
   useEffect(() => {
-    fetchNotification();
+    if (token) {
+      fetchNotification();
+    }
   }, []);
+
+  if (!token) {
+    return <SigninRequired />;
+  }
 
   if (loading) {
     return <LoadingScreen />;
