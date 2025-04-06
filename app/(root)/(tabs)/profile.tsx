@@ -1,15 +1,15 @@
-import { ScrollView, Modal, Dimensions, Image } from 'react-native';
 import { RefreshControl, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useDispatch, useSelector } from 'react-redux';
 import { Text, View, Pressable } from 'react-native';
 import React, { useEffect, useState } from 'react';
+import { ScrollView, Image } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { router, Link } from 'expo-router';
 import axios from 'axios';
 import { FontAwesome, AntDesign } from '@expo/vector-icons';
-import RectangleButton from '@/components/RectangleButton';
 import { Ionicons, Foundation } from '@expo/vector-icons';
+import ConfirmModal from '@/components/ConfirmModal';
 import { logout } from '@/redux/slices/authSlice';
 import getNewToken from '@/utils/getNewToken';
 import logo from '@/assets/images/logoHp.png';
@@ -18,7 +18,7 @@ import { RootState } from '@/redux/store';
 import LoadingScreen from '../loading-screen';
 
 const Profile = () => {
-  const version: string = '25.03.27';
+  const version: string = '25.04.06';
   const token = useSelector((state: RootState) => state?.auth.accessToken);
   const [refreshing, setRefreshing] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
@@ -275,9 +275,8 @@ const Profile = () => {
 };
 
 const LogoutButton = () => {
-  const dispatch = useDispatch();
   const [modalVisible, setModalVisible] = useState<boolean>(false);
-  const width = Dimensions.get('window').width;
+  const dispatch = useDispatch();
 
   const handleLogout = () => {
     dispatch(logout());
@@ -286,38 +285,13 @@ const LogoutButton = () => {
 
   return (
     <>
-      <Modal
-        animationType='fade'
-        transparent={true}
-        visible={modalVisible}
-        onRequestClose={() => {
-          setModalVisible(!modalVisible);
-        }}
-      >
-        <View
-          style={{ backgroundColor: 'rgba( 0, 0, 0, 0.3)' }}
-          className='flex-1 items-center justify-center'
-        >
-          <View
-            className='p-3 rounded-xl bg-white shadow-lg'
-            style={{ width: width * 0.8 - 8 }}
-          >
-            <Text className='text-center my-4 text-lg'>
-              Bạn muốn đăng xuất?
-            </Text>
-            <View style={{ gap: 8 }} className='flex-row items-center'>
-              <RectangleButton
-                title='Hủy'
-                bgVariant='outline'
-                textVariant='primary'
-                onPress={() => setModalVisible(!modalVisible)}
-              />
-              <RectangleButton title='Đồng ý' onPress={handleLogout} />
-            </View>
-          </View>
-        </View>
-      </Modal>
-      <TouchableOpacity onPress={() => setModalVisible(!modalVisible)}>
+      <ConfirmModal
+        onClose={() => setModalVisible(false)}
+        onConfirm={handleLogout}
+        text='Bạn muốn đăng xuất?'
+        modalVisible={modalVisible}
+      />
+      <TouchableOpacity onPress={() => setModalVisible(true)}>
         <View
           className='flex-row items-center justify-center py-3'
           style={{ gap: 10 }}

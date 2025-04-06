@@ -1,15 +1,15 @@
-import { Dimensions, FlatList, RefreshControl } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router, useLocalSearchParams } from 'expo-router';
+import { FlatList, RefreshControl } from 'react-native';
 import React, { useState, useEffect } from 'react';
+import { Text, View, Image } from 'react-native';
 import Toast from 'react-native-toast-message';
-import { Modal, Image } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
-import { Text, View } from 'react-native';
 import moment from 'moment';
 import axios from 'axios';
 import RectangleButton from '@/components/RectangleButton';
 import ScreenHeader from '@/components/ScreenHeader';
+import ConfirmModal from '@/components/ConfirmModal';
 import { IOrder, IOrderItem } from '@/types/type';
 import { AntDesign } from '@expo/vector-icons';
 import getNewToken from '@/utils/getNewToken';
@@ -212,7 +212,6 @@ const RenderOrders = ({ item, fetchOrders, token }: IProps) => {
 const CancelOrder = ({ id, fetchOrders, token }: IProps) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [loading, setLoading] = useState(false);
-  const width = Dimensions.get('window').width;
 
   const handleCancelOrder = async () => {
     try {
@@ -243,40 +242,13 @@ const CancelOrder = ({ id, fetchOrders, token }: IProps) => {
 
   return (
     <>
-      <Modal
-        animationType='fade'
-        transparent={true}
-        visible={modalVisible}
-        onRequestClose={() => {
-          setModalVisible(!modalVisible);
-        }}
-      >
-        <View
-          style={{ backgroundColor: 'rgba( 0, 0, 0, 0.3)' }}
-          className='flex-1 items-center justify-center'
-        >
-          <View
-            className='p-3 rounded-xl bg-white shadow-lg'
-            style={{ width: width * 0.8 - 8 }}
-          >
-            <Text className='text-center my-4 text-lg'>Bạn muốn hủy đơn?</Text>
-            <View style={{ gap: 8 }} className='flex-row items-center'>
-              <RectangleButton
-                title='Không'
-                bgVariant='outline'
-                textVariant='primary'
-                onPress={() => setModalVisible(!modalVisible)}
-              />
-              <RectangleButton
-                title='Đồng ý'
-                loading={loading}
-                disabled={loading}
-                onPress={handleCancelOrder}
-              />
-            </View>
-          </View>
-        </View>
-      </Modal>
+      <ConfirmModal
+        onConfirm={handleCancelOrder}
+        onClose={() => setModalVisible(!modalVisible)}
+        modalVisible={modalVisible}
+        loading={loading}
+        text='Bạn có chắc chắn muốn hủy đơn hàng này?'
+      />
       <View className='h-8 w-24 mt-1'>
         <RectangleButton
           onPress={() => setModalVisible(!modalVisible)}
