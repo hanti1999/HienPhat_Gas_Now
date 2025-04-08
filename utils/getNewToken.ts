@@ -1,6 +1,7 @@
 import * as SecureStore from 'expo-secure-store';
 import Toast from 'react-native-toast-message';
 import { useDispatch } from 'react-redux';
+import { router } from 'expo-router';
 import moment from 'moment';
 import axios from 'axios';
 import { loginSuccess, logout } from '@/redux/slices/authSlice';
@@ -29,6 +30,7 @@ const getNewToken = async () => {
   } catch (error) {
     console.error('Lỗi lấy token mới: ', error);
     dispatch(logout());
+    router.replace('/(root)/(tabs)/home');
     Toast.show({ type: 'info', text1: 'Phiên đăng nhập đã hết hạn' });
   }
 };

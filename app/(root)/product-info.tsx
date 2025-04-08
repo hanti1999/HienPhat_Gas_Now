@@ -107,6 +107,10 @@ const ProductInfo = () => {
   };
 
   const addWishlist = async () => {
+    if (!token) {
+      router.push('/(auth)/sign-in');
+      return;
+    }
     try {
       setWlLoading(true);
       const url = `${process.env.EXPO_PUBLIC_API}/wishlist`;
@@ -188,7 +192,9 @@ const ProductInfo = () => {
   }, []);
 
   useEffect(() => {
-    checkWishlist();
+    if (token) {
+      checkWishlist();
+    }
   }, []);
 
   if (loading) {

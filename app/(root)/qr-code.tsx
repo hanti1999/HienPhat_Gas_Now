@@ -12,7 +12,7 @@ const QrCode = () => {
       <StatusBar style='dark' />
       <ScreenHeader text='Mã QR của bạn' bg='white' textColor='black' />
       <View className='flex-1 items-center p-3'>
-        <Text className='text-[16px] text-center'>
+        <Text className='text-[16px] mb-2 text-center'>
           Xin chào! <Text className='font-semibold text-lg'>{name}</Text>
           {'\n'}
           {'\n'}

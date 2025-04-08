@@ -11,7 +11,7 @@ const SigninRequired = () => {
     <SafeAreaView edges={['top']} className='flex-1 bg-primary-pink'>
       <StatusBar backgroundColor='#fb77c5' style='light' />
       <ScreenHeader />
-      <View className='flex-1 bg-white'>
+      <View className='flex-1 bg-white p-2'>
         <Text className='text-center text-xl font-bold'>
           Bạn cần đăng nhập để sử dụng tính năng này
         </Text>
@@ -19,7 +19,7 @@ const SigninRequired = () => {
           Vui lòng đăng nhập hoặc đăng ký để tiếp tục
         </Text>
         <View
-          className='flex-row items-center py-2 px-3 h-[60px]'
+          className='flex-row items-center p-2 h-[60px]'
           style={{ gap: 12 }}
         >
           <View className='flex-1'>

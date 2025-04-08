@@ -2,7 +2,7 @@
   "expo": {
     "name": "Hiền Phát",
     "slug": "hienphatgasnow",
-    "version": "25.04.06",
+    "version": "25.04.08",
     "orientation": "portrait",
     "icon": "./assets/icons/icon.png",
     "scheme": "myapp",

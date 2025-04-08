@@ -11,6 +11,7 @@ import axios from 'axios';
 import { removeFromCart, clearCart } from '@/redux/slices/cartSlice';
 import { FontAwesome6, AntDesign } from '@expo/vector-icons';
 import RectangleButton from '@/components/RectangleButton';
+import SigninRequired from '@/components/signin-required';
 import RectangleInput from '@/components/RectangleInput';
 import cashIcon from '@/assets/icons/dollar_128px.png';
 import ScreenHeader from '@/components/ScreenHeader';
@@ -23,7 +24,6 @@ import getNewToken from '@/utils/getNewToken';
 import { RootState } from '@/redux/store';
 import LoadingScreen from '../loading-screen';
 import NoProduct from '../no-product';
-import SigninRequired from '@/components/signin-required';
 
 const Cart = () => {
   const cartQuantity = useSelector(

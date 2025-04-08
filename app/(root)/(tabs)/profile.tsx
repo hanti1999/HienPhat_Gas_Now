@@ -8,6 +8,7 @@ import { StatusBar } from 'expo-status-bar';
 import { router, Link } from 'expo-router';
 import axios from 'axios';
 import { FontAwesome, AntDesign } from '@expo/vector-icons';
+import RectangleButton from '@/components/RectangleButton';
 import { Ionicons, Foundation } from '@expo/vector-icons';
 import ConfirmModal from '@/components/ConfirmModal';
 import { logout } from '@/redux/slices/authSlice';
@@ -16,10 +17,9 @@ import logo from '@/assets/images/logoHp.png';
 import { ProfileType } from '@/types/type';
 import { RootState } from '@/redux/store';
 import LoadingScreen from '../loading-screen';
-import RectangleButton from '@/components/RectangleButton';
 
 const Profile = () => {
-  const version: string = '25.04.06';
+  const version: string = '25.04.08';
   const token = useSelector((state: RootState) => state?.auth.accessToken);
   const [refreshing, setRefreshing] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
