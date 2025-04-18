@@ -5,17 +5,16 @@ import { router } from 'expo-router';
 
 interface IProps {
   categoryId: string;
-  token: string | null;
   extraText: string;
 }
 
-const SeeMoreCard = ({ categoryId, token, extraText }: IProps) => {
+const SeeMoreCard = ({ categoryId, extraText }: IProps) => {
   return (
     <TouchableOpacity
       onPress={() =>
         router.push({
           pathname: '/(root)/product-filter',
-          params: { id: categoryId, token: token, type: 'category' },
+          params: { id: categoryId, type: 'category' },
         })
       }
       className='flex-row items-center justify-center py-2'

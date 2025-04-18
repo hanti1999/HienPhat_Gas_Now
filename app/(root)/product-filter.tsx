@@ -13,7 +13,7 @@ import LoadingScreen from './loading-screen';
 import NoProduct from './no-product';
 
 const ProductFilter = () => {
-  const { id, token, type } = useLocalSearchParams();
+  const { id, type } = useLocalSearchParams();
   const [products, setProducts] = useState<Product[]>([]);
   const [refreshing, setRefreshing] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
@@ -21,12 +21,8 @@ const ProductFilter = () => {
   const fetchProductByBrand = async () => {
     try {
       const url = `${process.env.EXPO_PUBLIC_API}/product/${type}/${id}`;
-      const config = {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      };
-      const res = await axios.get(url, config);
+
+      const res = await axios.get(url);
       if (res.status === 200) {
         setProducts(res?.data);
       }
@@ -62,16 +58,14 @@ const ProductFilter = () => {
   return (
     <SafeAreaView edges={['top']} className='flex-1 bg-primary-pink'>
       <StatusBar backgroundColor='#fb77c5' style='light' />
-      <SearchBar token={token as string} />
+      <SearchBar />
       <ScreenHeader text={'Sản phẩm'} bg='white' textColor='black' />
       <FlatList
         keyExtractor={(item) => item?.product_id}
         className='bg-white'
         data={products}
         numColumns={2}
-        renderItem={({ item }) => (
-          <ProductCard item={item} token={token} size={0.5} />
-        )}
+        renderItem={({ item }) => <ProductCard item={item} size={0.5} />}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }

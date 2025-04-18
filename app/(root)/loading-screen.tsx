@@ -14,7 +14,7 @@ const LoadingScreen = ({ showBack = true }: { showBack?: boolean }) => {
         className='bg-white py-2 h-full flex-row justify-center items-center'
       >
         <Text className='text-lg'>Đang tải...</Text>
-        <ActivityIndicator color='#000' />
+        <ActivityIndicator color='#fb77c5' />
       </View>
     </SafeAreaView>
   );

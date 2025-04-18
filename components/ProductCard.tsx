@@ -9,11 +9,10 @@ import { Product } from '@/types/type';
 
 interface IProductCard {
   item: Product;
-  token: string | null | string[];
   size: number;
 }
 
-const ProductCard = ({ item, token, size }: IProductCard) => {
+const ProductCard = ({ item, size }: IProductCard) => {
   const [isLoading, setLoading] = useState<boolean>(false);
   const dispatch = useDispatch();
   const width = Dimensions.get('window').width;
@@ -42,7 +41,7 @@ const ProductCard = ({ item, token, size }: IProductCard) => {
   const navToInfo = () => {
     router.push({
       pathname: '/(root)/product-info',
-      params: { token: token, itemId: item?.product_id },
+      params: { itemId: item?.product_id },
     });
   };
 

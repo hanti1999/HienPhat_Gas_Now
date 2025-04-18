@@ -12,7 +12,7 @@ import LoadingScreen from './loading-screen';
 import NoProduct from './no-product';
 
 const SearchResult = () => {
-  const { input, token } = useLocalSearchParams();
+  const { input } = useLocalSearchParams();
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
@@ -20,12 +20,7 @@ const SearchResult = () => {
     const searchProduct = async () => {
       try {
         const url = `${process.env.EXPO_PUBLIC_API}/product/search?search=${input}`;
-        const config = {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        };
-        const res = await axios.get(url, config);
+        const res = await axios.get(url);
         if (res.status === 200) {
           setProducts(res?.data);
         }
@@ -60,9 +55,7 @@ const SearchResult = () => {
         className='bg-gray-100'
         data={products}
         numColumns={2}
-        renderItem={({ item }) => (
-          <ProductCard token={token} item={item} size={0.5} />
-        )}
+        renderItem={({ item }) => <ProductCard item={item} size={0.5} />}
       />
     </SafeAreaView>
   );

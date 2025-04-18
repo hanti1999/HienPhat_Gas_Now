@@ -3,11 +3,11 @@ import { Link, router, useLocalSearchParams } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { SwiperFlatList } from 'react-native-swiper-flatlist';
 import { Image, FlatList, ScrollView } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
 import { View, Text, Dimensions } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import Toast from 'react-native-toast-message';
 import { StatusBar } from 'expo-status-bar';
-import { useDispatch } from 'react-redux';
 import moment from 'moment';
 import axios from 'axios';
 import { FontAwesome, AntDesign } from '@expo/vector-icons';
@@ -16,6 +16,7 @@ import { addToCart } from '@/redux/slices/cartSlice';
 import ScreenHeader from '@/components/ScreenHeader';
 import { Product, Review } from '@/types/type';
 import getNewToken from '@/utils/getNewToken';
+import { RootState } from '@/redux/store';
 import LoadingScreen from './loading-screen';
 
 interface IDes {
@@ -39,7 +40,8 @@ interface ICarousel {
 }
 
 const ProductInfo = () => {
-  const { token, itemId } = useLocalSearchParams();
+  const token = useSelector((state: RootState) => state.auth.accessToken);
+  const { itemId } = useLocalSearchParams();
   const [inWishlist, setIsInWishlist] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [wlLoading, setWlLoading] = useState<boolean>(false);
@@ -52,16 +54,11 @@ const ProductInfo = () => {
   const [data, setData] = useState<Product>();
   const width = Dimensions.get('window').width;
   const dispatch = useDispatch();
-  const config = {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  };
 
   const checkWishlist = async () => {
     try {
       const url = `${process.env.EXPO_PUBLIC_API}/wishlist`;
-      const res = await axios.get(url, config);
+      const res = await axios.get(url);
       if (res.status === 200) {
         const products: Product[] = res.data.wishlist;
         const filteredProducts = products.find((p) => p.product_id === itemId);
@@ -117,7 +114,7 @@ const ProductInfo = () => {
       const data = {
         product_id: itemId,
       };
-      const res = await axios.post(url, data, config);
+      const res = await axios.post(url, data);
       if (res.status === 201) {
         Toast.show({ text1: 'Đã thêm vào sản phẩm yêu thích' });
         checkWishlist();
@@ -138,7 +135,7 @@ const ProductInfo = () => {
     try {
       setWlLoading(true);
       const url = `${process.env.EXPO_PUBLIC_API}/wishlist/${itemId}`;
-      const res = await axios.delete(url, config);
+      const res = await axios.delete(url);
       if (res.status === 200) {
         checkWishlist();
         Toast.show({ text1: 'Đã xóa khỏi sản phẩm yêu thích' });
@@ -165,11 +162,11 @@ const ProductInfo = () => {
         const url4 = `${process.env.EXPO_PUBLIC_API}/review/product/${itemId}`;
         const url5 = `${process.env.EXPO_PUBLIC_API}/feature/${itemId}`;
         const [res1, res2, res3, res4, res5] = await Promise.all([
-          axios.get(url1, config),
-          axios.get(url2, config),
-          axios.get(url3, config),
-          axios.get(url4, config),
-          axios.get(url5, config),
+          axios.get(url1),
+          axios.get(url2),
+          axios.get(url3),
+          axios.get(url4),
+          axios.get(url5),
         ]);
         setData(res1?.data);
         setCarousel(res2?.data);

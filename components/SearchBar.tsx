@@ -6,7 +6,7 @@ import tulip from '@/assets/images/tulip.png';
 import { Ionicons } from '@expo/vector-icons';
 import { RootState } from '@/redux/store';
 
-const SearchBar = ({ token }: { token: string | null }) => {
+const SearchBar = () => {
   const cartQuantity = useSelector(
     (state: RootState) => state.cart.totalQuantity
   );
@@ -15,7 +15,7 @@ const SearchBar = ({ token }: { token: string | null }) => {
   const searchHandler = () => {
     router.push({
       pathname: '/(root)/search-result',
-      params: { input: input, token: token },
+      params: { input: input },
     });
   };
 

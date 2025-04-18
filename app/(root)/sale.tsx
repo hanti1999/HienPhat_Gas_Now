@@ -18,19 +18,13 @@ import { Product } from '@/types/type';
 import LoadingScreen from './loading-screen';
 
 const Sale = () => {
-  const token = useSelector((state: RootState) => state.auth.accessToken);
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
   const getProducts = async () => {
     try {
       const url = `${process.env.EXPO_PUBLIC_API}/product/top-discount`;
-      const config = {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      };
-      const res = await axios.get(url, config);
+      const res = await axios.get(url);
       if (res.status === 200) {
         setProducts(res.data);
       }
@@ -68,7 +62,7 @@ const Sale = () => {
         <FlatList
           data={products}
           keyExtractor={(item) => item?.product_id}
-          renderItem={({ item }) => <ProductCard item={item} token={token} />}
+          renderItem={({ item }) => <ProductCard item={item} />}
           showsVerticalScrollIndicator={false}
           className='mb-28'
         />
@@ -111,12 +105,7 @@ const Header = () => {
   );
 };
 
-interface IProps {
-  item: Product;
-  token: string | null;
-}
-
-const ProductCard = ({ item, token }: IProps) => {
+const ProductCard = ({ item }: { item: Product }) => {
   const [isLoading, setLoading] = useState<boolean>(false);
   const dispatch = useDispatch();
 
@@ -144,7 +133,7 @@ const ProductCard = ({ item, token }: IProps) => {
   const navToInfo = () => {
     router.push({
       pathname: '/(root)/product-info',
-      params: { token: token, itemId: item?.product_id },
+      params: { itemId: item?.product_id },
     });
   };
 
