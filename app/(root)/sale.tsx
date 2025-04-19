@@ -12,7 +12,6 @@ import { Entypo, Ionicons } from '@expo/vector-icons';
 import { addToCart } from '@/redux/slices/cartSlice';
 import saleBg from '@/assets/images/sale-bg.jpg';
 import daisy from '@/assets/images/daisy.png';
-import getNewToken from '@/utils/getNewToken';
 import { RootState } from '@/redux/store';
 import { Product } from '@/types/type';
 import LoadingScreen from './loading-screen';
@@ -29,11 +28,7 @@ const Sale = () => {
         setProducts(res.data);
       }
     } catch (error: any) {
-      if (error.response && error.response.status === 401) {
-        await getNewToken();
-      } else {
-        console.error(error);
-      }
+      console.error(error);
     } finally {
       setLoading(false);
     }

@@ -1,21 +1,21 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { Image, ScrollView, RefreshControl, View, Button } from 'react-native';
+import { Image, ScrollView, RefreshControl, View } from 'react-native';
 import { Dimensions, FlatList, Pressable } from 'react-native';
 import { SwiperFlatList } from 'react-native-swiper-flatlist';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ActivityIndicator, Text } from 'react-native';
+import React, { useState, useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { router } from 'expo-router';
 import axios from 'axios';
 import banner2 from '@/assets/slider-img/DonTetSaleHet_MayLocNuoc.png';
+import { IBrand, ICategory, Product } from '@/types/type';
+import loadingIcon from '@/assets/icons/Loading_icon.gif';
 import banner1 from '@/assets/slider-img/sale8-3.jpg';
 import ProductTitle from '@/components/ProductTitle';
 import ProductCard from '@/components/ProductCard';
 import SeeMoreCard from '@/components/SeeMoreCard';
 import SearchBar from '@/components/SearchBar';
 import daisy from '@/assets/images/daisy.png';
-import getNewToken from '@/utils/getNewToken';
-import { Product } from '@/types/type';
 import { slider } from '@/constants';
 import LoadingScreen from '../loading-screen';
 
@@ -28,9 +28,11 @@ const Home = () => {
   const [accessories, setAccessories] = useState<Product[]>([]);
   const [gasStove, setGasStove] = useState<Product[]>([]);
   // lazy loading
-  const [showSuggested, setShowSuggested] = useState<boolean>(false);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const scrollRef = useRef<ScrollView>(null);
+  const [data, setData] = useState<Product[]>([]);
+  const [lazyLoad, setLazyLoading] = useState<boolean>(false);
+  const [noMore, setNoMore] = useState<boolean>(false);
+  const [start, setStart] = useState<number>(1);
+  const [end, setEnd] = useState<number>(13);
   //<<
   const width = Dimensions.get('window').width;
   const idList = {
@@ -61,11 +63,11 @@ const Home = () => {
         axios.get(url4),
         axios.get(url5),
       ]);
-      setGasStove(res1.data);
-      setElectricStove(res2.data);
-      setKitchenAppli(res3.data);
-      setAccessories(res4.data);
-      setSale(res5.data);
+      setGasStove(res1.data?.slice(0, 6));
+      setElectricStove(res2.data?.slice(0, 6));
+      setKitchenAppli(res3.data?.slice(0, 6));
+      setAccessories(res4.data?.slice(0, 6));
+      setSale(res5.data?.slice(0, 6));
     } catch (error) {
       console.error('Lỗi fetch sản phẩm', error);
     } finally {
@@ -77,23 +79,38 @@ const Home = () => {
     fetchProducts();
   }, []);
 
-  const handleScroll = useCallback(
-    (event: any) => {
-      const { layoutMeasurement, contentOffset, contentSize } =
-        event.nativeEvent;
-      const isCloseToBottom =
-        layoutMeasurement.height + contentOffset.y >= contentSize.height - 20;
-
-      if (isCloseToBottom && !showSuggested && !isLoading) {
-        setIsLoading(true);
-        setTimeout(() => {
-          setShowSuggested(true);
-          setIsLoading(false);
-        }, 1000);
+  const getSuggestProduct = async () => {
+    // Mỗi khi cuộn đến cuối màn hình sẽ load thêm 12 sản phẩm
+    // bugs: lần cuộn đầu sẽ fetch đến 24 sản phẩm?
+    try {
+      setLazyLoading(true);
+      const res = await axios.get(`${process.env.EXPO_PUBLIC_API}/product`);
+      if (res.status === 200) {
+        setData((prevData) => [...prevData, ...res.data.slice(start, end)]);
+        setStart(end);
+        setEnd((end) => end + 12);
+        if (start > res.data.length) {
+          setNoMore(true);
+        }
       }
-    },
-    [isLoading, showSuggested]
-  );
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLazyLoading(false);
+    }
+  };
+
+  const isCloseToBottom = ({
+    layoutMeasurement,
+    contentOffset,
+    contentSize,
+  }: any) => {
+    const paddingToBottom = 50;
+    return (
+      layoutMeasurement.height + contentOffset.y >=
+      contentSize.height - paddingToBottom
+    );
+  };
 
   if (loading) {
     return <LoadingScreen />;
@@ -104,8 +121,11 @@ const Home = () => {
       <StatusBar backgroundColor='#fb77c5' style='light' />
       <SearchBar />
       <ScrollView
-        ref={scrollRef}
-        onScroll={handleScroll}
+        onScroll={({ nativeEvent }) => {
+          if (isCloseToBottom(nativeEvent) && !lazyLoad && noMore === false) {
+            getSuggestProduct();
+          }
+        }}
         scrollEventThrottle={40}
         showsVerticalScrollIndicator={false}
         className='bg-gray-100'
@@ -113,7 +133,6 @@ const Home = () => {
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
       >
-        <HorizontalCategory />
         <SwiperFlatList
           autoplay
           autoplayDelay={5}
@@ -133,6 +152,10 @@ const Home = () => {
           )}
         />
 
+        <HorizontalCategory />
+
+        <HorizontalBrand />
+
         <View className='flex-row items-center justify-between bg-white py-1'>
           <Image className='w-12 h-12' source={daisy} />
           <Text className='font-bold text-2xl text-red-500 '>
@@ -142,7 +165,7 @@ const Home = () => {
         </View>
 
         <FlatList
-          data={sale?.slice(0, 6)}
+          data={sale}
           style={{ backgroundColor: 'white', paddingHorizontal: 4 }}
           renderItem={({ item }) => <ProductCard item={item} size={0.45} />}
           keyExtractor={(item) => item?.product_id}
@@ -153,7 +176,7 @@ const Home = () => {
         <View className='border-t-2 border-primary-pink mt-5 relative bg-white'>
           <ProductTitle text={'Bếp gas'} />
           <View className='flex-row flex-wrap mt-5'>
-            {gasStove.slice(0, 8).map((item, index) => (
+            {gasStove.map((item, index) => (
               <ProductCard key={index} item={item} size={0.5} />
             ))}
           </View>
@@ -167,7 +190,7 @@ const Home = () => {
         <View className='border-t-2 border-primary-pink mt-5 relative bg-white'>
           <ProductTitle text={'Bếp điện'} />
           <View className='flex-row flex-wrap mt-5'>
-            {electricStove.slice(0, 8).map((item, index) => (
+            {electricStove.map((item, index) => (
               <ProductCard key={index} item={item} size={0.5} />
             ))}
           </View>
@@ -181,7 +204,7 @@ const Home = () => {
         <View className='border-t-2 border-primary-pink mt-5 relative bg-white'>
           <ProductTitle text={'Gia dụng'} />
           <View className='flex-row flex-wrap mt-5'>
-            {kitchenAppli.slice(0, 8).map((item, index) => (
+            {kitchenAppli.map((item, index) => (
               <ProductCard key={index} item={item} size={0.5} />
             ))}
           </View>
@@ -191,36 +214,21 @@ const Home = () => {
         <View className='border-t-2 border-primary-pink mt-5 relative bg-white'>
           <ProductTitle text={'Phụ kiện'} />
           <View className='flex-row flex-wrap mt-5'>
-            {accessories.slice(0, 8).map((item, index) => (
+            {accessories.map((item, index) => (
               <ProductCard key={index} item={item} size={0.5} />
             ))}
           </View>
           <SeeMoreCard categoryId={idList.phuKien} extraText={'Phụ kiện'} />
         </View>
 
-        <View className='border-t-2 border-primary-pink my-2 bg-white'>
-          <View className='px-3 pt-2'>
-            <Text className='font-semibold text-primary-pink text-[16px]'>
-              Thương hiệu nổi bật
-            </Text>
-          </View>
-          <HorizontalBrand />
-        </View>
-
-        {isLoading && (
-          <View className='mt-2 mb-6 items-center'>
-            <ActivityIndicator color='#fb77c5' />
-          </View>
-        )}
-
-        {showSuggested && <SuggestedProduct />}
+        <SuggestedProduct data={data} loading={lazyLoad} />
       </ScrollView>
     </SafeAreaView>
   );
 };
 
 const HorizontalCategory = () => {
-  const [catList, setCatList] = useState<any>();
+  const [catList, setCatList] = useState<ICategory[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
@@ -232,11 +240,7 @@ const HorizontalCategory = () => {
           setCatList(res.data);
         }
       } catch (error: any) {
-        if (error.response && error.response.status === 401) {
-          await getNewToken();
-        } else {
-          console.error('Lỗi Horizontal category ', error.message);
-        }
+        console.error('Lỗi Horizontal category ', error.message);
       } finally {
         setLoading(false);
       }
@@ -254,39 +258,47 @@ const HorizontalCategory = () => {
   }
 
   return (
-    <FlatList
-      renderItem={({ item }) => (
-        <Pressable
-          onPress={() =>
-            router.push({
-              pathname: '/(root)/product-filter',
-              params: {
-                id: item?.category_id,
-                type: 'category',
-              },
-            })
-          }
-          className='m-1'
-        >
-          <Image
-            resizeMode='contain'
-            className='w-20 h-20'
-            source={{ uri: item?.category_img_url }}
-          />
-          <Text className='text-center font-medium'>{item?.category_name}</Text>
-        </Pressable>
-      )}
-      showsHorizontalScrollIndicator={false}
-      data={catList}
-      keyExtractor={(item) => item?.category_id}
-      horizontal
-      style={{ backgroundColor: 'white' }}
-    />
+    <View className='bg-white mt-2 border-t-2 border-primary-pink'>
+      <Text className='px-3 pt-1 font-semibold text-primary-pink text-[16px]'>
+        Danh mục
+      </Text>
+      <FlatList
+        renderItem={({ item }) => (
+          <Pressable
+            onPress={() =>
+              router.push({
+                pathname: '/(root)/product-filter',
+                params: {
+                  id: item?.category_id,
+                  type: 'category',
+                },
+              })
+            }
+            className='m-1'
+          >
+            <Image
+              resizeMode='contain'
+              className='w-20 h-20'
+              source={{ uri: item?.category_img_url }}
+              loadingIndicatorSource={loadingIcon}
+            />
+            <Text className='text-center font-medium'>
+              {item?.category_name}
+            </Text>
+          </Pressable>
+        )}
+        showsHorizontalScrollIndicator={false}
+        data={catList}
+        keyExtractor={(item) => item?.category_id}
+        horizontal
+        style={{ backgroundColor: 'white' }}
+      />
+    </View>
   );
 };
 
 const HorizontalBrand = () => {
-  const [brandList, setBrandList] = useState<any>();
+  const [brandList, setBrandList] = useState<IBrand[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
@@ -298,11 +310,7 @@ const HorizontalBrand = () => {
           setBrandList(res?.data.reverse());
         }
       } catch (error: any) {
-        if (error.response && error.response.status === 401) {
-          await getNewToken();
-        } else {
-          console.error('Lỗi Horizontal brand ', error.message);
-        }
+        console.error('Lỗi Horizontal brand ', error.message);
       } finally {
         setLoading(false);
       }
@@ -320,86 +328,58 @@ const HorizontalBrand = () => {
   }
 
   return (
-    <FlatList
-      renderItem={({ item }) => (
-        <Pressable
-          onPress={() =>
-            router.push({
-              pathname: '/(root)/product-filter',
-              params: { id: item?.brand_id, type: 'brand' },
-            })
-          }
-          className='m-1'
-        >
-          <Image
-            resizeMode='contain'
-            className='w-20 h-20'
-            source={{ uri: item?.brand_img_url }}
-          />
-          <Text className='text-center font-medium'>{item?.brand_name}</Text>
-        </Pressable>
-      )}
-      showsHorizontalScrollIndicator={false}
-      data={brandList}
-      keyExtractor={(item) => item?.brand_id}
-      horizontal
-    />
+    <View className='border-t-2 border-primary-pink my-2 bg-white'>
+      <Text className='px-3 pt-1 font-semibold text-primary-pink text-[16px]'>
+        Thương hiệu
+      </Text>
+      <FlatList
+        renderItem={({ item }) => (
+          <Pressable
+            onPress={() =>
+              router.push({
+                pathname: '/(root)/product-filter',
+                params: { id: item?.brand_id, type: 'brand' },
+              })
+            }
+            className='m-1'
+          >
+            <Image
+              resizeMode='contain'
+              className='w-20 h-20'
+              source={{ uri: item?.brand_img_url }}
+              loadingIndicatorSource={loadingIcon}
+            />
+            <Text className='text-center font-medium'>{item?.brand_name}</Text>
+          </Pressable>
+        )}
+        showsHorizontalScrollIndicator={false}
+        data={brandList}
+        keyExtractor={(item) => item?.brand_id}
+        horizontal
+      />
+    </View>
   );
 };
 
-const SuggestedProduct = () => {
-  const [data, setData] = useState<Product[]>([]);
-  const [loading, setLoading] = useState<boolean>(false);
-  const [showMore, setShowMore] = useState<boolean>(false);
+interface IProps {
+  data: Product[];
+  loading: boolean;
+}
 
-  useEffect(() => {
-    const getProduct = async () => {
-      try {
-        setLoading(true);
-        const res = await axios.get(`${process.env.EXPO_PUBLIC_API}/product`);
-        if (res.status === 200) {
-          setData(res.data);
-        }
-      } catch (error) {
-        console.log(error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    getProduct();
-  }, []);
-
-  if (loading) {
-    return (
-      <View className='h-[84px] flex justify-center'>
-        <ActivityIndicator color='#fb77c5' />
-      </View>
-    );
-  }
-
+const SuggestedProduct = ({ data, loading }: IProps) => {
   return (
     <View className='border-t-2 border-primary-pink mt-5 relative bg-white'>
-      <ProductTitle text={'Mua gì hôm nay'} />
+      <ProductTitle text={'Gợi ý cho bạn'} />
       <View className='flex-row flex-wrap mt-5'>
-        {data?.slice(0, 24).map((item, index) => (
+        {data?.map((item, index) => (
           <ProductCard key={index} item={item} size={0.5} />
         ))}
-        {!showMore && (
-          <View className='w-full p-5'>
-            <Button
-              title='Tải thêm'
-              onPress={() => setShowMore(true)}
-              color={'#fb77c5'}
-            />
-          </View>
-        )}
-        {showMore &&
-          data
-            ?.slice(24, data?.length)
-            .map((item, index) => (
-              <ProductCard key={index} item={item} size={0.5} />
-            ))}
       </View>
+      {loading && (
+        <View className='mt-2 mb-6 items-center'>
+          <ActivityIndicator color='#fb77c5' />
+        </View>
+      )}
     </View>
   );
 };

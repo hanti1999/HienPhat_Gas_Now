@@ -4,6 +4,7 @@ import Toast from 'react-native-toast-message';
 import { useDispatch } from 'react-redux';
 import React, { useState } from 'react';
 import { router } from 'expo-router';
+import loadingIcon from '@/assets/icons/Loading_icon.gif';
 import { addToCart } from '@/redux/slices/cartSlice';
 import { Product } from '@/types/type';
 
@@ -52,6 +53,7 @@ const ProductCard = ({ item, size }: IProductCard) => {
           <Image
             className='aspect-square rounded-tl-md rounded-tr-md'
             source={{ uri: item?.product_image_url }}
+            loadingIndicatorSource={loadingIcon}
           />
         </View>
         <View className='p-1.5 justify-between bg-pink-100 border-x border-b rounded-bl-md rounded-br-md border-gray-200'>
