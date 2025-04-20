@@ -1,11 +1,11 @@
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { FlatList, RefreshControl } from 'react-native';
-import React, { useState, useEffect } from 'react';
 import { useLocalSearchParams } from 'expo-router';
+import React, { useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import axios from 'axios';
 import ScreenHeader from '@/components/ScreenHeader';
 import ProductCard from '@/components/ProductCard';
+import useGetData from '@/customHooks/useGetData';
 import SearchBar from '@/components/SearchBar';
 import { Product } from '@/types/type';
 import LoadingScreen from './loading-screen';
@@ -13,32 +13,13 @@ import NoProduct from './no-product';
 
 const ProductFilter = () => {
   const { id, type } = useLocalSearchParams();
-  const [products, setProducts] = useState<Product[]>([]);
   const [refreshing, setRefreshing] = useState<boolean>(false);
-  const [loading, setLoading] = useState<boolean>(true);
-
-  const fetchProductByBrand = async () => {
-    try {
-      const url = `${process.env.EXPO_PUBLIC_API}/product/${type}/${id}`;
-
-      const res = await axios.get(url);
-      if (res.status === 200) {
-        setProducts(res?.data);
-      }
-    } catch (error: any) {
-      console.error('Lỗi (Product-filter)', error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchProductByBrand();
-  }, []);
+  const url = `${process.env.EXPO_PUBLIC_API}/product/${type}/${id}`;
+  const { data: products, loading, refetch } = useGetData<Product[]>(url);
 
   const onRefresh = async () => {
     setRefreshing(true);
-    await fetchProductByBrand();
+    await refetch();
     setRefreshing(false);
   };
 
@@ -46,7 +27,7 @@ const ProductFilter = () => {
     return <LoadingScreen />;
   }
 
-  if (products.length === 0) {
+  if (products?.length === 0) {
     return <NoProduct text={'Chưa có sản phẩm'} />;
   }
 

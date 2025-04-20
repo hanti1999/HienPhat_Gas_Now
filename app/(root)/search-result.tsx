@@ -1,36 +1,18 @@
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useLocalSearchParams } from 'expo-router';
-import React, { useEffect, useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { FlatList } from 'react-native';
-import axios from 'axios';
 import ScreenHeader from '@/components/ScreenHeader';
 import ProductCard from '@/components/ProductCard';
+import useGetData from '@/customHooks/useGetData';
 import { Product } from '@/types/type';
 import LoadingScreen from './loading-screen';
 import NoProduct from './no-product';
 
 const SearchResult = () => {
   const { input } = useLocalSearchParams();
-  const [products, setProducts] = useState<Product[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-
-  useEffect(() => {
-    const searchProduct = async () => {
-      try {
-        const url = `${process.env.EXPO_PUBLIC_API}/product/search?search=${input}`;
-        const res = await axios.get(url);
-        if (res.status === 200) {
-          setProducts(res?.data);
-        }
-      } catch (error: any) {
-        console.error('Tìm kiếm không thành công!', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    searchProduct();
-  }, []);
+  const url = `${process.env.EXPO_PUBLIC_API}/product/search?search=${input}`;
+  const { data: products, loading } = useGetData<Product[]>(url);
 
   if (loading) {
     return <LoadingScreen />;

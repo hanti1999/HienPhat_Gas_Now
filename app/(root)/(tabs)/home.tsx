@@ -7,13 +7,14 @@ import React, { useState, useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { router } from 'expo-router';
 import axios from 'axios';
-import banner2 from '@/assets/slider-img/DonTetSaleHet_MayLocNuoc.png';
 import { IBrand, ICategory, Product } from '@/types/type';
 import loadingIcon from '@/assets/icons/Loading_icon.gif';
-import banner1 from '@/assets/slider-img/sale8-3.jpg';
+import banner1 from '@/assets/slider-img/banner3.jpg';
+import banner2 from '@/assets/slider-img/banner3.jpg';
 import ProductTitle from '@/components/ProductTitle';
 import ProductCard from '@/components/ProductCard';
 import SeeMoreCard from '@/components/SeeMoreCard';
+import useGetData from '@/customHooks/useGetData';
 import SearchBar from '@/components/SearchBar';
 import daisy from '@/assets/images/daisy.png';
 import { slider } from '@/constants';
@@ -69,7 +70,6 @@ const Home = () => {
       setAccessories(res4.data?.slice(0, 6));
       setSale(res5.data?.slice(0, 6));
     } catch (error) {
-      console.error('Lỗi fetch sản phẩm', error);
     } finally {
       setLoading(false);
     }
@@ -94,7 +94,6 @@ const Home = () => {
         }
       }
     } catch (error) {
-      console.error(error);
     } finally {
       setLazyLoading(false);
     }
@@ -143,9 +142,9 @@ const Home = () => {
               <Image
                 source={item}
                 style={{
-                  height: 0.5625 * width,
-                  aspectRatio: '16/9',
+                  resizeMode: 'contain',
                   width: width,
+                  height: (width / 16) * 6,
                 }}
               />
             </Pressable>
@@ -173,53 +172,43 @@ const Home = () => {
           horizontal
         />
 
-        <View className='border-t-2 border-primary-pink mt-5 relative bg-white'>
-          <ProductTitle text={'Bếp gas'} />
-          <View className='flex-row flex-wrap mt-5'>
-            {gasStove.map((item, index) => (
-              <ProductCard key={index} item={item} size={0.5} />
-            ))}
-          </View>
-          <SeeMoreCard categoryId={idList.bepGas} extraText={'Bếp gas'} />
-        </View>
+        <ProductSection
+          title='Bếp gas'
+          data={gasStove}
+          cateId={idList.bepGas}
+        />
 
         <Pressable onPress={() => router.push('/sale')}>
-          <Image className='w-full h-[60px]' source={banner1} />
+          <Image
+            style={{ resizeMode: 'contain', width: width, height: 80 }}
+            source={banner1}
+          />
         </Pressable>
 
-        <View className='border-t-2 border-primary-pink mt-5 relative bg-white'>
-          <ProductTitle text={'Bếp điện'} />
-          <View className='flex-row flex-wrap mt-5'>
-            {electricStove.map((item, index) => (
-              <ProductCard key={index} item={item} size={0.5} />
-            ))}
-          </View>
-          <SeeMoreCard categoryId={idList.bepDien} extraText={'Bếp điện'} />
-        </View>
+        <ProductSection
+          title='Bếp điện'
+          data={electricStove}
+          cateId={idList.bepDien}
+        />
 
         <Pressable onPress={() => router.push('/sale')}>
-          <Image className='w-full h-[140px]' source={banner2} />
+          <Image
+            style={{ resizeMode: 'contain', width: width, height: 80 }}
+            source={banner2}
+          />
         </Pressable>
 
-        <View className='border-t-2 border-primary-pink mt-5 relative bg-white'>
-          <ProductTitle text={'Gia dụng'} />
-          <View className='flex-row flex-wrap mt-5'>
-            {kitchenAppli.map((item, index) => (
-              <ProductCard key={index} item={item} size={0.5} />
-            ))}
-          </View>
-          <SeeMoreCard categoryId={idList.giaDung} extraText={'Gia dụng'} />
-        </View>
+        <ProductSection
+          title='Gia dụng'
+          data={kitchenAppli}
+          cateId={idList.giaDung}
+        />
 
-        <View className='border-t-2 border-primary-pink mt-5 relative bg-white'>
-          <ProductTitle text={'Phụ kiện'} />
-          <View className='flex-row flex-wrap mt-5'>
-            {accessories.map((item, index) => (
-              <ProductCard key={index} item={item} size={0.5} />
-            ))}
-          </View>
-          <SeeMoreCard categoryId={idList.phuKien} extraText={'Phụ kiện'} />
-        </View>
+        <ProductSection
+          title='Phụ kiện'
+          data={accessories}
+          cateId={idList.phuKien}
+        />
 
         <SuggestedProduct data={data} loading={lazyLoad} />
       </ScrollView>
@@ -227,27 +216,33 @@ const Home = () => {
   );
 };
 
+interface ISectionProps {
+  title: string;
+  data: Product[];
+  cateId: string;
+}
+
+const ProductSection = ({ data, cateId, title }: ISectionProps) => {
+  return (
+    <View className='border-t-2 border-primary-pink mt-2 relative bg-white'>
+      <View className='px-2 py-1 bg-primary-pink w-1/3 rounded-br-3xl'>
+        <Text className='font-semibold text-white uppercase text-xl'>
+          {title}
+        </Text>
+      </View>
+      <View className='flex-row flex-wrap mt-2'>
+        {data.map((item, index) => (
+          <ProductCard key={index} item={item} size={0.5} />
+        ))}
+      </View>
+      <SeeMoreCard categoryId={cateId} extraText={title} />
+    </View>
+  );
+};
+
 const HorizontalCategory = () => {
-  const [catList, setCatList] = useState<ICategory[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-
-  useEffect(() => {
-    const fetchCategory = async () => {
-      try {
-        const url = `${process.env.EXPO_PUBLIC_API}/category`;
-        const res = await axios.get(url);
-        if (res.status === 200) {
-          setCatList(res.data);
-        }
-      } catch (error: any) {
-        console.error('Lỗi Horizontal category ', error.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchCategory();
-  }, []);
+  const url = `${process.env.EXPO_PUBLIC_API}/category`;
+  const { data: catList, loading } = useGetData<ICategory[]>(url);
 
   if (loading) {
     return (
@@ -298,26 +293,8 @@ const HorizontalCategory = () => {
 };
 
 const HorizontalBrand = () => {
-  const [brandList, setBrandList] = useState<IBrand[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-
-  useEffect(() => {
-    const fetchBrand = async () => {
-      try {
-        const url = `${process.env.EXPO_PUBLIC_API}/brand`;
-        const res = await axios.get(url);
-        if (res.status === 200) {
-          setBrandList(res?.data.reverse());
-        }
-      } catch (error: any) {
-        console.error('Lỗi Horizontal brand ', error.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchBrand();
-  }, []);
+  const url = `${process.env.EXPO_PUBLIC_API}/brand`;
+  const { data: brandList, loading } = useGetData<IBrand[]>(url);
 
   if (loading) {
     return (

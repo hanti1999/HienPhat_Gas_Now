@@ -1,7 +1,6 @@
 import onboarding1 from '@/assets/images/daisy.png';
-import slider1 from '@/assets/slider-img/slider1.png';
-import slider2 from '@/assets/slider-img/slider2.png';
-import slider3 from '@/assets/slider-img/slider3.png';
+import slider1 from '@/assets/slider-img/banner1.jpg';
+import slider2 from '@/assets/slider-img/banner2.jpg';
 
 export const onboarding = [
   {
@@ -19,4 +18,4 @@ export const onboarding = [
   },
 ];
 
-export const slider = [slider1, slider2, slider3];
+export const slider = [slider1, slider2];
