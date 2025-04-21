@@ -40,6 +40,7 @@ const ProductFilter = () => {
         keyExtractor={(item) => item?.product_id}
         className='bg-white'
         data={products}
+        initialNumToRender={6}
         numColumns={2}
         renderItem={({ item }) => <ProductCard item={item} size={0.5} />}
         refreshControl={

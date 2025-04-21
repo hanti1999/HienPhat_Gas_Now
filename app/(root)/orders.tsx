@@ -1,15 +1,16 @@
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router, useLocalSearchParams } from 'expo-router';
 import { FlatList, RefreshControl } from 'react-native';
-import React, { useState, useEffect } from 'react';
 import { Text, View, Image } from 'react-native';
 import Toast from 'react-native-toast-message';
 import { StatusBar } from 'expo-status-bar';
+import React, { useState } from 'react';
 import moment from 'moment';
 import axios from 'axios';
 import RectangleButton from '@/components/RectangleButton';
 import ScreenHeader from '@/components/ScreenHeader';
 import ConfirmModal from '@/components/ConfirmModal';
+import useGetData from '@/customHooks/useGetData';
 import { IOrder, IOrderItem } from '@/types/type';
 import { AntDesign } from '@expo/vector-icons';
 import getNewToken from '@/utils/getNewToken';
@@ -19,48 +20,25 @@ import NoProduct from './no-product';
 const Orders = () => {
   const { token } = useLocalSearchParams();
   const [refreshing, setRefreshing] = useState<boolean>(false);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [orders, setOrders] = useState<IOrder[]>([]);
-
-  const fetchOrders = async () => {
-    try {
-      const url = `${process.env.EXPO_PUBLIC_API}/order`;
-      const config = {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      };
-      const res = await axios.get(url, config);
-      if (res.status === 200) {
-        setOrders(res?.data.reverse());
-      }
-    } catch (error: any) {
-      if (error.response && error.response.status === 401) {
-        await getNewToken();
-      } else {
-        console.error(error);
-        Toast.show({ type: 'error', text1: 'Lỗi hệ thống!' });
-      }
-    } finally {
-      setLoading(false);
-    }
+  const url = `${process.env.EXPO_PUBLIC_API}/order`;
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
   };
+  const { data: orders, refetch, loading } = useGetData<IOrder[]>(url, config);
 
   const onRefresh = async () => {
     setRefreshing(true);
-    await fetchOrders();
+    await refetch();
     setRefreshing(false);
   };
-
-  useEffect(() => {
-    fetchOrders();
-  }, []);
 
   if (loading) {
     return <LoadingScreen />;
   }
 
-  if (orders.length === 0) {
+  if (orders?.length === 0) {
     return <NoProduct text={'Bạn chưa có đơn hàng nào!'} />;
   }
 
@@ -71,9 +49,9 @@ const Orders = () => {
       <FlatList
         className='bg-gray-100'
         keyExtractor={(item) => item.order_id}
-        data={orders}
+        data={orders?.reverse()}
         renderItem={({ item }) => (
-          <RenderOrders fetchOrders={fetchOrders} item={item} token={token} />
+          <RenderOrders fetchOrders={refetch} item={item} token={token} />
         )}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
@@ -84,7 +62,7 @@ const Orders = () => {
 };
 
 interface IProps {
-  fetchOrders: () => Promise<any>;
+  fetchOrders: () => void;
   token: string | string[];
   item?: IOrder;
   id?: string;

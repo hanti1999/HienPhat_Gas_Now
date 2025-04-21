@@ -8,12 +8,7 @@ import loadingIcon from '@/assets/icons/Loading_icon.gif';
 import { addToCart } from '@/redux/slices/cartSlice';
 import { Product } from '@/types/type';
 
-interface IProductCard {
-  item: Product;
-  size: number;
-}
-
-const ProductCard = ({ item, size }: IProductCard) => {
+const ProductCard = ({ item, size }: { item: Product; size: number }) => {
   const [isLoading, setLoading] = useState<boolean>(false);
   const dispatch = useDispatch();
   const width = Dimensions.get('window').width;

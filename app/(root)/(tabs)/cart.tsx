@@ -19,13 +19,19 @@ import bankIcon from '@/assets/icons/scan_128px.png';
 import CheckedLabel from '@/components/CheckedLabel';
 import { MaterialIcons } from '@expo/vector-icons';
 import { CartItem, IAddress } from '@/types/type';
+import useGetData from '@/customHooks/useGetData';
 import { FontAwesome } from '@expo/vector-icons';
 import getNewToken from '@/utils/getNewToken';
 import { RootState } from '@/redux/store';
 import LoadingScreen from '../loading-screen';
 import NoProduct from '../no-product';
 
+interface IPoints {
+  total_points: number;
+}
+
 const Cart = () => {
+  const token = useSelector((state: RootState) => state.auth.accessToken);
   const cartQuantity = useSelector(
     (state: RootState) => state.cart.totalQuantity
   );
@@ -34,47 +40,34 @@ const Cart = () => {
   );
   const cartAmount = useSelector((state: RootState) => state.cart.totalAmount);
   const cartItems = useSelector((state: RootState) => state.cart.cartItems);
-  const token = useSelector((state: RootState) => state.auth.accessToken);
   const dispatch = useDispatch();
   const [paymentMethod, setPaymentMethod] = useState<string>('cod');
   const [voucher, setVoucher] = useState<string>('');
   const [note, setNote] = useState<string>('');
   const [selectedAddress, setSelectedAddress] = useState<IAddress>();
-  const [address, setAddress] = useState<IAddress[]>([]);
   const [totalAmount, setTotalAmount] = useState<number>(cartAmount);
   const [voucherAmount, setVoucherAmount] = useState<number>(0);
-  const [userPoints, setUserPoints] = useState<number>(0);
   const [orderLoading, setOrderLoading] = useState<boolean>(false);
   const [modalVisible, setModalVisible] = useState<boolean>(false);
   const [refreshing, setRefreshing] = useState<boolean>(false);
   const [usePoint, setUsePoint] = useState<boolean>(false);
-  const [loading, setLoading] = useState<boolean>(false);
   const P_PINK = '#fb77c5';
+  const url = `${process.env.EXPO_PUBLIC_API}/shipping`;
+  const url2 = `${process.env.EXPO_PUBLIC_API}/point`;
   const config = {
     headers: {
       Authorization: `Bearer ${token}`,
     },
   };
-
-  const fetchAddress = async () => {
-    try {
-      setLoading(true);
-      const url = `${process.env.EXPO_PUBLIC_API}/shipping`;
-      const res = await axios.get(url, config);
-      if (res.status === 200) {
-        setAddress(res?.data?.addresses);
-        setUserPoints(res?.data?.points?.total_points);
-      }
-    } catch (error: any) {
-      if (error.response && error.response.status === 401) {
-        await getNewToken();
-      } else {
-        console.error('Lỗi (NotificationScreen)', error);
-      }
-    } finally {
-      setLoading(false);
-    }
-  };
+  const {
+    data: address,
+    loading,
+    refetch: refAdd,
+  } = useGetData<IAddress[]>(url, config);
+  const { data: userPoints, refetch: refPoints } = useGetData<IPoints>(
+    url2,
+    config
+  );
 
   const handleUseVoucher = async () => {
     Toast.show({ type: 'info', text1: `Tính năng đang phát triển` });
@@ -83,7 +76,8 @@ const Cart = () => {
 
   const onRefresh = async () => {
     setRefreshing(true);
-    await fetchAddress();
+    await refAdd();
+    await refPoints();
     setRefreshing(false);
   };
 
@@ -99,7 +93,7 @@ const Cart = () => {
         address_id: selectedAddress?.address?.address_id,
         voucher_code: voucher,
         payment_method: paymentMethod,
-        points_used: usePoint === true ? userPoints : 0,
+        points_used: usePoint === true ? userPoints?.total_points : 0,
         delivery_note: note,
         items: items,
       };
@@ -122,7 +116,6 @@ const Cart = () => {
         await getNewToken();
       } else {
         Toast.show({ type: 'error', text1: 'Tạo đơn hàng không thành công' });
-        console.error('Lỗi (CartScreen): ', error);
       }
     } finally {
       setOrderLoading(false);
@@ -132,29 +125,25 @@ const Cart = () => {
   const toggleSwitch = () => {
     setUsePoint(!usePoint);
     setTotalAmount(
-      usePoint ? totalAmount + userPoints : totalAmount - userPoints
+      usePoint
+        ? totalAmount + userPoints!.total_points
+        : totalAmount - userPoints!.total_points
     );
   };
-
-  useEffect(() => {
-    if (token) {
-      fetchAddress();
-    }
-  }, []);
 
   useEffect(() => {
     setTotalAmount(cartAmount);
   }, [cartAmount]);
 
   useEffect(() => {
-    const filteredAddress = address.find((address) => address.is_default);
+    const filteredAddress = address?.find((address) => address.is_default);
     setSelectedAddress(filteredAddress);
   }, [address]);
 
   useFocusEffect(
     useCallback(() => {
       if (token) {
-        fetchAddress();
+        refAdd();
       }
     }, [])
   );
@@ -251,13 +240,13 @@ const Cart = () => {
             <View className='flex-row items-center' style={{ gap: 4 }}>
               <MaterialIcons name='wallet' size={24} color={P_PINK} />
               <Text className='text-right text-[16px]'>
-                Dùng {userPoints?.toLocaleString()} điểm
+                Dùng {userPoints?.total_points.toLocaleString()} điểm
               </Text>
             </View>
             <Switch
               trackColor={{ false: '#767577', true: P_PINK }}
               onValueChange={toggleSwitch}
-              disabled={userPoints === 0}
+              disabled={userPoints?.total_points === 0}
               value={usePoint}
             />
           </View>
@@ -343,7 +332,7 @@ const Cart = () => {
                 </TouchableOpacity>
               </View>
               <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-                {address.map((item, index) => (
+                {address?.map((item, index) => (
                   <TouchableOpacity
                     key={index}
                     className='w-36 h-36 p-3 border rounded-lg mr-1 bg-white'
@@ -402,7 +391,11 @@ const Cart = () => {
             Tiết kiệm:{' '}
             <Text className='text-primary-pink'>
               {usePoint
-                ? (totalDiscount + userPoints + voucherAmount).toLocaleString()
+                ? (
+                    totalDiscount +
+                    userPoints!.total_points +
+                    voucherAmount
+                  ).toLocaleString()
                 : (totalDiscount + voucherAmount).toLocaleString()}
               đ
             </Text>

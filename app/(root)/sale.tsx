@@ -2,12 +2,11 @@ import { ActivityIndicator, ImageBackground } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { TouchableOpacity, Image } from 'react-native';
 import { View, Text, FlatList } from 'react-native';
-import React, { useState, useEffect } from 'react';
 import Toast from 'react-native-toast-message';
 import { StatusBar } from 'expo-status-bar';
+import React, { useState } from 'react';
 import Constants from 'expo-constants';
 import { router } from 'expo-router';
-import axios from 'axios';
 import { Entypo, Ionicons } from '@expo/vector-icons';
 import { addToCart } from '@/redux/slices/cartSlice';
 import saleBg from '@/assets/images/sale-bg.jpg';
@@ -15,28 +14,11 @@ import daisy from '@/assets/images/daisy.png';
 import { RootState } from '@/redux/store';
 import { Product } from '@/types/type';
 import LoadingScreen from './loading-screen';
+import useGetData from '@/customHooks/useGetData';
 
 const Sale = () => {
-  const [products, setProducts] = useState<Product[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-
-  const getProducts = async () => {
-    try {
-      const url = `${process.env.EXPO_PUBLIC_API}/product/top-discount`;
-      const res = await axios.get(url);
-      if (res.status === 200) {
-        setProducts(res.data);
-      }
-    } catch (error: any) {
-      console.error(error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    getProducts();
-  }, []);
+  const url = `${process.env.EXPO_PUBLIC_API}/product/top-discount`;
+  const { data: products, loading } = useGetData<Product[]>(url);
 
   if (loading) {
     return <LoadingScreen />;

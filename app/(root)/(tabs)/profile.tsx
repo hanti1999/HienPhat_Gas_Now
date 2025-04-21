@@ -2,70 +2,43 @@ import { RefreshControl, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useDispatch, useSelector } from 'react-redux';
 import { Text, View, Pressable } from 'react-native';
-import React, { useEffect, useState } from 'react';
 import { ScrollView, Image } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { router, Link } from 'expo-router';
-import axios from 'axios';
+import React, { useState } from 'react';
 import { FontAwesome, AntDesign } from '@expo/vector-icons';
 import RectangleButton from '@/components/RectangleButton';
 import { Ionicons, Foundation } from '@expo/vector-icons';
 import ConfirmModal from '@/components/ConfirmModal';
+import useGetData from '@/customHooks/useGetData';
 import { logout } from '@/redux/slices/authSlice';
-import getNewToken from '@/utils/getNewToken';
 import logo from '@/assets/images/logoHp.png';
 import { ProfileType } from '@/types/type';
 import { RootState } from '@/redux/store';
 import LoadingScreen from '../loading-screen';
 
 const Profile = () => {
-  const version: string = '25.04.20';
+  const version: string = '25.04.21';
   const token = useSelector((state: RootState) => state?.auth.accessToken);
   const [refreshing, setRefreshing] = useState<boolean>(false);
-  const [loading, setLoading] = useState<boolean>(false);
-  const [user, setUser] = useState<ProfileType>();
+  const url = `${process.env.EXPO_PUBLIC_API}/user`;
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+  const {
+    data: user,
+    loading,
+    refetch,
+    clearData,
+  } = useGetData<ProfileType>(url, config);
 
   const onRefresh = async () => {
     setRefreshing(true);
-    if (token) {
-      await fetchUserProfile();
-    }
+    await refetch();
     setRefreshing(false);
   };
-
-  const clearData = () => {
-    setUser(undefined);
-  };
-
-  const fetchUserProfile = async () => {
-    try {
-      setLoading(true);
-      const url = `${process.env.EXPO_PUBLIC_API}/user`;
-      const config = {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      };
-      const res = await axios.get(url, config);
-      if (res.status === 200) {
-        setUser(res.data);
-      }
-    } catch (error: any) {
-      if (error.response && error.response.status === 401) {
-        await getNewToken();
-      } else {
-        console.error('Lỗi (catch ProfileScreen): ', error);
-      }
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    if (token) {
-      fetchUserProfile();
-    }
-  }, []);
 
   if (loading) {
     return <LoadingScreen />;

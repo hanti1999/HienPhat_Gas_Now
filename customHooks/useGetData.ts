@@ -8,6 +8,7 @@ interface UseFetchResult<T> {
   loading: boolean;
   error: any;
   refetch: () => void;
+  clearData: () => void;
 }
 
 function useGetData<T>(url: string, config?: any): UseFetchResult<T> {
@@ -37,11 +38,15 @@ function useGetData<T>(url: string, config?: any): UseFetchResult<T> {
     fetchData();
   }, [url]);
 
+  const clearData = () => {
+    setData(null)
+  }
+
   const refetch = () => {
     fetchData();
   };
 
-  return { data, loading, error, refetch };
+  return { data, loading, error, refetch, clearData };
 }
 
 export default useGetData;

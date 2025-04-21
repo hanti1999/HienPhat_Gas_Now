@@ -1,16 +1,12 @@
 import { RefreshControl, FlatList, View, Text } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { TouchableOpacity, Image } from 'react-native';
-import React, { useEffect, useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { useSelector } from 'react-redux';
+import React, { useState } from 'react';
 import { router } from 'expo-router';
 import moment from 'moment';
-import axios from 'axios';
-import SigninRequired from '@/components/signin-required';
 import ScreenHeader from '@/components/ScreenHeader';
-import getNewToken from '@/utils/getNewToken';
-import { RootState } from '@/redux/store';
+import useGetData from '@/customHooks/useGetData';
 import LoadingScreen from '../loading-screen';
 import NoProduct from '../no-product';
 
@@ -24,55 +20,20 @@ interface INoti {
 }
 
 const Notification = () => {
-  const token = useSelector((state: RootState) => state.auth.accessToken);
-  const [notification, setNotification] = useState<INoti[]>([]);
   const [refreshing, setRefreshing] = useState<boolean>(false);
-  const [loading, setLoading] = useState<boolean>(true);
-
+  const url = `${process.env.EXPO_PUBLIC_API}/notification`;
+  const { data: noti, loading, refetch } = useGetData<INoti[]>(url);
   const onRefresh = async () => {
     setRefreshing(true);
-    await fetchNotification();
+    await refetch();
     setRefreshing(false);
   };
-
-  const fetchNotification = async () => {
-    try {
-      const url = `${process.env.EXPO_PUBLIC_API}/notification`;
-      const config = {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      };
-      const res = await axios.get(url, config);
-      if (res.status === 200) {
-        setNotification(res.data);
-      }
-    } catch (error: any) {
-      if (error.response && error.response.status === 401) {
-        await getNewToken();
-      } else {
-        console.error('Lỗi (NotificationScreen)', error);
-      }
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    if (token) {
-      fetchNotification();
-    }
-  }, []);
-
-  if (!token) {
-    return <SigninRequired />;
-  }
 
   if (loading) {
     return <LoadingScreen />;
   }
 
-  if (notification.length === 0 || notification.length === undefined) {
+  if (noti?.length === 0 || noti?.length === undefined) {
     return <NoProduct text={'Tạm chưa có thông báo'} type='noti' />;
   }
 
@@ -81,7 +42,7 @@ const Notification = () => {
       <StatusBar backgroundColor='#fb77c5' style='light' />
       <ScreenHeader text={'Thông báo'} showBack={false} />
       <FlatList
-        data={notification}
+        data={noti}
         renderItem={({ item, index }) => (
           <RenderItem item={item} index={index} />
         )}
