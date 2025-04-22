@@ -3,10 +3,11 @@ import { Dimensions, FlatList, Pressable } from 'react-native';
 import { SwiperFlatList } from 'react-native-swiper-flatlist';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ActivityIndicator, Text } from 'react-native';
-import React, { useState, useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
+import React, { useState } from 'react';
 import { router } from 'expo-router';
 import axios from 'axios';
+import useGetMultipleData from '@/customHooks/useGetMultipleData';
 import { IBrand, ICategory, Product } from '@/types/type';
 import loadingIcon from '@/assets/icons/Loading_icon.gif';
 import banner1 from '@/assets/slider-img/banner3.jpg';
@@ -19,15 +20,25 @@ import SearchBar from '@/components/SearchBar';
 import daisy from '@/assets/images/daisy.png';
 import { slider } from '@/constants';
 import LoadingScreen from '../loading-screen';
+import NoProduct from '../no-product';
+
+const idList = {
+  bepGas: '28f860e1-fd20-4a43-9625-e1278506f7b4',
+  bepDien: '317b0305-3afe-4102-8dd9-71b9a70a8ad4',
+  giaDung: 'fa9569fc-c014-4f96-82c7-3d9530dd0561',
+  phuKien: '812acba5-6456-4901-9b94-abf78a45531d',
+};
+
+const urls = [
+  `${process.env.EXPO_PUBLIC_API}/product/category/${idList.bepGas}`,
+  `${process.env.EXPO_PUBLIC_API}/product/category/${idList.bepDien}`,
+  `${process.env.EXPO_PUBLIC_API}/product/category/${idList.giaDung}`,
+  `${process.env.EXPO_PUBLIC_API}/product/category/${idList.phuKien}`,
+  `${process.env.EXPO_PUBLIC_API}/product/top-discount`,
+];
 
 const Home = () => {
   const [refreshing, setRefreshing] = useState<boolean>(false);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [sale, setSale] = useState<Product[]>([]);
-  const [electricStove, setElectricStove] = useState<Product[]>([]);
-  const [kitchenAppli, setKitchenAppli] = useState<Product[]>([]);
-  const [accessories, setAccessories] = useState<Product[]>([]);
-  const [gasStove, setGasStove] = useState<Product[]>([]);
   // lazy loading
   const [data, setData] = useState<Product[]>([]);
   const [lazyLoad, setLazyLoading] = useState<boolean>(false);
@@ -36,48 +47,20 @@ const Home = () => {
   const [end, setEnd] = useState<number>(13);
   //<<
   const width = Dimensions.get('window').width;
-  const idList = {
-    bepGas: '28f860e1-fd20-4a43-9625-e1278506f7b4',
-    bepDien: '317b0305-3afe-4102-8dd9-71b9a70a8ad4',
-    giaDung: 'fa9569fc-c014-4f96-82c7-3d9530dd0561',
-    phuKien: '812acba5-6456-4901-9b94-abf78a45531d',
-  };
+
+  const {
+    data: products,
+    refetch,
+    loading,
+  } = useGetMultipleData<
+    [Product[], Product[], Product[], Product[], Product[]]
+  >(urls);
 
   const onRefresh = async () => {
     setRefreshing(true);
-    await fetchProducts();
+    await refetch();
     setRefreshing(false);
   };
-
-  const fetchProducts = async () => {
-    try {
-      setLoading(true);
-      const url1 = `${process.env.EXPO_PUBLIC_API}/product/category/${idList.bepGas}`;
-      const url2 = `${process.env.EXPO_PUBLIC_API}/product/category/${idList.bepDien}`;
-      const url3 = `${process.env.EXPO_PUBLIC_API}/product/category/${idList.giaDung}`;
-      const url4 = `${process.env.EXPO_PUBLIC_API}/product/category/${idList.phuKien}`;
-      const url5 = `${process.env.EXPO_PUBLIC_API}/product/top-discount`;
-      const [res1, res2, res3, res4, res5] = await Promise.all([
-        axios.get(url1),
-        axios.get(url2),
-        axios.get(url3),
-        axios.get(url4),
-        axios.get(url5),
-      ]);
-      setGasStove(res1.data?.slice(0, 6));
-      setElectricStove(res2.data?.slice(0, 6));
-      setKitchenAppli(res3.data?.slice(0, 6));
-      setAccessories(res4.data?.slice(0, 6));
-      setSale(res5.data?.slice(0, 6));
-    } catch (error) {
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchProducts();
-  }, []);
 
   const getSuggestProduct = async () => {
     // Mỗi khi cuộn đến cuối màn hình sẽ load thêm 12 sản phẩm
@@ -115,105 +98,115 @@ const Home = () => {
     return <LoadingScreen />;
   }
 
-  return (
-    <SafeAreaView edges={['top']} className='flex-1 bg-primary-pink'>
-      <StatusBar backgroundColor='#fb77c5' style='light' />
-      <SearchBar />
-      <ScrollView
-        onScroll={({ nativeEvent }) => {
-          if (isCloseToBottom(nativeEvent) && !lazyLoad && noMore === false) {
-            getSuggestProduct();
+  if (products) {
+    const gasStove = products[0]?.slice(0, 6);
+    const electricStove = products[1]?.slice(0, 6);
+    const kitchenAppli = products[2]?.slice(0, 6);
+    const accessories = products[3]?.slice(0, 6);
+    const sale = products[4]?.slice(0, 6);
+
+    return (
+      <SafeAreaView edges={['top']} className='flex-1 bg-primary-pink'>
+        <StatusBar backgroundColor='#fb77c5' style='light' />
+        <SearchBar />
+        <ScrollView
+          onScroll={({ nativeEvent }) => {
+            if (isCloseToBottom(nativeEvent) && !lazyLoad && noMore === false) {
+              getSuggestProduct();
+            }
+          }}
+          scrollEventThrottle={40}
+          showsVerticalScrollIndicator={false}
+          className='bg-gray-100'
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
           }
-        }}
-        scrollEventThrottle={40}
-        showsVerticalScrollIndicator={false}
-        className='bg-gray-100'
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-        }
-      >
-        <SwiperFlatList
-          autoplay
-          autoplayDelay={5}
-          autoplayLoop
-          data={slider}
-          renderItem={({ item }) => (
-            <Pressable onPress={() => router.push('/sale')}>
-              <Image
-                source={item}
-                style={{
-                  resizeMode: 'contain',
-                  width: width,
-                  height: (width / 16) * 6,
-                }}
-              />
-            </Pressable>
-          )}
-        />
-
-        <HorizontalCategory />
-
-        <HorizontalBrand />
-
-        <View className='flex-row items-center justify-between bg-white py-1'>
-          <Image className='w-12 h-12' source={daisy} />
-          <Text className='font-bold text-2xl text-red-500 '>
-            Ưu đãi quá trời!
-          </Text>
-          <Image className='w-12 h-12' source={daisy} />
-        </View>
-
-        <FlatList
-          data={sale}
-          style={{ backgroundColor: 'white', paddingHorizontal: 4 }}
-          renderItem={({ item }) => <ProductCard item={item} size={0.45} />}
-          keyExtractor={(item) => item?.product_id}
-          showsHorizontalScrollIndicator={false}
-          horizontal
-        />
-
-        <ProductSection
-          title='Bếp gas'
-          data={gasStove}
-          cateId={idList.bepGas}
-        />
-
-        <Pressable onPress={() => router.push('/sale')}>
-          <Image
-            style={{ resizeMode: 'contain', width: width, height: 80 }}
-            source={banner1}
+        >
+          <SwiperFlatList
+            autoplay
+            autoplayDelay={5}
+            autoplayLoop
+            data={slider}
+            renderItem={({ item }) => (
+              <Pressable onPress={() => router.push('/sale')}>
+                <Image
+                  source={item}
+                  style={{
+                    resizeMode: 'contain',
+                    width: width,
+                    height: (width / 16) * 6,
+                  }}
+                />
+              </Pressable>
+            )}
           />
-        </Pressable>
 
-        <ProductSection
-          title='Bếp điện'
-          data={electricStove}
-          cateId={idList.bepDien}
-        />
+          <HorizontalCategory />
 
-        <Pressable onPress={() => router.push('/sale')}>
-          <Image
-            style={{ resizeMode: 'contain', width: width, height: 80 }}
-            source={banner2}
+          <HorizontalBrand />
+
+          <View className='flex-row items-center justify-between bg-white py-1'>
+            <Image className='w-12 h-12' source={daisy} />
+            <Text className='font-bold text-2xl text-red-500 '>
+              Ưu đãi quá trời!
+            </Text>
+            <Image className='w-12 h-12' source={daisy} />
+          </View>
+
+          <FlatList
+            data={sale}
+            style={{ backgroundColor: 'white', paddingHorizontal: 4 }}
+            renderItem={({ item }) => <ProductCard item={item} size={0.45} />}
+            keyExtractor={(item) => item?.product_id}
+            showsHorizontalScrollIndicator={false}
+            horizontal
           />
-        </Pressable>
 
-        <ProductSection
-          title='Gia dụng'
-          data={kitchenAppli}
-          cateId={idList.giaDung}
-        />
+          <ProductSection
+            title='Bếp gas'
+            data={gasStove}
+            cateId={idList.bepGas}
+          />
 
-        <ProductSection
-          title='Phụ kiện'
-          data={accessories}
-          cateId={idList.phuKien}
-        />
+          <Pressable onPress={() => router.push('/sale')}>
+            <Image
+              style={{ resizeMode: 'contain', width: width, height: 80 }}
+              source={banner1}
+            />
+          </Pressable>
 
-        <SuggestedProduct data={data} loading={lazyLoad} />
-      </ScrollView>
-    </SafeAreaView>
-  );
+          <ProductSection
+            title='Bếp điện'
+            data={electricStove}
+            cateId={idList.bepDien}
+          />
+
+          <Pressable onPress={() => router.push('/sale')}>
+            <Image
+              style={{ resizeMode: 'contain', width: width, height: 80 }}
+              source={banner2}
+            />
+          </Pressable>
+
+          <ProductSection
+            title='Gia dụng'
+            data={kitchenAppli}
+            cateId={idList.giaDung}
+          />
+
+          <ProductSection
+            title='Phụ kiện'
+            data={accessories}
+            cateId={idList.phuKien}
+          />
+
+          <SuggestedProduct data={data} loading={lazyLoad} />
+        </ScrollView>
+      </SafeAreaView>
+    );
+  }
+
+  return <NoProduct text='Không tải được sản phẩm' />;
 };
 
 interface ISectionProps {

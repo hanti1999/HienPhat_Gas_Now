@@ -16,7 +16,7 @@ const NoProduct = ({ text, type = 'cart' }: IProps) => {
   return (
     <SafeAreaView className='flex-1 bg-primary-pink'>
       <StatusBar backgroundColor='#fb77c5' style='light' />
-      <ScreenHeader showBack={false} text='Thông báo' />
+      <ScreenHeader text='Thông báo' />
       <View className='flex items-center h-full bg-white px-3'>
         <Image
           style={{ maxWidth: 400, maxHeight: 400 }}

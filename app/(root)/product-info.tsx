@@ -2,14 +2,15 @@ import { TouchableOpacity, ActivityIndicator } from 'react-native';
 import { Link, router, useLocalSearchParams } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { SwiperFlatList } from 'react-native-swiper-flatlist';
+import React, { useState, useEffect, useMemo } from 'react';
 import { Image, FlatList, ScrollView } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { View, Text, Dimensions } from 'react-native';
-import React, { useState, useEffect } from 'react';
 import Toast from 'react-native-toast-message';
 import { StatusBar } from 'expo-status-bar';
 import moment from 'moment';
 import axios from 'axios';
+import useGetMultipleData from '@/customHooks/useGetMultipleData';
 import { FontAwesome, AntDesign } from '@expo/vector-icons';
 import RectangleButton from '@/components/RectangleButton';
 import { addToCart } from '@/redux/slices/cartSlice';
@@ -45,15 +46,18 @@ const ProductInfo = () => {
   const [inWishlist, setIsInWishlist] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [wlLoading, setWlLoading] = useState<boolean>(false);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [averageRating, setAverageRating] = useState<number>();
-  const [description, setDescription] = useState<IDes[]>([]);
-  const [feature, setFeature] = useState<IFeature[]>([]);
-  const [carousel, setCarousel] = useState<ICarousel[]>([]);
-  const [reviews, setReviews] = useState<Review[]>([]);
-  const [data, setData] = useState<Product>();
   const width = Dimensions.get('window').width;
   const dispatch = useDispatch();
+
+  const urls = useMemo(() => {
+    return [
+      `${process.env.EXPO_PUBLIC_API}/product/${itemId}`,
+      `${process.env.EXPO_PUBLIC_API}/carousel/${itemId}`,
+      `${process.env.EXPO_PUBLIC_API}/description/${itemId}`,
+      `${process.env.EXPO_PUBLIC_API}/review/product/${itemId}`,
+      `${process.env.EXPO_PUBLIC_API}/feature/${itemId}`,
+    ];
+  }, [itemId]);
 
   const checkWishlist = async () => {
     try {
@@ -73,7 +77,7 @@ const ProductInfo = () => {
     }
   };
 
-  const addItemToCart = () => {
+  const addItemToCart = (data: Product) => {
     dispatch(
       addToCart({
         id: data?.product_id,
@@ -85,8 +89,8 @@ const ProductInfo = () => {
     );
   };
 
-  const handleAddToCart = () => {
-    addItemToCart();
+  const handleAddToCart = (data: Product) => {
+    addItemToCart(data);
     setIsLoading(true);
     const timeout = setTimeout(() => {
       setIsLoading(false);
@@ -98,8 +102,8 @@ const ProductInfo = () => {
     };
   };
 
-  const handleBuyNow = () => {
-    addItemToCart();
+  const handleBuyNow = (data: Product) => {
+    addItemToCart(data);
     router.push('/(root)/(tabs)/cart');
   };
 
@@ -152,41 +156,10 @@ const ProductInfo = () => {
     }
   };
 
-  useEffect(() => {
-    const getData = async () => {
-      try {
-        setLoading(true);
-        const url1 = `${process.env.EXPO_PUBLIC_API}/product/${itemId}`;
-        const url2 = `${process.env.EXPO_PUBLIC_API}/carousel/${itemId}`;
-        const url3 = `${process.env.EXPO_PUBLIC_API}/description/${itemId}`;
-        const url4 = `${process.env.EXPO_PUBLIC_API}/review/product/${itemId}`;
-        const url5 = `${process.env.EXPO_PUBLIC_API}/feature/${itemId}`;
-        const [res1, res2, res3, res4, res5] = await Promise.all([
-          axios.get(url1),
-          axios.get(url2),
-          axios.get(url3),
-          axios.get(url4),
-          axios.get(url5),
-        ]);
-        setData(res1?.data);
-        setCarousel(res2?.data);
-        setDescription(res3?.data);
-        setReviews(res4?.data);
-        setFeature(res5?.data);
-        // Tính đánh giá trung bình
-        const totalRating = res4?.data.reduce(
-          (acc: any, item: any) => acc + item.review_rating,
-          0
-        );
-        setAverageRating(totalRating / res4?.data.length);
-      } catch (error) {
-        console.error(error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    getData();
-  }, []);
+  const { data: datas, loading } =
+    useGetMultipleData<[Product, ICarousel[], IDes[], Review[], IFeature[]]>(
+      urls
+    );
 
   useEffect(() => {
     if (token) {
@@ -198,138 +171,155 @@ const ProductInfo = () => {
     return <LoadingScreen />;
   }
 
-  return (
-    <SafeAreaView className='flex-1 bg-white'>
-      <StatusBar backgroundColor='white' style='dark' />
-      <ScreenHeader
-        text={'Chi tiết sản phẩm'}
-        showCart={true}
-        bg='white'
-        textColor='black'
-      />
-      <ScrollView showsVerticalScrollIndicator={false} className='bg-gray-100'>
-        <SwiperFlatList
-          data={carousel}
-          renderItem={({ item }: { item: ICarousel }) => (
-            <Image
-              source={{ uri: item?.image_url }}
-              style={{ height: width, width: width }}
-            />
-          )}
+  if (datas) {
+    const data = datas?.[0];
+    const carousel = datas?.[1];
+    const description = datas?.[2];
+    const reviews = datas?.[3];
+    const feature = datas?.[4];
+    // Tính đánh giá trung bình
+    const totalRating = reviews?.reduce(
+      (acc: any, item: any) => acc + item.review_rating,
+      0
+    );
+    // setAverageRating(totalRating / reviews.length);
+    const averageRating = totalRating / reviews.length;
+    return (
+      <SafeAreaView className='flex-1 bg-white'>
+        <StatusBar backgroundColor='white' style='dark' />
+        <ScreenHeader
+          text={'Chi tiết sản phẩm'}
+          showCart={true}
+          bg='white'
+          textColor='black'
         />
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          className='bg-gray-100'
+        >
+          <SwiperFlatList
+            data={carousel}
+            renderItem={({ item }: { item: ICarousel }) => (
+              <Image
+                source={{ uri: item?.image_url }}
+                style={{ height: width, width: width }}
+              />
+            )}
+          />
 
-        <View className='p-3 mb-2 bg-pink-100'>
-          <Text numberOfLines={2} className='font-semibold text-[18px]'>
-            {data?.product_name}
-          </Text>
-          <View className='flex-row items-center py-2' style={{ gap: 8 }}>
-            <Text className='text-[24px] font-bold'>
-              {data?.final_price.toLocaleString()}đ
+          <View className='p-3 mb-2 bg-pink-100'>
+            <Text numberOfLines={2} className='font-semibold text-[18px]'>
+              {data?.product_name}
             </Text>
-            {data!.product_discount > 0 && (
-              <>
-                <Text className='line-through text-[16px] text-gray-500'>
-                  {data?.product_price.toLocaleString()}đ
-                </Text>
-                <View className='px-1 py-0.5 rounded-lg bg-red-500'>
-                  <Text className='text-white '>
-                    -{data?.product_discount}%
+            <View className='flex-row items-center py-2' style={{ gap: 8 }}>
+              <Text className='text-[24px] font-bold'>
+                {data?.final_price.toLocaleString()}đ
+              </Text>
+              {data!.product_discount > 0 && (
+                <>
+                  <Text className='line-through text-[16px] text-gray-500'>
+                    {data?.product_price.toLocaleString()}đ
                   </Text>
-                </View>
-              </>
-            )}
-          </View>
-          <View className='flex-row justify-between items-center'>
-            <View className='flex-row items-center' style={{ gap: 4 }}>
-              <Text>{averageRating}</Text>
-              <FontAwesome name='star' size={14} color='#faa935' />
-              <Text>({reviews?.length} đánh giá)</Text>
-              <Text className='text-gray-400'>|</Text>
-              <Text>Đã bán: {data?.product_sold}</Text>
+                  <View className='px-1 py-0.5 rounded-lg bg-red-500'>
+                    <Text className='text-white '>
+                      -{data?.product_discount}%
+                    </Text>
+                  </View>
+                </>
+              )}
             </View>
-            {inWishlist ? (
-              <TouchableOpacity onPress={removeWishlist} disabled={wlLoading}>
-                {wlLoading ? (
-                  <ActivityIndicator />
-                ) : (
-                  <FontAwesome name='heart' size={24} color='#fb77c5' />
-                )}
-              </TouchableOpacity>
-            ) : (
-              <TouchableOpacity onPress={addWishlist} disabled={wlLoading}>
-                {wlLoading ? (
-                  <ActivityIndicator />
-                ) : (
-                  <FontAwesome name='heart-o' size={24} color='#fb77c5' />
-                )}
-              </TouchableOpacity>
-            )}
+            <View className='flex-row justify-between items-center'>
+              <View className='flex-row items-center' style={{ gap: 4 }}>
+                <Text>{averageRating}</Text>
+                <FontAwesome name='star' size={14} color='#faa935' />
+                <Text>({reviews?.length} đánh giá)</Text>
+                <Text className='text-gray-400'>|</Text>
+                <Text>Đã bán: {data?.product_sold}</Text>
+              </View>
+              {inWishlist ? (
+                <TouchableOpacity onPress={removeWishlist} disabled={wlLoading}>
+                  {wlLoading ? (
+                    <ActivityIndicator />
+                  ) : (
+                    <FontAwesome name='heart' size={24} color='#fb77c5' />
+                  )}
+                </TouchableOpacity>
+              ) : (
+                <TouchableOpacity onPress={addWishlist} disabled={wlLoading}>
+                  {wlLoading ? (
+                    <ActivityIndicator />
+                  ) : (
+                    <FontAwesome name='heart-o' size={24} color='#fb77c5' />
+                  )}
+                </TouchableOpacity>
+              )}
+            </View>
+          </View>
+
+          <View className='p-3 mb-2 bg-pink-200'>
+            <Text className='text-[16px] font-semibold mb-2'>
+              Đặc điểm nổi bật
+            </Text>
+            <View>
+              {feature?.map((item, index) => (
+                <Text className='pt-0.5' key={index}>
+                  o {item?.feature_des}
+                </Text>
+              ))}
+            </View>
+          </View>
+
+          <View className='p-3 mb-2 bg-pink-200'>
+            <Text className='text-[16px] font-semibold mb-2'>
+              Thông tin chi tiết
+            </Text>
+            <View>
+              {description?.map((item, index) => (
+                <Text className='pt-0.5' key={index}>
+                  o {item?.description}
+                </Text>
+              ))}
+            </View>
+          </View>
+
+          <View className='p-3 mb-2 bg-pink-300'>
+            <Text className='text-[16px] font-semibold mb-2'>Bài đánh giá</Text>
+            <Reviews reviews={reviews} />
+          </View>
+        </ScrollView>
+
+        <View
+          className='flex-row items-center py-2 px-3 h-[60px]'
+          style={{ gap: 12 }}
+        >
+          <Link href={'https://zalo.me/0975841582'}>
+            <View className='flex items-center justify-center rounded-full border border-[#0068ff] h-10 w-10'>
+              <AntDesign name='customerservice' size={20} color='#0068ff' />
+              <Text className='text-[10px] text-[#0068ff]'>Chat</Text>
+            </View>
+          </Link>
+          <View className='flex-1'>
+            <RectangleButton
+              onPress={() => handleAddToCart(data)}
+              textVariant={data?.product_instock ? 'danger' : 'disabled'}
+              title={data?.product_instock ? 'Thêm vào giỏ' : 'Hết hàng'}
+              bgVariant={data?.product_instock ? 'primary' : 'disabled'}
+              disabled={isLoading || data?.product_instock === false}
+              loading={isLoading}
+            />
+          </View>
+          <View className={`${data?.product_instock ? 'flex-1' : 'hidden'}`}>
+            <RectangleButton
+              onPress={() => handleBuyNow(data)}
+              title={'Mua ngay'}
+              textVariant='primary'
+              bgVariant='outline'
+            />
           </View>
         </View>
-
-        <View className='p-3 mb-2 bg-pink-200'>
-          <Text className='text-[16px] font-semibold mb-2'>
-            Đặc điểm nổi bật
-          </Text>
-          <View>
-            {feature?.map((item, index) => (
-              <Text className='pt-0.5' key={index}>
-                o {item?.feature_des}
-              </Text>
-            ))}
-          </View>
-        </View>
-
-        <View className='p-3 mb-2 bg-pink-200'>
-          <Text className='text-[16px] font-semibold mb-2'>
-            Thông tin chi tiết
-          </Text>
-          <View>
-            {description?.map((item, index) => (
-              <Text className='pt-0.5' key={index}>
-                o {item?.description}
-              </Text>
-            ))}
-          </View>
-        </View>
-
-        <View className='p-3 mb-2 bg-pink-300'>
-          <Text className='text-[16px] font-semibold mb-2'>Bài đánh giá</Text>
-          <Reviews reviews={reviews} />
-        </View>
-      </ScrollView>
-
-      <View
-        className='flex-row items-center py-2 px-3 h-[60px]'
-        style={{ gap: 12 }}
-      >
-        <Link href={'https://zalo.me/0975841582'}>
-          <View className='flex items-center justify-center rounded-full border border-[#0068ff] h-10 w-10'>
-            <AntDesign name='customerservice' size={20} color='#0068ff' />
-            <Text className='text-[10px] text-[#0068ff]'>Chat</Text>
-          </View>
-        </Link>
-        <View className='flex-1'>
-          <RectangleButton
-            onPress={handleAddToCart}
-            textVariant={data?.product_instock ? 'danger' : 'disabled'}
-            title={data?.product_instock ? 'Thêm vào giỏ' : 'Hết hàng'}
-            bgVariant={data?.product_instock ? 'primary' : 'disabled'}
-            disabled={isLoading || data?.product_instock === false}
-            loading={isLoading}
-          />
-        </View>
-        <View className={`${data?.product_instock ? 'flex-1' : 'hidden'}`}>
-          <RectangleButton
-            onPress={handleBuyNow}
-            title={'Mua ngay'}
-            textVariant='primary'
-            bgVariant='outline'
-          />
-        </View>
-      </View>
-    </SafeAreaView>
-  );
+      </SafeAreaView>
+    );
+  }
 };
 
 const Reviews = ({ reviews }: { reviews: Review[] }) => {
