@@ -15,16 +15,11 @@ const Page = () => {
       const expiryTime = parseInt(accessTokenExpiry as string);
 
       if (expiryTime) {
-        console.log(
-          'Hết hạn : ' + moment.unix(expiryTime).format('DD/MM/YYYY HH:mm')
-        );
         if (expiryTime < moment().unix()) {
           getNewToken();
         }
       }
-    } catch (error) {
-      console.error('Lỗi (index.tsx): ', error);
-    }
+    } catch (error) {}
   };
 
   useEffect(() => {

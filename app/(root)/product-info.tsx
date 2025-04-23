@@ -48,6 +48,11 @@ const ProductInfo = () => {
   const [wlLoading, setWlLoading] = useState<boolean>(false);
   const width = Dimensions.get('window').width;
   const dispatch = useDispatch();
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
 
   const urls = useMemo(() => {
     return [
@@ -62,9 +67,9 @@ const ProductInfo = () => {
   const checkWishlist = async () => {
     try {
       const url = `${process.env.EXPO_PUBLIC_API}/wishlist`;
-      const res = await axios.get(url);
+      const res = await axios.get(url, config);
       if (res.status === 200) {
-        const products: Product[] = res.data.wishlist;
+        const products: Product[] = res.data;
         const filteredProducts = products.find((p) => p.product_id === itemId);
         setIsInWishlist(filteredProducts !== undefined);
       }
@@ -118,7 +123,7 @@ const ProductInfo = () => {
       const data = {
         product_id: itemId,
       };
-      const res = await axios.post(url, data);
+      const res = await axios.post(url, data, config);
       if (res.status === 201) {
         Toast.show({ text1: 'Đã thêm vào sản phẩm yêu thích' });
         checkWishlist();
@@ -139,7 +144,7 @@ const ProductInfo = () => {
     try {
       setWlLoading(true);
       const url = `${process.env.EXPO_PUBLIC_API}/wishlist/${itemId}`;
-      const res = await axios.delete(url);
+      const res = await axios.delete(url, config);
       if (res.status === 200) {
         checkWishlist();
         Toast.show({ text1: 'Đã xóa khỏi sản phẩm yêu thích' });
