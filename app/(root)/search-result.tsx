@@ -8,10 +8,13 @@ import useGetData from '@/customHooks/useGetData';
 import { Product } from '@/types/type';
 import LoadingScreen from './loading-screen';
 import NoProduct from './no-product';
+import { useMemo } from 'react';
 
 const SearchResult = () => {
   const { input } = useLocalSearchParams();
-  const url = `${process.env.EXPO_PUBLIC_API}/product/search?search=${input}`;
+  const url = useMemo(() => {
+    return `${process.env.EXPO_PUBLIC_API}/product/search?search=${input}`;
+  }, [input]);
   const { data: products, loading } = useGetData<Product[]>(url);
 
   if (loading) {

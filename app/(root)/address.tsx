@@ -10,9 +10,10 @@ import useGetData from '@/customHooks/useGetData';
 import { IAddress } from '@/types/type';
 import LoadingScreen from './loading-screen';
 
+const url = `${process.env.EXPO_PUBLIC_API}/shipping`;
+
 const Address = () => {
   const { token } = useLocalSearchParams();
-  const url = `${process.env.EXPO_PUBLIC_API}/shipping`;
   const config = {
     headers: {
       Authorization: `Bearer ${token}`,

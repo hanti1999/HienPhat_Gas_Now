@@ -30,6 +30,10 @@ interface IPoints {
   total_points: number;
 }
 
+const P_PINK = '#fb77c5';
+const url = `${process.env.EXPO_PUBLIC_API}/shipping`;
+const url2 = `${process.env.EXPO_PUBLIC_API}/point`;
+
 const Cart = () => {
   const token = useSelector((state: RootState) => state.auth.accessToken);
   const cartQuantity = useSelector(
@@ -51,9 +55,6 @@ const Cart = () => {
   const [modalVisible, setModalVisible] = useState<boolean>(false);
   const [refreshing, setRefreshing] = useState<boolean>(false);
   const [usePoint, setUsePoint] = useState<boolean>(false);
-  const P_PINK = '#fb77c5';
-  const url = `${process.env.EXPO_PUBLIC_API}/shipping`;
-  const url2 = `${process.env.EXPO_PUBLIC_API}/point`;
   const config = {
     headers: {
       Authorization: `Bearer ${token}`,

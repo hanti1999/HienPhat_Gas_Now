@@ -1,7 +1,7 @@
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { FlatList, RefreshControl } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import ScreenHeader from '@/components/ScreenHeader';
 import ProductCard from '@/components/ProductCard';
@@ -13,8 +13,10 @@ import NoProduct from './no-product';
 
 const ProductFilter = () => {
   const { id, type } = useLocalSearchParams();
+  const url = useMemo(() => {
+    return `${process.env.EXPO_PUBLIC_API}/product/${type}/${id}`;
+  }, [type, id]);
   const [refreshing, setRefreshing] = useState<boolean>(false);
-  const url = `${process.env.EXPO_PUBLIC_API}/product/${type}/${id}`;
   const { data: products, loading, refetch } = useGetData<Product[]>(url);
 
   const onRefresh = async () => {

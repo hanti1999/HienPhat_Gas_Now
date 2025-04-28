@@ -1,5 +1,5 @@
+import { useState, useEffect, useCallback } from 'react';
 import Toast from 'react-native-toast-message';
-import { useState, useEffect } from 'react';
 import axios from 'axios';
 import getNewToken from '@/utils/getNewToken';
 
@@ -38,9 +38,9 @@ function useGetData<T>(url: string, config?: any): UseFetchResult<T> {
     fetchData();
   }, [url]);
 
-  const clearData = () => {
-    setData(null)
-  }
+  const clearData = useCallback(() => {
+    setData(null);
+  }, [url]);
 
   const refetch = () => {
     fetchData();

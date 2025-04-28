@@ -16,8 +16,9 @@ import { Product } from '@/types/type';
 import LoadingScreen from './loading-screen';
 import useGetData from '@/customHooks/useGetData';
 
+const url = `${process.env.EXPO_PUBLIC_API}/product/top-discount`;
+
 const Sale = () => {
-  const url = `${process.env.EXPO_PUBLIC_API}/product/top-discount`;
   const { data: products, loading } = useGetData<Product[]>(url);
 
   if (loading) {

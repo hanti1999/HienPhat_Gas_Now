@@ -18,10 +18,10 @@ interface INoti {
   sysn_link: string;
   sysn_is_link: boolean;
 }
+const url = `${process.env.EXPO_PUBLIC_API}/notification`;
 
 const Notification = () => {
   const [refreshing, setRefreshing] = useState<boolean>(false);
-  const url = `${process.env.EXPO_PUBLIC_API}/notification`;
   const { data: noti, loading, refetch } = useGetData<INoti[]>(url);
   const onRefresh = async () => {
     setRefreshing(true);

@@ -17,11 +17,12 @@ import { ProfileType } from '@/types/type';
 import { RootState } from '@/redux/store';
 import LoadingScreen from '../loading-screen';
 
+const url = `${process.env.EXPO_PUBLIC_API}/user`;
+const version: string = '25.04.23';
+
 const Profile = () => {
-  const version: string = '25.04.23';
   const token = useSelector((state: RootState) => state?.auth.accessToken);
   const [refreshing, setRefreshing] = useState<boolean>(false);
-  const url = `${process.env.EXPO_PUBLIC_API}/user`;
   const config = {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -279,7 +280,7 @@ const Profile = () => {
   );
 };
 
-const LogoutButton = ({ clearData }: { clearData: () => void }) => {
+const LogoutButton = React.memo(({ clearData }: { clearData: () => void }) => {
   const [modalVisible, setModalVisible] = useState<boolean>(false);
   const dispatch = useDispatch();
 
@@ -308,6 +309,6 @@ const LogoutButton = ({ clearData }: { clearData: () => void }) => {
       </TouchableOpacity>
     </>
   );
-};
+});
 
 export default Profile;

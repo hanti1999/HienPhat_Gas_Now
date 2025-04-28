@@ -10,10 +10,11 @@ import ProductCard from '@/components/ProductCard';
 import useGetData from '@/customHooks/useGetData';
 import { Product } from '@/types/type';
 
+const url = `${process.env.EXPO_PUBLIC_API}/wishlist`;
+
 const Wishlist = () => {
   const { token } = useLocalSearchParams();
   const [refreshing, setRefreshing] = useState<boolean>(false);
-  const url = `${process.env.EXPO_PUBLIC_API}/wishlist`;
   const config = {
     headers: {
       Authorization: `Bearer ${token}`,

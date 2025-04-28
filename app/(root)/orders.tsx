@@ -17,10 +17,11 @@ import getNewToken from '@/utils/getNewToken';
 import LoadingScreen from './loading-screen';
 import NoProduct from './no-product';
 
+const url = `${process.env.EXPO_PUBLIC_API}/order`;
+
 const Orders = () => {
   const { token } = useLocalSearchParams();
   const [refreshing, setRefreshing] = useState<boolean>(false);
-  const url = `${process.env.EXPO_PUBLIC_API}/order`;
   const config = {
     headers: {
       Authorization: `Bearer ${token}`,
