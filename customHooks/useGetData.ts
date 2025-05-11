@@ -28,8 +28,8 @@ function useGetData<T>(
       }
     } catch (err: any) {
       setError(err.message);
-      if (error.response && error.response.status === 401) {
-        await getNewToken();
+      if (err.response.status === 401) {
+        getNewToken();
       } else {
         Toast.show({ type: 'error', text1: 'Lỗi hệ thống!' });
       }

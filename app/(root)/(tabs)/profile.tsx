@@ -9,6 +9,7 @@ import React, { useState } from 'react';
 import { FontAwesome, AntDesign } from '@expo/vector-icons';
 import RectangleButton from '@/components/RectangleButton';
 import { Ionicons, Foundation } from '@expo/vector-icons';
+import loadingIcon from '@/assets/icons/Loading_icon.gif';
 import ConfirmModal from '@/components/ConfirmModal';
 import useGetData from '@/customHooks/useGetData';
 import { logout } from '@/redux/slices/authSlice';
@@ -18,7 +19,7 @@ import { RootState } from '@/redux/store';
 import LoadingScreen from '../loading-screen';
 
 const url = `${process.env.EXPO_PUBLIC_API}/user`;
-const version: string = '25.04.23';
+const version: string = '25.05.11';
 
 const Profile = () => {
   const token = useSelector((state: RootState) => state?.auth.accessToken);
@@ -266,7 +267,11 @@ const Profile = () => {
               className='flex-row items-center justify-center'
               style={{ gap: 8 }}
             >
-              <Image source={logo} className='w-10 h-10' />
+              <Image
+                source={logo}
+                className='w-10 h-10'
+                loadingIndicatorSource={loadingIcon}
+              />
               <View>
                 <Text className='text-gray-500'>CÔNG TY TNHH</Text>
                 <Text className='text-gray-500'>HIỀN PHÁT VI NA</Text>
