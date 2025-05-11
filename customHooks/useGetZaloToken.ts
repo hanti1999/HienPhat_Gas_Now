@@ -37,15 +37,11 @@ const useFetch = (url?: string) => {
     fetchData();
   }, [url]);
 
-  const refetch = () => {
-    fetchData();
-  };
-
   return {
     zaloToken,
     isLoading,
     error,
-    refetch,
+    refetch: fetchData,
   };
 };
 

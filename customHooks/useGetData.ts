@@ -1,12 +1,12 @@
 import { useState, useEffect, useCallback } from 'react';
 import Toast from 'react-native-toast-message';
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import getNewToken from '@/utils/getNewToken';
 
 interface UseFetchResult<T> {
   data: T | null;
   loading: boolean;
-  error: any;
+  error: AxiosError | null;
   refetch: () => void;
   clearData: () => void;
 }
@@ -42,11 +42,7 @@ function useGetData<T>(url: string, config?: any): UseFetchResult<T> {
     setData(null);
   }, [url]);
 
-  const refetch = () => {
-    fetchData();
-  };
-
-  return { data, loading, error, refetch, clearData };
+  return { data, loading, error, refetch: fetchData, clearData };
 }
 
 export default useGetData;

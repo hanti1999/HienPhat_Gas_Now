@@ -262,7 +262,7 @@ const Profile = () => {
 
         <View className='mt-5 pb-5'>
           <View className='flex items-center'>
-            {/* <View
+            <View
               className='flex-row items-center justify-center'
               style={{ gap: 8 }}
             >
@@ -271,7 +271,7 @@ const Profile = () => {
                 <Text className='text-gray-500'>CÔNG TY TNHH</Text>
                 <Text className='text-gray-500'>HIỀN PHÁT VI NA</Text>
               </View>
-            </View> */}
+            </View>
             <Text className='text-gray-500'>Phiên bản: {version}</Text>
           </View>
         </View>

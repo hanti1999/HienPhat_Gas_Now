@@ -31,11 +31,7 @@ function useGetMultipleData<T extends any[]>(urls: string[]): ApiResponse<T> {
     fetchData();
   }, [urls]);
 
-  const refetch = () => {
-    fetchData();
-  };
-
-  return { data, loading, error, refetch };
+  return { data, loading, error, refetch: fetchData };
 }
 
 export default useGetMultipleData;

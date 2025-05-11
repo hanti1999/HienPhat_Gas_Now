@@ -11,9 +11,6 @@
 2. FE
 
 - React Native, TypeScript, Tailwindcss, Expo, Redux toolkit, Zalo dev,...
-   <!-- ```bash
-   npm install
-   ``` -->
 
 3. BE
 
@@ -29,11 +26,7 @@
 
 ## Liên kết
 
-- [Demo Youtube](https://youtu.be/Pi9lE1sAsTI)
-
-- Google Play
-
-- App Store
+- [Demo Youtube](https://youtu.be/o8R0oMV_WFw)
 
 ## Nguồn
 
