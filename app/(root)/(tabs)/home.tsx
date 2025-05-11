@@ -224,9 +224,13 @@ const ProductSection = ({ data, cateId, title }: ISectionProps) => {
         </Text>
       </View>
       <View className='flex-row flex-wrap mt-2'>
-        {data.map((item, index) => (
-          <ProductCard key={index} item={item} size={0.5} />
-        ))}
+        <FlatList
+          data={data}
+          numColumns={2}
+          scrollEnabled={false}
+          keyExtractor={(item) => item?.product_id.toString()}
+          renderItem={({ item }) => <ProductCard item={item} size={0.5} />}
+        />
       </View>
       <SeeMoreCard categoryId={cateId} extraText={title} />
     </View>
@@ -275,11 +279,11 @@ const HorizontalCategory = () => {
             </Text>
           </Pressable>
         )}
+        ItemSeparatorComponent={() => <View className='w-0.5' />}
+        keyExtractor={(item) => item?.category_id}
         showsHorizontalScrollIndicator={false}
         data={catList}
-        keyExtractor={(item) => item?.category_id}
         horizontal
-        style={{ backgroundColor: 'white' }}
       />
     </View>
   );
@@ -322,9 +326,10 @@ const HorizontalBrand = () => {
             <Text className='text-center font-medium'>{item?.brand_name}</Text>
           </Pressable>
         )}
+        ItemSeparatorComponent={() => <View className='w-0.5' />}
+        keyExtractor={(item) => item?.brand_id}
         showsHorizontalScrollIndicator={false}
         data={brandList}
-        keyExtractor={(item) => item?.brand_id}
         horizontal
       />
     </View>

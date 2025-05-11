@@ -11,7 +11,11 @@ interface UseFetchResult<T> {
   clearData: () => void;
 }
 
-function useGetData<T>(url: string, config?: any): UseFetchResult<T> {
+function useGetData<T>(
+  url: string,
+  config?: any,
+  autoFetch = true
+): UseFetchResult<T> {
   const [data, setData] = useState<T | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<any>(null);
@@ -35,7 +39,9 @@ function useGetData<T>(url: string, config?: any): UseFetchResult<T> {
   };
 
   useEffect(() => {
-    fetchData();
+    if (autoFetch) {
+      fetchData();
+    }
   }, [url]);
 
   const clearData = useCallback(() => {

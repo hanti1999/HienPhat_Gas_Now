@@ -33,7 +33,7 @@ const Notification = () => {
     return <LoadingScreen />;
   }
 
-  if (noti?.length === 0 || noti?.length === undefined) {
+  if (noti?.length === 0 || noti === undefined) {
     return <NoProduct text={'Tạm chưa có thông báo'} type='noti' />;
   }
 
