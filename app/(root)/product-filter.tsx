@@ -35,9 +35,6 @@ const ProductFilter = () => {
 
   return (
     <SafeAreaView edges={['top']} className='flex-1 bg-primary-pink'>
-      <StatusBar backgroundColor='#fb77c5' style='light' />
-      <SearchBar />
-      <ScreenHeader text={'Sản phẩm'} bg='white' textColor='black' />
       <FlatList
         keyExtractor={(item) => item?.product_id}
         className='bg-white'
@@ -47,6 +44,13 @@ const ProductFilter = () => {
         renderItem={({ item }) => <ProductCard item={item} size={0.5} />}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
+        ListHeaderComponent={
+          <>
+            <StatusBar backgroundColor='#fb77c5' style='light' />
+            <SearchBar />
+            <ScreenHeader text={'Sản phẩm'} bg='white' textColor='black' />
+          </>
         }
       />
     </SafeAreaView>

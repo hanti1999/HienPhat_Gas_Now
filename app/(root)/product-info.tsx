@@ -75,7 +75,7 @@ const ProductInfo = () => {
       }
     } catch (error: any) {
       if (error.response && error.response.status === 401) {
-        await getNewToken();
+        getNewToken();
       } else {
         console.error('Lỗi check wishlist', error);
       }
@@ -130,7 +130,7 @@ const ProductInfo = () => {
       }
     } catch (error: any) {
       if (error.response && error.response.status === 401) {
-        await getNewToken();
+        getNewToken();
       } else {
         console.log('Lỗi không thêm được wishlist', error);
         Toast.show({ type: 'error', text1: 'Thêm không thành công' });
@@ -151,7 +151,7 @@ const ProductInfo = () => {
       }
     } catch (error: any) {
       if (error.response && error.response.status === 401) {
-        await getNewToken();
+        getNewToken();
       } else {
         console.log('Lỗi không xóa được wishlist', error);
         Toast.show({ type: 'error', text1: 'Xoá không thành công' });
@@ -265,26 +265,28 @@ const ProductInfo = () => {
             <Text className='text-[16px] font-semibold mb-2'>
               Đặc điểm nổi bật
             </Text>
-            <View>
-              {feature?.map((item, index) => (
-                <Text className='pt-0.5' key={index}>
-                  o {item?.feature_des}
-                </Text>
-              ))}
-            </View>
+            <FlatList
+              data={feature}
+              keyExtractor={(item) => item?.feature_id}
+              renderItem={({ item }) => (
+                <Text className='pt-0.5'>o {item?.feature_des}</Text>
+              )}
+              scrollEnabled={false}
+            />
           </View>
 
           <View className='p-3 mb-2 bg-pink-200'>
             <Text className='text-[16px] font-semibold mb-2'>
               Thông tin chi tiết
             </Text>
-            <View>
-              {description?.map((item, index) => (
-                <Text className='pt-0.5' key={index}>
-                  o {item?.description}
-                </Text>
-              ))}
-            </View>
+            <FlatList
+              data={description}
+              scrollEnabled={false}
+              keyExtractor={(item) => item?.description_id}
+              renderItem={({ item }) => (
+                <Text className='pt-0.5'>o {item?.description}</Text>
+              )}
+            />
           </View>
 
           <View className='p-3 mb-2 bg-pink-300'>

@@ -217,29 +217,40 @@ interface ISectionProps {
 
 const ProductSection = ({ data, cateId, title }: ISectionProps) => {
   return (
-    <View className='border-t-2 border-primary-pink mt-2 relative bg-white'>
-      <View className='px-2 py-1 bg-primary-pink w-1/3 rounded-br-3xl'>
-        <Text className='font-semibold text-white uppercase text-xl'>
-          {title}
-        </Text>
-      </View>
-      <View className='flex-row flex-wrap mt-2'>
-        <FlatList
-          data={data}
-          numColumns={2}
-          scrollEnabled={false}
-          keyExtractor={(item) => item?.product_id.toString()}
-          renderItem={({ item }) => <ProductCard item={item} size={0.5} />}
-        />
-      </View>
-      <SeeMoreCard categoryId={cateId} extraText={title} />
-    </View>
+    <FlatList
+      data={data}
+      numColumns={2}
+      scrollEnabled={false}
+      keyExtractor={(item) => item?.product_id.toString()}
+      renderItem={({ item }) => <ProductCard item={item} size={0.5} />}
+      className='border-t-2 border-primary-pink mt-2 relative bg-white'
+      ListHeaderComponent={
+        <View className='px-2 py-1 bg-primary-pink w-1/3 rounded-br-3xl'>
+          <Text className='font-semibold text-white uppercase text-xl'>
+            {title}
+          </Text>
+        </View>
+      }
+      ListFooterComponent={
+        <SeeMoreCard categoryId={cateId} extraText={title} />
+      }
+    />
   );
 };
 
 const HorizontalCategory = () => {
   const url = `${process.env.EXPO_PUBLIC_API}/category`;
   const { data: catList, loading } = useGetData<ICategory[]>(url);
+
+  const navToFilter = (id: string) => {
+    router.push({
+      pathname: '/(root)/product-filter',
+      params: {
+        id,
+        type: 'category',
+      },
+    });
+  };
 
   if (loading) {
     return (
@@ -256,18 +267,7 @@ const HorizontalCategory = () => {
       </Text>
       <FlatList
         renderItem={({ item }) => (
-          <Pressable
-            onPress={() =>
-              router.push({
-                pathname: '/(root)/product-filter',
-                params: {
-                  id: item?.category_id,
-                  type: 'category',
-                },
-              })
-            }
-            className='m-1'
-          >
+          <Pressable onPress={() => navToFilter(item?.category_id)}>
             <Image
               resizeMode='contain'
               className='w-20 h-20'
@@ -279,11 +279,12 @@ const HorizontalCategory = () => {
             </Text>
           </Pressable>
         )}
-        ItemSeparatorComponent={() => <View className='w-0.5' />}
+        ItemSeparatorComponent={() => <View className='w-2' />}
         keyExtractor={(item) => item?.category_id}
         showsHorizontalScrollIndicator={false}
         data={catList}
         horizontal
+        contentContainerStyle={{ marginLeft: 12 }}
       />
     </View>
   );
@@ -292,6 +293,13 @@ const HorizontalCategory = () => {
 const HorizontalBrand = () => {
   const url = `${process.env.EXPO_PUBLIC_API}/brand`;
   const { data: brandList, loading } = useGetData<IBrand[]>(url);
+
+  const navToFilter = (id: string) => {
+    router.push({
+      pathname: '/(root)/product-filter',
+      params: { id, type: 'brand' },
+    });
+  };
 
   if (loading) {
     return (
@@ -308,15 +316,7 @@ const HorizontalBrand = () => {
       </Text>
       <FlatList
         renderItem={({ item }) => (
-          <Pressable
-            onPress={() =>
-              router.push({
-                pathname: '/(root)/product-filter',
-                params: { id: item?.brand_id, type: 'brand' },
-              })
-            }
-            className='m-1'
-          >
+          <Pressable onPress={() => navToFilter(item?.brand_id)}>
             <Image
               resizeMode='contain'
               className='w-20 h-20'
@@ -326,7 +326,8 @@ const HorizontalBrand = () => {
             <Text className='text-center font-medium'>{item?.brand_name}</Text>
           </Pressable>
         )}
-        ItemSeparatorComponent={() => <View className='w-0.5' />}
+        ItemSeparatorComponent={() => <View className='w-2' />}
+        contentContainerStyle={{ marginLeft: 12 }}
         keyExtractor={(item) => item?.brand_id}
         showsHorizontalScrollIndicator={false}
         data={brandList}
@@ -343,18 +344,25 @@ interface IProps {
 
 const SuggestedProduct = ({ data, loading }: IProps) => {
   return (
-    <View className='border-t-2 border-primary-pink mt-5 relative bg-white'>
+    <View className='relative mt-5 bg-white border-t-2 border-primary-pink'>
       <ProductTitle text={'Gợi ý cho bạn'} />
-      <View className='flex-row flex-wrap mt-5'>
-        {data?.map((item, index) => (
-          <ProductCard key={index} item={item} size={0.5} />
-        ))}
-      </View>
-      {loading && (
-        <View className='mt-2 mb-6 items-center'>
-          <ActivityIndicator color='#fb77c5' />
-        </View>
-      )}
+      <FlatList
+        numColumns={2}
+        data={data}
+        keyExtractor={(item) => item?.product_id.toString()}
+        contentContainerStyle={{ marginTop: 20 }}
+        renderItem={({ item }) => <ProductCard item={item} size={0.5} />}
+        scrollEnabled={false}
+        ListHeaderComponent={
+          <>
+            {loading && (
+              <View className='mt-2 mb-6 items-center'>
+                <ActivityIndicator color='#fb77c5' />
+              </View>
+            )}
+          </>
+        }
+      />
     </View>
   );
 };

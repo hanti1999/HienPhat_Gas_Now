@@ -208,7 +208,7 @@ const CancelOrder = ({ id, fetchOrders, token }: IProps) => {
       }
     } catch (error: any) {
       if (error.response && error.response.status === 401) {
-        await getNewToken();
+        getNewToken();
       } else {
         console.error('Lỗi (OrderScreen):', error);
         Toast.show({ type: 'error', text1: 'Hủy đơn không thành công' });

@@ -9,12 +9,12 @@ import Constants from 'expo-constants';
 import { router } from 'expo-router';
 import { Entypo, Ionicons } from '@expo/vector-icons';
 import { addToCart } from '@/redux/slices/cartSlice';
+import useGetData from '@/customHooks/useGetData';
 import saleBg from '@/assets/images/sale-bg.jpg';
 import daisy from '@/assets/images/daisy.png';
 import { RootState } from '@/redux/store';
 import { Product } from '@/types/type';
 import LoadingScreen from './loading-screen';
-import useGetData from '@/customHooks/useGetData';
 
 const url = `${process.env.EXPO_PUBLIC_API}/product/top-discount`;
 
@@ -27,24 +27,25 @@ const Sale = () => {
 
   return (
     <ImageBackground source={saleBg} style={{ flex: 1 }}>
-      <StatusBar backgroundColor='transparent' />
-      <Header />
-      <View className='px-3'>
-        <View className='flex-row items-center justify-center pb-3'>
-          <Image className='w-10 h-10' source={daisy} />
-          <Text className='font-bold text-2xl text-red-500'>
-            Ưu đãi đến 50%!!!
-          </Text>
-          <Image className='w-10 h-10' source={daisy} />
-        </View>
-        <FlatList
-          data={products}
-          keyExtractor={(item) => item?.product_id}
-          renderItem={({ item }) => <ProductCard item={item} />}
-          showsVerticalScrollIndicator={false}
-          className='mb-28'
-        />
-      </View>
+      <FlatList
+        data={products}
+        keyExtractor={(item) => item?.product_id}
+        renderItem={({ item }) => <ProductCard item={item} />}
+        showsVerticalScrollIndicator={false}
+        ListHeaderComponent={
+          <>
+            <StatusBar backgroundColor='transparent' />
+            <Header />
+            <View className='flex-row items-center justify-center pb-3'>
+              <Image className='w-10 h-10' source={daisy} />
+              <Text className='font-bold text-2xl text-red-500'>
+                Ưu đãi đến 50%!!!
+              </Text>
+              <Image className='w-10 h-10' source={daisy} />
+            </View>
+          </>
+        }
+      />
     </ImageBackground>
   );
 };
@@ -116,7 +117,7 @@ const ProductCard = ({ item }: { item: Product }) => {
   };
 
   return (
-    <View className='bg-white rounded-lg mb-2 overflow-hidden h-[140px]'>
+    <View className='bg-white rounded-lg mb-2 mx-3 overflow-hidden h-[140px]'>
       <TouchableOpacity onPress={navToInfo} className='flex-row'>
         <Image
           source={{ uri: item?.product_image_url }}

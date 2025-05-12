@@ -1,6 +1,6 @@
 import { TouchableOpacity, TouchableWithoutFeedback } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Keyboard, View, Text } from 'react-native';
+import { Keyboard, View, Text, FlatList } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
 import Toast from 'react-native-toast-message';
 import { StatusBar } from 'expo-status-bar';
@@ -20,14 +20,17 @@ const Review = () => {
     <SafeAreaView edges={['top']} className='bg-primary-pink flex-1'>
       <StatusBar backgroundColor='#fb77c5' style='light' />
       <ScreenHeader text='Trở lại' />
-      {productArr.map((item, index) => (
-        <Form
-          key={index}
-          product_id={item}
-          order_id={order_id as string}
-          token={token as string}
-        />
-      ))}
+      <FlatList
+        data={productArr}
+        keyExtractor={(item) => item}
+        renderItem={({ item }) => (
+          <Form
+            product_id={item}
+            order_id={order_id as string}
+            token={token as string}
+          />
+        )}
+      />
     </SafeAreaView>
   );
 };
@@ -73,7 +76,7 @@ const Form = ({ product_id, order_id, token }: IProps) => {
       }
     } catch (error: any) {
       if (error.response && error.response.status === 401) {
-        await getNewToken();
+        getNewToken();
       } else {
         console.log('Gửi đánh giá không thành công', error);
         Toast.show({ type: 'error', text1: 'Gửi đánh giá không thành công' });

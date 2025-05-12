@@ -1,10 +1,10 @@
 import { Dimensions, TouchableOpacity, RefreshControl } from 'react-native';
 import { Image, TextInput, Text, View, Modal } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { ScrollView, Switch, FlatList } from 'react-native';
 import { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { router, useFocusEffect } from 'expo-router';
-import { ScrollView, Switch } from 'react-native';
 import Toast from 'react-native-toast-message';
 import { StatusBar } from 'expo-status-bar';
 import axios from 'axios';
@@ -114,7 +114,7 @@ const Cart = () => {
       }
     } catch (error: any) {
       if (error.response && error.response.status === 401) {
-        await getNewToken();
+        getNewToken();
       } else {
         Toast.show({ type: 'error', text1: 'Tạo đơn hàng không thành công' });
       }
@@ -226,9 +226,15 @@ const Cart = () => {
               Chi tiết đơn hàng
             </Text>
           </View>
-          {cartItems.map((item, index) => (
-            <RenderItemToCart item={item} key={index} dispatch={dispatch} />
-          ))}
+          <FlatList
+            data={cartItems}
+            scrollEnabled={false}
+            keyExtractor={(item) => item?.id}
+            renderItem={({ item }) => (
+              <RenderItemToCart item={item} dispatch={dispatch} />
+            )}
+          />
+
           <View className='flex-row justify-between items-center mt-2'>
             <Text className='text-right text-[16px]'>
               Tổng tạm tính ({cartQuantity} sản phẩm)
@@ -332,10 +338,12 @@ const Cart = () => {
                   <AntDesign name='close' size={24} color='black' />
                 </TouchableOpacity>
               </View>
-              <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-                {address?.map((item, index) => (
+              <FlatList
+                horizontal
+                data={address}
+                keyExtractor={(item) => item?.address?.address_id}
+                renderItem={({ item }) => (
                   <TouchableOpacity
-                    key={index}
                     className='w-36 h-36 p-3 border rounded-lg mr-1 bg-white'
                     style={{
                       borderColor: selectedAddress === item ? P_PINK : '',
@@ -356,22 +364,24 @@ const Cart = () => {
                     </Text>
                     <Text className='mt-1'>{item.address?.address_full}</Text>
                   </TouchableOpacity>
-                ))}
-                <TouchableOpacity
-                  className='w-36 h-36 border rounded-lg bg-white'
-                  onPress={() => {
-                    setModalVisible(!modalVisible);
-                    router.push({
-                      pathname: '/(root)/add-address',
-                      params: { token },
-                    });
-                  }}
-                >
-                  <View className='w-36 h-36 justify-center items-center'>
-                    <AntDesign name='plus' size={40} color='black' />
-                  </View>
-                </TouchableOpacity>
-              </ScrollView>
+                )}
+                ListFooterComponent={
+                  <TouchableOpacity
+                    className='w-36 h-36 border rounded-lg bg-white'
+                    onPress={() => {
+                      setModalVisible(!modalVisible);
+                      router.push({
+                        pathname: '/(root)/add-address',
+                        params: { token },
+                      });
+                    }}
+                  >
+                    <View className='w-36 h-36 justify-center items-center'>
+                      <AntDesign name='plus' size={40} color='black' />
+                    </View>
+                  </TouchableOpacity>
+                }
+              />
             </View>
           </View>
         </Modal>

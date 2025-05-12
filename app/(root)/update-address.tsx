@@ -103,7 +103,7 @@ const UpdateAddress = () => {
       }
     } catch (error: any) {
       if (error.response && error.response.status === 401) {
-        await getNewToken();
+        getNewToken();
       } else {
         console.error('Cập nhật địa chỉ không thành công: ', error);
         Toast.show({ type: 'error', text1: 'Cập nhật không thành công' });
@@ -125,7 +125,7 @@ const UpdateAddress = () => {
       }
     } catch (error: any) {
       if (error.response && error.response.status === 401) {
-        await getNewToken();
+        getNewToken();
       } else {
         Toast.show({ type: 'error', text1: 'Xóa không thành công' });
         console.error('Xóa địa chỉ không thành công: ', error);
