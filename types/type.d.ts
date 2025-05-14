@@ -1,4 +1,10 @@
 import { TextInputProps, TouchableOpacityProps } from 'react-native';
+declare interface IBanner {
+  banner_id: string;
+  banner_img_url: string;
+  product_id: string[];
+  banner_type: 'main' | 'sub';
+}
 
 declare interface IBrand {
   brand_id: string;

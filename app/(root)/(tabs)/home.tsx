@@ -7,8 +7,8 @@ import { StatusBar } from 'expo-status-bar';
 import React, { useState } from 'react';
 import { router } from 'expo-router';
 import axios from 'axios';
+import { IBanner, IBrand, ICategory, Product } from '@/types/type';
 import useGetMultipleData from '@/customHooks/useGetMultipleData';
-import { IBrand, ICategory, Product } from '@/types/type';
 import loadingIcon from '@/assets/icons/Loading_icon.gif';
 import banner1 from '@/assets/slider-img/banner3.jpg';
 import banner2 from '@/assets/slider-img/banner3.jpg';
@@ -18,7 +18,6 @@ import SeeMoreCard from '@/components/SeeMoreCard';
 import useGetData from '@/customHooks/useGetData';
 import SearchBar from '@/components/SearchBar';
 import daisy from '@/assets/images/daisy.png';
-import { slider } from '@/constants';
 import LoadingScreen from '../loading-screen';
 import NoProduct from '../no-product';
 
@@ -36,6 +35,8 @@ const urls = [
   `${process.env.EXPO_PUBLIC_API}/product/category/${idList.phuKien}`,
   `${process.env.EXPO_PUBLIC_API}/product/top-discount`,
 ];
+
+const bannerUrl = `${process.env.EXPO_PUBLIC_API}/banner`;
 
 const Home = () => {
   const [refreshing, setRefreshing] = useState<boolean>(false);
@@ -55,6 +56,7 @@ const Home = () => {
   } = useGetMultipleData<
     [Product[], Product[], Product[], Product[], Product[]]
   >(urls);
+  const { data: banner } = useGetData<IBanner[]>(bannerUrl);
 
   const onRefresh = async () => {
     setRefreshing(true);
@@ -98,12 +100,13 @@ const Home = () => {
     return <LoadingScreen />;
   }
 
-  if (products) {
+  if (products && banner) {
     const gasStove = products[0]?.slice(0, 6);
     const electricStove = products[1]?.slice(0, 6);
     const kitchenAppli = products[2]?.slice(0, 6);
     const accessories = products[3]?.slice(0, 6);
     const sale = products[4]?.slice(0, 6);
+    const mainBanner = banner.filter((b) => b.banner_type === 'main');
 
     return (
       <SafeAreaView edges={['top']} className='flex-1 bg-primary-pink'>
@@ -126,11 +129,11 @@ const Home = () => {
             autoplay
             autoplayDelay={5}
             autoplayLoop
-            data={slider}
+            data={mainBanner.map((banner) => banner.banner_img_url)}
             renderItem={({ item }) => (
               <Pressable onPress={() => router.push('/sale')}>
                 <Image
-                  source={item}
+                  source={{ uri: item }}
                   style={{
                     resizeMode: 'contain',
                     width: width,
@@ -261,7 +264,7 @@ const HorizontalCategory = () => {
   }
 
   return (
-    <View className='bg-white mt-2 border-t-2 border-primary-pink'>
+    <View className='bg-white mt-2 pb-1 border-t-2 border-primary-pink'>
       <Text className='px-3 pt-1 font-semibold text-primary-pink text-[16px]'>
         Danh mục
       </Text>
@@ -310,7 +313,7 @@ const HorizontalBrand = () => {
   }
 
   return (
-    <View className='border-t-2 border-primary-pink my-2 bg-white'>
+    <View className='border-t-2 border-primary-pink my-2 pb-1 bg-white'>
       <Text className='px-3 pt-1 font-semibold text-primary-pink text-[16px]'>
         Thương hiệu
       </Text>
