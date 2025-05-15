@@ -6,7 +6,6 @@ import { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { router, useFocusEffect } from 'expo-router';
 import Toast from 'react-native-toast-message';
-import { StatusBar } from 'expo-status-bar';
 import axios from 'axios';
 import { removeFromCart, clearCart } from '@/redux/slices/cartSlice';
 import { FontAwesome6, AntDesign } from '@expo/vector-icons';
@@ -163,7 +162,6 @@ const Cart = () => {
 
   return (
     <SafeAreaView edges={['top']} className='flex-1 bg-primary-pink'>
-      <StatusBar backgroundColor='#fb77c5' style='light' />
       <ScreenHeader text='Giỏ hàng' showBack={false} />
       <ScrollView
         showsVerticalScrollIndicator={false}
@@ -218,14 +216,6 @@ const Cart = () => {
 
         {/* Chi tiết đơn hàng */}
         <View className='bg-white p-3 mb-2'>
-          <View className='flex-row items-center' style={{ gap: 4 }}>
-            <View className='w-5'>
-              <FontAwesome6 name='cart-shopping' size={18} color={P_PINK} />
-            </View>
-            <Text className='uppercase font-bold text-[18px]'>
-              Chi tiết đơn hàng
-            </Text>
-          </View>
           <FlatList
             data={cartItems}
             scrollEnabled={false}
@@ -233,6 +223,16 @@ const Cart = () => {
             renderItem={({ item }) => (
               <RenderItemToCart item={item} dispatch={dispatch} />
             )}
+            ListHeaderComponent={
+              <View className='flex-row items-center' style={{ gap: 4 }}>
+                <View className='w-5'>
+                  <FontAwesome6 name='cart-shopping' size={18} color={P_PINK} />
+                </View>
+                <Text className='uppercase font-bold text-[18px]'>
+                  Chi tiết đơn hàng
+                </Text>
+              </View>
+            }
           />
 
           <View className='flex-row justify-between items-center mt-2'>
@@ -341,7 +341,7 @@ const Cart = () => {
               <FlatList
                 horizontal
                 data={address}
-                keyExtractor={(item) => item?.address?.address_id}
+                keyExtractor={(item) => item?.address?.address_full}
                 renderItem={({ item }) => (
                   <TouchableOpacity
                     className='w-36 h-36 p-3 border rounded-lg mr-1 bg-white'

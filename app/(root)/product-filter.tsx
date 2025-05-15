@@ -2,7 +2,6 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { FlatList, RefreshControl } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
 import React, { useMemo, useState } from 'react';
-import { StatusBar } from 'expo-status-bar';
 import ScreenHeader from '@/components/ScreenHeader';
 import ProductCard from '@/components/ProductCard';
 import useGetData from '@/customHooks/useGetData';
@@ -47,7 +46,6 @@ const ProductFilter = () => {
         }
         ListHeaderComponent={
           <>
-            <StatusBar backgroundColor='#fb77c5' style='light' />
             <SearchBar />
             <ScreenHeader text={'Sản phẩm'} bg='white' textColor='black' />
           </>

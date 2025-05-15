@@ -1,7 +1,6 @@
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router, useLocalSearchParams } from 'expo-router';
 import { View, Text, Pressable } from 'react-native';
-import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import ScreenHeader from '@/components/ScreenHeader';
 import { AntDesign } from '@expo/vector-icons';
@@ -12,7 +11,6 @@ const UserInfo = () => {
   return (
     <SafeAreaView edges={['top']} className='flex-1 bg-primary-pink'>
       <View className='flex-1 bg-gray-100'>
-        <StatusBar backgroundColor='#fb77c5' style='light' />
         <ScreenHeader text={'Thông tin người dùng'} />
         <View className='p-3 bg-white'>
           <View className='flex-row items-center justify-between py-3'>

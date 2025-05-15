@@ -1,6 +1,5 @@
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useLocalSearchParams } from 'expo-router';
-import { StatusBar } from 'expo-status-bar';
 import { FlatList } from 'react-native';
 import { useMemo } from 'react';
 import ScreenHeader from '@/components/ScreenHeader';
@@ -34,12 +33,7 @@ const SearchResult = () => {
         data={products}
         numColumns={2}
         renderItem={({ item }) => <ProductCard item={item} size={0.5} />}
-        ListHeaderComponent={
-          <>
-            <StatusBar backgroundColor='#fb77c5' style='light' />
-            <ScreenHeader text={'Kết quả tìm kiếm'} />
-          </>
-        }
+        ListHeaderComponent={<ScreenHeader text={'Kết quả tìm kiếm'} />}
       />
     </SafeAreaView>
   );

@@ -3,7 +3,6 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useDispatch, useSelector } from 'react-redux';
 import { Text, View, Pressable } from 'react-native';
 import { ScrollView, Image } from 'react-native';
-import { StatusBar } from 'expo-status-bar';
 import { router, Link } from 'expo-router';
 import React, { useState } from 'react';
 import { FontAwesome, AntDesign } from '@expo/vector-icons';
@@ -19,7 +18,7 @@ import { RootState } from '@/redux/store';
 import LoadingScreen from '../loading-screen';
 
 const url = `${process.env.EXPO_PUBLIC_API}/user`;
-const version: string = '25.05.11';
+const version: string = '25.05.15';
 
 const Profile = () => {
   const token = useSelector((state: RootState) => state?.auth.accessToken);
@@ -48,7 +47,6 @@ const Profile = () => {
 
   return (
     <SafeAreaView edges={['top']} className='flex-1 bg-primary-pink'>
-      <StatusBar backgroundColor='#fb77c5' style='light' />
       <View className='p-3 flex-row items-center bg-primary-pink'>
         {user ? (
           <>

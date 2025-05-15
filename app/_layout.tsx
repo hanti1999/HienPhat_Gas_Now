@@ -6,6 +6,7 @@ import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
 import 'react-native-reanimated';
 import { store } from '@/redux/store';
+import { StatusBar } from 'expo-status-bar';
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -38,6 +39,7 @@ export default function RootLayout() {
 
   return (
     <>
+      <StatusBar backgroundColor='#fb77c5' style='light' />
       <Provider store={store}>
         <Stack>
           <Stack.Screen name='index' options={{ headerShown: false }} />

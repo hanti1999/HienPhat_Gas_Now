@@ -7,7 +7,6 @@ import { Image, FlatList, ScrollView } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { View, Text, Dimensions } from 'react-native';
 import Toast from 'react-native-toast-message';
-import { StatusBar } from 'expo-status-bar';
 import moment from 'moment';
 import axios from 'axios';
 import useGetMultipleData from '@/customHooks/useGetMultipleData';
@@ -191,7 +190,6 @@ const ProductInfo = () => {
     const averageRating = totalRating / reviews.length;
     return (
       <SafeAreaView className='flex-1 bg-white'>
-        <StatusBar backgroundColor='white' style='dark' />
         <ScreenHeader
           text={'Chi tiết sản phẩm'}
           showCart={true}
@@ -261,33 +259,35 @@ const ProductInfo = () => {
             </View>
           </View>
 
-          <View className='p-3 mb-2 bg-pink-200'>
-            <Text className='text-[16px] font-semibold mb-2'>
-              Đặc điểm nổi bật
-            </Text>
-            <FlatList
-              data={feature}
-              keyExtractor={(item) => item?.feature_id}
-              renderItem={({ item }) => (
-                <Text className='pt-0.5'>o {item?.feature_des}</Text>
-              )}
-              scrollEnabled={false}
-            />
-          </View>
+          <FlatList
+            data={feature}
+            keyExtractor={(item) => item?.feature_id}
+            renderItem={({ item }) => (
+              <Text className='pt-0.5'>o {item?.feature_des}</Text>
+            )}
+            scrollEnabled={false}
+            ListHeaderComponent={
+              <Text className='text-[16px] font-semibold mb-2'>
+                Đặc điểm nổi bật
+              </Text>
+            }
+            className='p-3 mb-2 bg-pink-200'
+          />
 
-          <View className='p-3 mb-2 bg-pink-200'>
-            <Text className='text-[16px] font-semibold mb-2'>
-              Thông tin chi tiết
-            </Text>
-            <FlatList
-              data={description}
-              scrollEnabled={false}
-              keyExtractor={(item) => item?.description_id}
-              renderItem={({ item }) => (
-                <Text className='pt-0.5'>o {item?.description}</Text>
-              )}
-            />
-          </View>
+          <FlatList
+            data={description}
+            scrollEnabled={false}
+            keyExtractor={(item) => item?.description_id}
+            renderItem={({ item }) => (
+              <Text className='pt-0.5'>o {item?.description}</Text>
+            )}
+            ListHeaderComponent={
+              <Text className='text-[16px] font-semibold mb-2'>
+                Thông tin chi tiết
+              </Text>
+            }
+            className='p-3 mb-2 bg-pink-200'
+          />
 
           <View className='p-3 mb-2 bg-pink-300'>
             <Text className='text-[16px] font-semibold mb-2'>Bài đánh giá</Text>
@@ -330,13 +330,10 @@ const ProductInfo = () => {
 };
 
 const Reviews = ({ reviews }: { reviews: Review[] }) => {
-  if (!reviews) {
-    return <Text>Chưa có đánh giá!</Text>;
-  }
-
   return (
     <FlatList
       renderItem={({ item, index }) => <RenderItem item={item} index={index} />}
+      ListEmptyComponent={<Text>Chưa có đánh giá</Text>}
       showsHorizontalScrollIndicator={false}
       initialNumToRender={2}
       data={reviews}

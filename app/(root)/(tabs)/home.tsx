@@ -3,7 +3,6 @@ import { Dimensions, FlatList, Pressable } from 'react-native';
 import { SwiperFlatList } from 'react-native-swiper-flatlist';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ActivityIndicator, Text } from 'react-native';
-import { StatusBar } from 'expo-status-bar';
 import React, { useState } from 'react';
 import { router } from 'expo-router';
 import axios from 'axios';
@@ -11,7 +10,6 @@ import { IBanner, IBrand, ICategory, Product } from '@/types/type';
 import useGetMultipleData from '@/customHooks/useGetMultipleData';
 import loadingIcon from '@/assets/icons/Loading_icon.gif';
 import banner1 from '@/assets/slider-img/banner3.jpg';
-import banner2 from '@/assets/slider-img/banner3.jpg';
 import ProductTitle from '@/components/ProductTitle';
 import ProductCard from '@/components/ProductCard';
 import SeeMoreCard from '@/components/SeeMoreCard';
@@ -110,7 +108,6 @@ const Home = () => {
 
     return (
       <SafeAreaView edges={['top']} className='flex-1 bg-primary-pink'>
-        <StatusBar backgroundColor='#fb77c5' style='light' />
         <SearchBar />
         <ScrollView
           onScroll={({ nativeEvent }) => {
@@ -160,7 +157,7 @@ const Home = () => {
             data={sale}
             style={{ backgroundColor: 'white', paddingHorizontal: 4 }}
             renderItem={({ item }) => <ProductCard item={item} size={0.45} />}
-            keyExtractor={(item) => item?.product_id}
+            keyExtractor={(item) => item?.product_id.toString()}
             showsHorizontalScrollIndicator={false}
             horizontal
           />
@@ -187,7 +184,7 @@ const Home = () => {
           <Pressable onPress={() => router.push('/sale')}>
             <Image
               style={{ resizeMode: 'contain', width: width, height: 80 }}
-              source={banner2}
+              source={banner1}
             />
           </Pressable>
 
@@ -283,7 +280,7 @@ const HorizontalCategory = () => {
           </Pressable>
         )}
         ItemSeparatorComponent={() => <View className='w-2' />}
-        keyExtractor={(item) => item?.category_id}
+        keyExtractor={(item) => item?.category_id.toString()}
         showsHorizontalScrollIndicator={false}
         data={catList}
         horizontal
@@ -331,7 +328,7 @@ const HorizontalBrand = () => {
         )}
         ItemSeparatorComponent={() => <View className='w-2' />}
         contentContainerStyle={{ marginLeft: 12 }}
-        keyExtractor={(item) => item?.brand_id}
+        keyExtractor={(item) => item?.brand_id.toString()}
         showsHorizontalScrollIndicator={false}
         data={brandList}
         horizontal

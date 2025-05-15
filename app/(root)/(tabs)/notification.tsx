@@ -1,7 +1,6 @@
 import { RefreshControl, FlatList, View, Text } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { TouchableOpacity, Image } from 'react-native';
-import { StatusBar } from 'expo-status-bar';
 import React, { useState } from 'react';
 import { router } from 'expo-router';
 import moment from 'moment';
@@ -39,8 +38,6 @@ const Notification = () => {
 
   return (
     <SafeAreaView edges={['top']} className='flex-1 bg-primary-pink'>
-      <StatusBar backgroundColor='#fb77c5' style='light' />
-      <ScreenHeader text={'Thông báo'} showBack={false} />
       <FlatList
         data={noti}
         renderItem={({ item, index }) => (
@@ -49,6 +46,9 @@ const Notification = () => {
         style={{ backgroundColor: 'rgb(243 244 246)' }}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
+        ListHeaderComponent={
+          <ScreenHeader text={'Thông báo'} showBack={false} />
         }
       />
     </SafeAreaView>

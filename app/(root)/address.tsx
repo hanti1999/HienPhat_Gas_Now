@@ -1,7 +1,6 @@
 import { router, useFocusEffect, useLocalSearchParams } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Pressable, FlatList } from 'react-native';
-import { StatusBar } from 'expo-status-bar';
 import React, { useCallback } from 'react';
 import { View, Text } from 'react-native';
 import RectangleButton from '@/components/RectangleButton';
@@ -45,7 +44,6 @@ const Address = () => {
         className='flex-1 bg-gray-100'
         ListHeaderComponent={
           <>
-            <StatusBar backgroundColor='#fb77c5' />
             <ScreenHeader text='Địa chỉ nhận hàng' />
             <View className='p-3 bg-white'>
               <RectangleButton

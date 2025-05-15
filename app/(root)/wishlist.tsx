@@ -1,7 +1,6 @@
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { FlatList, RefreshControl } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
-import { StatusBar } from 'expo-status-bar';
 import React, { useState } from 'react';
 import LoadingScreen from './loading-screen';
 import NoProduct from './no-product';
@@ -42,8 +41,6 @@ const Wishlist = () => {
 
   return (
     <SafeAreaView edges={['top']} className='flex-1 bg-primary-pink'>
-      <StatusBar backgroundColor='#fb77c5' style='light' />
-      <ScreenHeader text={'Danh sách yêu thích'} />
       <FlatList
         keyExtractor={(item) => item?.product_id}
         style={{ height: '100%' }}
@@ -54,6 +51,7 @@ const Wishlist = () => {
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
+        ListHeaderComponent={<ScreenHeader text={'Danh sách yêu thích'} />}
       />
     </SafeAreaView>
   );

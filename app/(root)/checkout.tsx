@@ -3,7 +3,6 @@ import { router, useLocalSearchParams } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import { View, Text, Image } from 'react-native';
 import * as WebBrowser from 'expo-web-browser';
-import { StatusBar } from 'expo-status-bar';
 import { useSelector } from 'react-redux';
 import RectangleButton from '@/components/RectangleButton';
 import CustomButton from '@/components/CustomButton';
@@ -48,7 +47,6 @@ const Checkout = () => {
   if (paymentMethod === 'cod') {
     return (
       <SafeAreaView edges={['top']} className='flex-1 bg-primary-pink'>
-        <StatusBar backgroundColor='#fb77c5' style='light' />
         <View className='flex-1 items-center justify-center p-3 bg-white'>
           <Image source={img} style={{ maxWidth: 400, maxHeight: 400 }} />
           <Text className='text-lg mt-2'>
@@ -79,7 +77,6 @@ const Checkout = () => {
 
   return (
     <SafeAreaView edges={['top']} className='flex-1 bg-primary-pink'>
-      <StatusBar backgroundColor='#fb77c5' style='light' />
       <ScreenHeader showBack={false} text='Quét mã QR để thanh toán' />
       <View className='flex-1 bg-gray-100'>
         <View className='flex p-3 bg-white' style={{ gap: 20 }}>

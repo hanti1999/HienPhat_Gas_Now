@@ -4,7 +4,6 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { router, useLocalSearchParams } from 'expo-router';
 import { View, ScrollView, Modal } from 'react-native';
 import Toast from 'react-native-toast-message';
-import { StatusBar } from 'expo-status-bar';
 import React, { useState } from 'react';
 import axios from 'axios';
 import { District, IAddress, Province, Ward } from '@/types/type';
@@ -157,7 +156,6 @@ const UpdateAddress = () => {
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         className='flex-1'
       >
-        <StatusBar backgroundColor='#fb77c5' style='light' />
         <ScreenHeader text='Chỉnh sửa địa chỉ' />
         <ScrollView className='bg-gray-100'>
           <View className='p-3 bg-white'>

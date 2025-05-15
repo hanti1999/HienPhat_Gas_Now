@@ -1,6 +1,5 @@
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useLocalSearchParams } from 'expo-router';
-import { StatusBar } from 'expo-status-bar';
 import { Text, View } from 'react-native';
 import { Link } from 'expo-router';
 import ScreenHeader from '@/components/ScreenHeader';
@@ -9,7 +8,6 @@ const AboutApp = () => {
   const { version } = useLocalSearchParams();
   return (
     <SafeAreaView edges={['top']} className='flex-1 bg-primary-pink'>
-      <StatusBar backgroundColor='#fb77c5' style='light' />
       <ScreenHeader text='Thông tin ứng dụng' />
       <View className='p-3 bg-white flex-1'>
         <Text className='text-[18px]'>Phiên bản: {version}</Text>

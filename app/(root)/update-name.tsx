@@ -1,7 +1,6 @@
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router, useLocalSearchParams } from 'expo-router';
 import Toast from 'react-native-toast-message';
-import { StatusBar } from 'expo-status-bar';
 import { Text, View } from 'react-native';
 import React, { useState } from 'react';
 import axios from 'axios';
@@ -45,7 +44,6 @@ const UpdateName = () => {
   };
   return (
     <SafeAreaView edges={['top']} className='bg-primary-pink flex-1'>
-      <StatusBar backgroundColor='#fb77c5' style='light' />
       <ScreenHeader text='Cập nhật tên' />
       <View className='flex-1 bg-gray-100'>
         <View className='p-3 bg-white'>

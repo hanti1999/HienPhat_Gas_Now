@@ -1,13 +1,11 @@
 import { Text, View, StyleSheet, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { StatusBar } from 'expo-status-bar';
 import { Link } from 'expo-router';
 import ScreenHeader from '@/components/ScreenHeader';
 
 const PrivacyPolicy = () => {
   return (
     <SafeAreaView edges={['top']} className='flex-1 bg-primary-pink'>
-      <StatusBar backgroundColor='#fb77c5' style='light' />
       <ScreenHeader text={'Chính sách bảo mật'} />
       <ScrollView className='bg-gray-100 flex-1'>
         <View className='p-3 bg-white flex-1 pb-10'>

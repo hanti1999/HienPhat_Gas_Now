@@ -3,7 +3,6 @@ import { router, useLocalSearchParams } from 'expo-router';
 import { FlatList, RefreshControl } from 'react-native';
 import { Text, View, Image } from 'react-native';
 import Toast from 'react-native-toast-message';
-import { StatusBar } from 'expo-status-bar';
 import React, { useState } from 'react';
 import moment from 'moment';
 import axios from 'axios';
@@ -45,8 +44,6 @@ const Orders = () => {
 
   return (
     <SafeAreaView edges={['top']} className='flex-1 bg-primary-pink'>
-      <StatusBar backgroundColor='#fb77c5' style='light' />
-      <ScreenHeader text='Lịch sử đơn hàng' />
       <FlatList
         className='bg-gray-100'
         keyExtractor={(item) => item.order_id}
@@ -57,6 +54,7 @@ const Orders = () => {
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
+        ListHeaderComponent={<ScreenHeader text='Lịch sử đơn hàng' />}
       />
     </SafeAreaView>
   );

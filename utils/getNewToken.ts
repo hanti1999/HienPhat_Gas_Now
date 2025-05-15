@@ -5,10 +5,11 @@ import { router } from 'expo-router';
 import moment from 'moment';
 import axios from 'axios';
 import { loginSuccess, logout } from '@/redux/slices/authSlice';
+import { dispatch } from '@/redux/store';
 
 const getNewToken = async () => {
-  const dispatch = useDispatch();
-  const refreshToken = SecureStore.getItem('refreshToken');
+  const refreshToken = await SecureStore.getItemAsync('refreshToken');
+  console.log('refresh token: ', refreshToken);
 
   try {
     const url = `${process.env.EXPO_PUBLIC_API}/auth/refresh-token`;
@@ -30,10 +31,10 @@ const getNewToken = async () => {
         })
       );
       Toast.show({ type: 'info', text1: 'Vui lòng thử lại lần nữa' });
+      console.error('Đã đổi token');
     }
   } catch (error) {
     dispatch(logout());
-    router.replace('/(root)/(tabs)/home');
     Toast.show({ type: 'info', text1: 'Phiên đăng nhập đã hết hạn' });
   }
 };

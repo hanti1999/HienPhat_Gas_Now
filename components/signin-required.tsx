@@ -1,15 +1,13 @@
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { StatusBar } from 'expo-status-bar';
 import { View, Text } from 'react-native';
 import { router } from 'expo-router';
 import React from 'react';
-import ScreenHeader from '@/components/ScreenHeader';
 import RectangleButton from '@/components/RectangleButton';
+import ScreenHeader from '@/components/ScreenHeader';
 
 const SigninRequired = () => {
   return (
     <SafeAreaView edges={['top']} className='flex-1 bg-primary-pink'>
-      <StatusBar backgroundColor='#fb77c5' style='light' />
       <ScreenHeader />
       <View className='flex-1 bg-white p-2'>
         <Text className='text-center text-xl font-bold'>
