@@ -9,12 +9,18 @@ import { Ionicons } from '@expo/vector-icons';
 import { RootState } from '@/redux/store';
 import { Product } from '@/types/type';
 import QuickSearchResultCard from './QuickSearchResultCard';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+const HISTORY_KEY = 'search_history';
+const MAX_HISTORY_LENGTH = 10;
 
 const SearchBar = () => {
   const cartQuantity = useSelector(
     (state: RootState) => state.cart.totalQuantity
   );
   const [input, setInput] = useState<string>('');
+  const [searchHistory, setSearchHistory] = useState([]);
+  const [isFocused, setIsFocused] = useState(false);
   const url = useMemo(() => {
     return `${process.env.EXPO_PUBLIC_API}/product/search?search=${input}`;
   }, [input]);
@@ -32,6 +38,15 @@ const SearchBar = () => {
       pathname: '/(root)/search-result',
       params: { input: input },
     });
+  };
+
+  const loadSearchHistory = async () => {
+    try {
+      const historyString = await AsyncStorage.getItem(HISTORY_KEY);
+      if (historyString !== null) {
+        setSearchHistory(JSON.parse(historyString));
+      }
+    } catch (error) {}
   };
 
   // Debounced search effect
@@ -53,16 +68,15 @@ const SearchBar = () => {
         style={{ gap: 8 }}
         className='px-3 flex-row flex-1 items-center bg-white h-10 rounded-full ml-3 my-3 relative z-20'
       >
-        <Pressable onPress={searchHandler}>
-          <Ionicons name='search' size={24} color={'#fb77c5'} />
-        </Pressable>
+        <Ionicons name='search' size={24} color={'#fb77c5'} />
         <TextInput
-          placeholder='Khách iu tìm gì nè?'
+          placeholder='Tìm kiếm sản phẩm...'
           onSubmitEditing={searchHandler}
           className='text-[16px] flex-1'
           placeholderTextColor={'#999'}
           onChangeText={setInput}
           value={input}
+          onFocus={() => setIsFocused(true)}
         />
         <Pressable onPress={searchHandler}>
           <Image className='w-9 h-9' source={tulip} />

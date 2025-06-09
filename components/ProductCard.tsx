@@ -51,10 +51,12 @@ const ProductCard = ({ item, size }: { item: Product; size: number }) => {
             loadingIndicatorSource={loadingIcon}
           />
         </View>
-        <View className='p-1.5 justify-between bg-pink-100 border-x border-b rounded-bl-md rounded-br-md border-gray-200'>
-          <Text numberOfLines={2}>{item?.product_name}</Text>
+        <View className='p-1.5 h-[140px] justify-between bg-pink-100 border-x border-b rounded-bl-md rounded-br-md border-gray-200'>
+          <Text numberOfLines={2} className='font-medium'>
+            {item?.product_name}
+          </Text>
           {item?.product_discount != 0 && (
-            <View className='flex-row items-center' style={{ gap: 4 }}>
+            <View className='flex-row items-center my-0.5' style={{ gap: 4 }}>
               <View className='px-0.5 rounded bg-red-500'>
                 <Text className='text-white text-[12px]'>
                   -{item?.product_discount}%
@@ -102,4 +104,4 @@ const ProductCard = ({ item, size }: { item: Product; size: number }) => {
   );
 };
 
-export default ProductCard;
+export default React.memo(ProductCard);
