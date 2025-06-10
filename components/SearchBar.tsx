@@ -1,26 +1,26 @@
+import { TextInput, Pressable, TouchableOpacity } from 'react-native';
 import React, { useEffect, useMemo, useState } from 'react';
-import { TextInput, View, Pressable } from 'react-native';
-import { Text, Image, FlatList } from 'react-native';
+import { Text, Image, FlatList, View } from 'react-native';
 import { useSelector } from 'react-redux';
 import { router } from 'expo-router';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import useGetData from '@/customHooks/useGetData';
 import tulip from '@/assets/images/tulip.png';
 import { Ionicons } from '@expo/vector-icons';
 import { RootState } from '@/redux/store';
 import { Product } from '@/types/type';
 import QuickSearchResultCard from './QuickSearchResultCard';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const HISTORY_KEY = 'search_history';
-const MAX_HISTORY_LENGTH = 10;
+const MAX_HISTORY_LENGTH = 6;
 
 const SearchBar = () => {
   const cartQuantity = useSelector(
     (state: RootState) => state.cart.totalQuantity
   );
   const [input, setInput] = useState<string>('');
-  const [searchHistory, setSearchHistory] = useState([]);
-  const [isFocused, setIsFocused] = useState(false);
+  const [searchHistory, setSearchHistory] = useState<string[]>([]);
+  const [isFocused, setIsFocused] = useState<boolean>(false);
   const url = useMemo(() => {
     return `${process.env.EXPO_PUBLIC_API}/product/search?search=${input}`;
   }, [input]);
@@ -32,7 +32,36 @@ const SearchBar = () => {
     clearData,
   } = useGetData<Product[]>(url, {}, false);
 
+  const loadSearchHistory = async () => {
+    try {
+      const historyString = await AsyncStorage.getItem(HISTORY_KEY);
+      if (historyString !== null) {
+        setSearchHistory(JSON.parse(historyString));
+      }
+    } catch (error) {
+      return;
+    }
+  };
+
+  const saveSearchHistory = async (query: string) => {
+    if (!query) return;
+
+    try {
+      const updatedHistory = [
+        query,
+        ...searchHistory.filter((item) => item !== query),
+      ];
+      const limitedHistory = updatedHistory.slice(0, MAX_HISTORY_LENGTH);
+      setSearchHistory(limitedHistory);
+      await AsyncStorage.setItem(HISTORY_KEY, JSON.stringify(limitedHistory));
+    } catch (error) {
+      return;
+    }
+  };
+
   const searchHandler = () => {
+    saveSearchHistory(input);
+    setIsFocused(false);
     setInput('');
     router.push({
       pathname: '/(root)/search-result',
@@ -40,13 +69,9 @@ const SearchBar = () => {
     });
   };
 
-  const loadSearchHistory = async () => {
-    try {
-      const historyString = await AsyncStorage.getItem(HISTORY_KEY);
-      if (historyString !== null) {
-        setSearchHistory(JSON.parse(historyString));
-      }
-    } catch (error) {}
+  const handleHistoryItemPress = (item: string) => {
+    setInput(item);
+    setIsFocused(false);
   };
 
   // Debounced search effect
@@ -76,11 +101,32 @@ const SearchBar = () => {
           placeholderTextColor={'#999'}
           onChangeText={setInput}
           value={input}
-          onFocus={() => setIsFocused(true)}
+          onBlur={() => setTimeout(() => setIsFocused(false), 200)}
+          onFocus={() => {
+            setIsFocused(true);
+            loadSearchHistory();
+          }}
         />
         <Pressable onPress={searchHandler}>
           <Image className='w-9 h-9' source={tulip} />
         </Pressable>
+        {!products && isFocused && searchHistory.length > 0 && (
+          <View className='absolute top-full left-0 right-0 bg-white z-10 rounded-3xl overflow-hidden border border-gray-200'>
+            <FlatList
+              data={searchHistory}
+              keyExtractor={(item) => item}
+              keyboardShouldPersistTaps='handled'
+              renderItem={({ item }) => (
+                <TouchableOpacity
+                  className='p-2'
+                  onPress={() => handleHistoryItemPress(item)}
+                >
+                  <Text>{item}</Text>
+                </TouchableOpacity>
+              )}
+            />
+          </View>
+        )}
         {products && (
           <View className='absolute top-full left-0 right-0 bg-white z-10 rounded-3xl overflow-hidden border border-gray-200'>
             <FlatList
