@@ -113,7 +113,7 @@ const Cart = () => {
       }
     } catch (error: any) {
       if (error.response && error.response.status === 401) {
-        getNewToken();
+        await getNewToken();
       } else {
         Toast.show({ type: 'error', text1: 'Tạo đơn hàng không thành công' });
       }

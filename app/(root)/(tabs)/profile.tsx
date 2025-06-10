@@ -18,7 +18,7 @@ import { RootState } from '@/redux/store';
 import LoadingScreen from '../loading-screen';
 
 const url = `${process.env.EXPO_PUBLIC_API}/user`;
-const version: string = '25.05.15';
+const version: string = '25.06.10';
 
 const Profile = () => {
   const token = useSelector((state: RootState) => state?.auth.accessToken);

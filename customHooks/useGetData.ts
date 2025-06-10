@@ -29,7 +29,7 @@ function useGetData<T>(
     } catch (err: any) {
       setError(err.message);
       if (err.response.status === 401) {
-        getNewToken();
+        await getNewToken();
       } else {
         Toast.show({ type: 'error', text1: 'Lỗi hệ thống!' });
       }

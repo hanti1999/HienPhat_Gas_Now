@@ -74,7 +74,7 @@ const Form = ({ product_id, order_id, token }: IProps) => {
       }
     } catch (error: any) {
       if (error.response && error.response.status === 401) {
-        getNewToken();
+        await getNewToken();
       } else {
         console.log('Gửi đánh giá không thành công', error);
         Toast.show({ type: 'error', text1: 'Gửi đánh giá không thành công' });

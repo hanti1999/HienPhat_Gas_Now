@@ -59,6 +59,18 @@ const SearchBar = () => {
     }
   };
 
+  const handleDeleteHistoryItem = async (itemToDelete: string) => {
+    try {
+      const updatedHistory = searchHistory.filter(
+        (item) => item !== itemToDelete
+      );
+      setSearchHistory(updatedHistory);
+      await AsyncStorage.setItem(HISTORY_KEY, JSON.stringify(updatedHistory));
+    } catch (error) {
+      return;
+    }
+  };
+
   const searchHandler = () => {
     saveSearchHistory(input);
     setIsFocused(false);
@@ -117,12 +129,20 @@ const SearchBar = () => {
               keyExtractor={(item) => item}
               keyboardShouldPersistTaps='handled'
               renderItem={({ item }) => (
-                <TouchableOpacity
-                  className='p-2'
-                  onPress={() => handleHistoryItemPress(item)}
-                >
-                  <Text>{item}</Text>
-                </TouchableOpacity>
+                <View className='flex flex-row items-center'>
+                  <TouchableOpacity
+                    className='p-3 flex-1'
+                    onPress={() => handleHistoryItemPress(item)}
+                  >
+                    <Text>{item}</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    className='p-3'
+                    onPress={() => handleDeleteHistoryItem(item)}
+                  >
+                    <Text>X</Text>
+                  </TouchableOpacity>
+                </View>
               )}
             />
           </View>

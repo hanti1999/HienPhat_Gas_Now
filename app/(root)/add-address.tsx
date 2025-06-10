@@ -58,7 +58,7 @@ const AddAddress = () => {
       }
     } catch (error: any) {
       if (error.response && error.response.status === 401) {
-        getNewToken();
+        await getNewToken();
       } else {
         Toast.show({ type: 'error', text1: 'Lỗi khi thêm địa chỉ' });
         console.log('Lỗi thêm địa chỉ: ' + error);

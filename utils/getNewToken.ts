@@ -1,12 +1,12 @@
-import * as SecureStore from 'expo-secure-store';
 import Toast from 'react-native-toast-message';
 import moment from 'moment';
 import axios from 'axios';
 import { loginSuccess, logout } from '@/redux/slices/authSlice';
 import { dispatch } from '@/redux/store';
+import { getValueFor } from './sercureStore';
 
 const getNewToken = async () => {
-  const refreshToken = await SecureStore.getItemAsync('refreshToken');
+  const refreshToken = await getValueFor('refreshToken');
   console.log('refresh token: ', refreshToken);
 
   try {
