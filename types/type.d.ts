@@ -91,7 +91,12 @@ declare interface AuthType {
   accessToken: string | null;
   refreshToken: string | null;
   accessTokenExpiry: string | null;
-  refreshTokenExpiry: string | null;
+}
+
+declare interface AuthPayload {
+  accessToken: string;
+  refreshToken: string;
+  accessTokenExpiry: string;
 }
 
 declare interface CartItem {

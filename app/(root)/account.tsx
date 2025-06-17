@@ -5,17 +5,18 @@ import Toast from 'react-native-toast-message';
 import { useDispatch } from 'react-redux';
 import { useState } from 'react';
 import axios from 'axios';
+import { logoutAndClearAuth } from '@/redux/slices/authSlice';
 import ScreenHeader from '@/components/ScreenHeader';
 import ConfirmModal from '@/components/ConfirmModal';
-import { logout } from '@/redux/slices/authSlice';
 import { AntDesign } from '@expo/vector-icons';
+import { AppDispatch } from '@/redux/store';
 
 const Account = () => {
   const { token, account_phonenumber, user_fullname, account_email } =
     useLocalSearchParams();
   const [modalVisible, setModalVisible] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
-  const dispatch = useDispatch();
+  const dispatch: AppDispatch = useDispatch();
 
   const openModel = () => {
     setModalVisible(true);
@@ -40,7 +41,7 @@ const Account = () => {
           type: 'success',
           text1: 'Xóa tài khoản thành công',
         });
-        dispatch(logout());
+        dispatch(logoutAndClearAuth());
         router.replace('/(root)/(tabs)/home');
       }
     } catch (error: any) {

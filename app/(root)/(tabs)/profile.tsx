@@ -5,16 +5,16 @@ import { Text, View, Pressable } from 'react-native';
 import { ScrollView, Image } from 'react-native';
 import { router, Link } from 'expo-router';
 import React, { useState } from 'react';
+import { logoutAndClearAuth } from '@/redux/slices/authSlice';
 import { FontAwesome, AntDesign } from '@expo/vector-icons';
 import RectangleButton from '@/components/RectangleButton';
 import { Ionicons, Foundation } from '@expo/vector-icons';
 import loadingIcon from '@/assets/icons/Loading_icon.gif';
+import { AppDispatch, RootState } from '@/redux/store';
 import ConfirmModal from '@/components/ConfirmModal';
 import useGetData from '@/customHooks/useGetData';
-import { logout } from '@/redux/slices/authSlice';
 import logo from '@/assets/images/logoHp.png';
 import { ProfileType } from '@/types/type';
-import { RootState } from '@/redux/store';
 import LoadingScreen from '../loading-screen';
 
 const url = `${process.env.EXPO_PUBLIC_API}/user`;
@@ -285,10 +285,10 @@ const Profile = () => {
 
 const LogoutButton = React.memo(({ clearData }: { clearData: () => void }) => {
   const [modalVisible, setModalVisible] = useState<boolean>(false);
-  const dispatch = useDispatch();
+  const dispatch: AppDispatch = useDispatch();
 
   const handleLogout = () => {
-    dispatch(logout());
+    dispatch(logoutAndClearAuth());
     setModalVisible(false);
     clearData();
   };

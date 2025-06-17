@@ -5,11 +5,12 @@ import { useDispatch } from 'react-redux';
 import React, { useState } from 'react';
 import moment from 'moment';
 import axios from 'axios';
-import { loginSuccess } from '@/redux/slices/authSlice';
+import { loginAndSaveAuth } from '@/redux/slices/authSlice';
 import CustomButton from '@/components/CustomButton';
 import HeaderImage from '@/components/HeaderImage';
 import InputField from '@/components/InputField';
 import { Ionicons } from '@expo/vector-icons';
+import { AppDispatch } from '@/redux/store';
 
 interface SigninData {
   phonenumber: string;
@@ -23,7 +24,7 @@ const SignIn = () => {
   });
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
-  const dispatch = useDispatch();
+  const dispatch: AppDispatch = useDispatch();
 
   const handleSignIn = async () => {
     try {
@@ -37,13 +38,11 @@ const SignIn = () => {
         const at: string = res?.data.accessToken;
         const rt: string = res?.data.refreshToken;
         const ate: number = res?.data.accessTokenExpiry + moment().unix();
-        const rte: number = res?.data.refreshTokenExpiry;
         dispatch(
-          loginSuccess({
+          loginAndSaveAuth({
             accessToken: at,
             refreshToken: rt,
             accessTokenExpiry: ate.toString(),
-            refreshTokenExpiry: rte.toString(),
           })
         );
         router.replace('/(root)/(tabs)/home');
@@ -53,7 +52,6 @@ const SignIn = () => {
         Toast.show({ type: 'error', text1: 'Tài khoản hoặc mật khẩu sai' });
       } else {
         Toast.show({ type: 'error', text1: 'Đăng nhập không thành công' });
-        console.error('Lỗi (Signin): ', error);
       }
     } finally {
       setLoading(false);

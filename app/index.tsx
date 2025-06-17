@@ -15,6 +15,7 @@ const Page = () => {
 
       if (expiryTime) {
         if (expiryTime < moment().unix()) {
+          console.log('Đã hết hạn, đang lấy token mới');
           await getNewToken();
         }
       }
@@ -25,11 +26,7 @@ const Page = () => {
     checkLoginStatus();
   }, []);
 
-  return (
-    <>
-      <Redirect href='/(root)/(tabs)/home' />
-    </>
-  );
+  return <Redirect href='/(root)/(tabs)/home' />;
 };
 
 export default Page;
