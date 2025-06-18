@@ -9,12 +9,12 @@ import { getValueFor } from './sercureStore';
 const getNewToken = async () => {
   console.log('Hàm getNewToken đang hoạt động'); // remove log
   const dispatch: AppDispatch = useDispatch();
+  const refreshToken = await getValueFor('refreshToken');
+  const url = `${process.env.EXPO_PUBLIC_API}/auth/refresh-token`;
+  const data = {
+    refreshToken: refreshToken,
+  };
   try {
-    const refreshToken = await getValueFor('refreshToken');
-    const url = `${process.env.EXPO_PUBLIC_API}/auth/refresh-token`;
-    const data = {
-      refreshToken: refreshToken,
-    };
     const res = await axios.post(url, data);
     console.log(res.status); // remove log
     if (res.status === 200) {

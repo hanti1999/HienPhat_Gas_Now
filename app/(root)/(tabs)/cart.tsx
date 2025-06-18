@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { router, useFocusEffect } from 'expo-router';
 import Toast from 'react-native-toast-message';
 import axios from 'axios';
+import { increaseQuantity, decreaseQuantity } from '@/redux/slices/cartSlice';
 import { removeFromCart, clearCart } from '@/redux/slices/cartSlice';
 import { FontAwesome6, AntDesign } from '@expo/vector-icons';
 import RectangleButton from '@/components/RectangleButton';
@@ -437,6 +438,14 @@ const RenderItemToCart = ({ item, dispatch }: IProp) => {
     dispatch(removeFromCart(item?.id));
   };
 
+  const handleIncrease = () => {
+    dispatch(increaseQuantity(item?.id));
+  };
+
+  const handleDecrease = () => {
+    dispatch(decreaseQuantity(item?.id));
+  };
+
   return (
     <View className='flex-row border-b border-gray-200 py-2' style={{ gap: 4 }}>
       <Image
@@ -473,13 +482,13 @@ const RenderItemToCart = ({ item, dispatch }: IProp) => {
           </TouchableOpacity>
 
           <View className='flex flex-row items-center border border-gray-200 rounded'>
-            <TouchableOpacity className='p-1'>
+            <TouchableOpacity className='p-1' onPress={handleDecrease}>
               <AntDesign name='minus' size={14} color='black' />
             </TouchableOpacity>
             <View className='py-1 px-2 border-x border-gray-200'>
               <Text>{item?.quantity}</Text>
             </View>
-            <TouchableOpacity className='p-1'>
+            <TouchableOpacity className='p-1' onPress={handleIncrease}>
               <AntDesign name='plus' size={14} color='black' />
             </TouchableOpacity>
           </View>
