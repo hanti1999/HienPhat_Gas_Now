@@ -15,7 +15,7 @@ const Page = () => {
 
       if (expiryTime) {
         if (expiryTime < moment().unix()) {
-          console.log('Đã hết hạn, đang lấy token mới');
+          console.log('Đã hết hạn, đang lấy token mới'); // remove log
           await getNewToken();
         }
       }

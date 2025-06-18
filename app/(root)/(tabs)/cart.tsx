@@ -448,25 +448,42 @@ const RenderItemToCart = ({ item, dispatch }: IProp) => {
         <Text numberOfLines={2} className='font-semibold text-[18px]'>
           {item?.title}
         </Text>
-        <Text className='mb-2 mt-4 text-[16px]'>
+        {/* <Text className='mb-2 mt-4 text-[16px]'>
           {item?.quantity}x {item?.price?.toLocaleString()}đ{' '}
           {item?.oldPrice !== item?.price && (
             <Text className='line-through text-gray-500 text-xs'>
               {item?.oldPrice.toLocaleString()}đ
             </Text>
           )}
+        </Text> */}
+        {/* <Text className='font-bold text-primary-pink text-[16px] mt-4 mb-2'>
+          {(item?.quantity * item?.price)?.toLocaleString()}đ
+        </Text> */}
+        <Text className='font-semibold text-primary-pink text-[16px] mt-4 mb-2'>
+          {item?.price?.toLocaleString()}đ
         </Text>
-        <Text className='font-bold text-[16px] mb-2'>
-          = {(item?.quantity * item?.price)?.toLocaleString()}đ
-        </Text>
-        <TouchableOpacity
-          className='flex-row items-center'
-          onPress={handleProduct}
-          style={{ gap: 4 }}
-        >
-          <FontAwesome name='trash' size={20} color={'#fb77c5'} />
-          <Text className='text-primary-pink text-[16px]'>Xoá sản phẩm</Text>
-        </TouchableOpacity>
+        <View className='flex flex-row items-center justify-between'>
+          <TouchableOpacity
+            className='flex-row items-center'
+            onPress={handleProduct}
+            style={{ gap: 4 }}
+          >
+            <FontAwesome name='trash' size={20} color={'#fb77c5'} />
+            <Text className='text-primary-pink text-[16px]'>Xoá</Text>
+          </TouchableOpacity>
+
+          <View className='flex flex-row items-center border border-gray-200 rounded'>
+            <TouchableOpacity className='p-1'>
+              <AntDesign name='minus' size={14} color='black' />
+            </TouchableOpacity>
+            <View className='py-1 px-2 border-x border-gray-200'>
+              <Text>{item?.quantity}</Text>
+            </View>
+            <TouchableOpacity className='p-1'>
+              <AntDesign name='plus' size={14} color='black' />
+            </TouchableOpacity>
+          </View>
+        </View>
       </View>
     </View>
   );

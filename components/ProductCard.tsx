@@ -70,9 +70,9 @@ const ProductCard = ({ item, size }: { item: Product; size: number }) => {
           <Text className='font-semibold text-red-500'>
             {item?.final_price.toLocaleString()} đ
           </Text>
-          <Text className='text-gray-500 text-[12px]'>
+          {/* <Text className='text-gray-500 text-[12px]'>
             Đã bán: {item?.product_sold}
-          </Text>
+          </Text> */}
           <TouchableOpacity
             onPress={() => addItemToCart()}
             disabled={isLoading || item?.product_instock === false}
