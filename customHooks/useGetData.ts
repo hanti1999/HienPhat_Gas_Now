@@ -29,8 +29,7 @@ function useGetData<T>(
     } catch (err: any) {
       setError(err.message);
       if (err.response.status === 401) {
-        console.log('loi 401'); // remove log
-        await getNewToken();
+        getNewToken();
       } else {
         Toast.show({ type: 'error', text1: 'Lỗi hệ thống!' });
       }

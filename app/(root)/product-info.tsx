@@ -74,7 +74,7 @@ const ProductInfo = () => {
       }
     } catch (error: any) {
       if (error.response && error.response.status === 401) {
-        await getNewToken();
+        getNewToken();
       } else {
         console.error('Lỗi check wishlist', error);
       }
@@ -129,7 +129,7 @@ const ProductInfo = () => {
       }
     } catch (error: any) {
       if (error.response && error.response.status === 401) {
-        await getNewToken();
+        getNewToken();
       } else {
         console.log('Lỗi không thêm được wishlist', error);
         Toast.show({ type: 'error', text1: 'Thêm không thành công' });
@@ -150,7 +150,7 @@ const ProductInfo = () => {
       }
     } catch (error: any) {
       if (error.response && error.response.status === 401) {
-        await getNewToken();
+        getNewToken();
       } else {
         console.log('Lỗi không xóa được wishlist', error);
         Toast.show({ type: 'error', text1: 'Xoá không thành công' });
