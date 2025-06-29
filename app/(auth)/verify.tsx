@@ -44,7 +44,7 @@ const Verify = () => {
       }
     } catch (error) {
       Toast.show({ type: 'error', text1: 'Đăng ký không thành công' });
-      console.error('Lỗi (VerifyScreen): ', error);
+      // console.error('Lỗi (VerifyScreen): ', error);
     } finally {
       setLoading(false);
     }

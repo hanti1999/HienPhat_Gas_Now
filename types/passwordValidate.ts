@@ -30,7 +30,7 @@ export const checkValidationRules = (validationRules: Array<RuleType>) => {
               return true; //  continue loop in `every`
             } else {
               checkPassed = false;
-              console.error(`Add a valid numeric ruleValue for ${rule.key}`);
+              // console.error(`Add a valid numeric ruleValue for ${rule.key}`);
               return false; //  stop loop in `every`
             }
 
@@ -38,11 +38,11 @@ export const checkValidationRules = (validationRules: Array<RuleType>) => {
             return true; //  continue loop in `every`
         }
       } else {
-        console.error(`Invalid rule key is added: ${rule.key}`);
+        // console.error(`Invalid rule key is added: ${rule.key}`);
       }
     });
   } else {
-    console.error('Expecting at least one validation rule');
+    // console.error('Expecting at least one validation rule');
   }
 
   return checkPassed;

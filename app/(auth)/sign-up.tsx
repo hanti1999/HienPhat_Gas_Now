@@ -68,7 +68,7 @@ const SignUp = () => {
         params: { ...form, otp },
       });
     } else if (res.data.error === -124) {
-      console.error('Access token hết hạn', res.data);
+      // console.error('Access token hết hạn', res.data);
       await getNewZaloToken();
     } else {
       setLoading(false);
@@ -76,7 +76,7 @@ const SignUp = () => {
         type: 'error',
         text1: `${res.data.message} (${res.data.error})`,
       });
-      console.error(`Lỗi: ${res.data.message} (${res.data.error})`);
+      // console.error(`Lỗi: ${res.data.message} (${res.data.error})`);
     }
   };
 
@@ -99,11 +99,11 @@ const SignUp = () => {
     const res = await axios.post(url, data, config);
     if (res?.data.error < 0) {
       Toast.show({ type: 'error', text1: 'Vui lòng liên hệ bộ phận hỗ trợ' });
-      console.error('Nhận token mới không thành công:', res?.data);
+      // console.error('Nhận token mới không thành công:', res?.data);
       setLoading(false);
       return;
     } else {
-      console.log('Đã nhận token mới');
+      // console.log('Đã nhận token mới');
       await updateNewTokenToNode(res.data);
     }
   };
@@ -124,7 +124,7 @@ const SignUp = () => {
         Toast.show({ text1: 'Vui lòng thử lại lần nữa' });
       }
     } catch (error) {
-      console.error('Cập nhật token mới không thành công', error);
+      // console.error('Cập nhật token mới không thành công', error);
       Toast.show({ type: 'error', text1: 'Vui lòng liên hệ bộ phận hỗ trợ' });
     } finally {
       setLoading(false);
@@ -145,7 +145,7 @@ const SignUp = () => {
       getOtp();
     } catch (error) {
       Toast.show({ type: 'error', text1: 'Đăng ký không thành công' });
-      console.error(error);
+      // console.error(error);
     } finally {
       setLoading(false);
     }
@@ -159,7 +159,7 @@ const SignUp = () => {
         address_full: res,
       });
     } catch (error) {
-      console.error('Lỗi lấy vị trí:', error);
+      // console.error('Lỗi lấy vị trí:', error);
       Toast.show({ type: 'error', text1: 'Không thể lấy vị trí' });
     }
   };

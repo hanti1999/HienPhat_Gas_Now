@@ -35,7 +35,7 @@ const UpdateName = () => {
       if (error.response && error.response.status === 401) {
         getNewToken();
       } else {
-        console.error('Thay đổi tên không thành công: ', error);
+        // console.error('Thay đổi tên không thành công: ', error);
         Toast.show({ type: 'error', text1: 'Đổi tên không thành công' });
       }
     } finally {

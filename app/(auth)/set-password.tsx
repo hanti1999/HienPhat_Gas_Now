@@ -48,7 +48,7 @@ const SetPassword = () => {
       }
     } catch (error) {
       Toast.show({ type: 'error', text1: 'Đổi mật khẩu không thành công' });
-      console.log(error);
+      // console.log(error);
     } finally {
       setLoading(false);
     }

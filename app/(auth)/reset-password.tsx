@@ -44,7 +44,7 @@ const ResetPassword = () => {
       setModalVisible(true);
       setOtpCountdown(30);
     } else if (res.data.error === -124) {
-      console.error('Access token hết hạn', res.data);
+      // console.error('Access token hết hạn', res.data);
       await getNewZaloToken();
     } else {
       setLoading(false);
@@ -52,7 +52,7 @@ const ResetPassword = () => {
         type: 'error',
         text1: `${res.data.message} (${res.data.error})`,
       });
-      console.error(`Lỗi: ${res.data.message} (${res.data.error})`);
+      // console.error(`Lỗi: ${res.data.message} (${res.data.error})`);
     }
   };
 
@@ -75,11 +75,11 @@ const ResetPassword = () => {
     const res = await axios.post(url, data, config);
     if (res?.data.error < 0) {
       Toast.show({ type: 'error', text1: 'Vui lòng liên hệ bộ phận hỗ trợ' });
-      console.error('Nhận token mới không thành công:', res?.data);
+      // console.error('Nhận token mới không thành công:', res?.data);
       setLoading(false);
       return;
     } else {
-      console.log('Đã nhận token mới');
+      // console.log('Đã nhận token mới');
       await updateNewTokenToNode(res.data);
     }
   };
@@ -99,7 +99,7 @@ const ResetPassword = () => {
         Toast.show({ text1: 'Vui lòng thử lại lần nữa' });
       }
     } catch (error) {
-      console.error('Cập nhật token mới không thành công', error);
+      // console.error('Cập nhật token mới không thành công', error);
       Toast.show({ type: 'error', text1: 'Vui lòng liên hệ bộ phận hỗ trợ' });
     } finally {
       setLoading(false);

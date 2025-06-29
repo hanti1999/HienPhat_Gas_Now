@@ -1,7 +1,6 @@
-import { RefreshControl, FlatList, View, Text } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { TouchableOpacity, Image } from 'react-native';
-import React, { useState } from 'react';
+import { FlatList, View, Text } from 'react-native';
 import { router } from 'expo-router';
 import moment from 'moment';
 import ScreenHeader from '@/components/ScreenHeader';
@@ -20,13 +19,7 @@ interface INoti {
 const url = `${process.env.EXPO_PUBLIC_API}/notification`;
 
 const Notification = () => {
-  const [refreshing, setRefreshing] = useState<boolean>(false);
-  const { data: noti, loading, refetch } = useGetData<INoti[]>(url);
-  const onRefresh = async () => {
-    setRefreshing(true);
-    await refetch();
-    setRefreshing(false);
-  };
+  const { data: noti, loading } = useGetData<INoti[]>(url);
 
   if (loading) {
     return <LoadingScreen />;
@@ -44,9 +37,6 @@ const Notification = () => {
           <RenderItem item={item} index={index} />
         )}
         style={{ backgroundColor: 'rgb(243 244 246)' }}
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-        }
         ListHeaderComponent={
           <ScreenHeader text={'Thông báo'} showBack={false} />
         }

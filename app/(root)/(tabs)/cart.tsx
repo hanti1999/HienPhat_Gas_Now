@@ -1,8 +1,8 @@
 import { Dimensions, TouchableOpacity, RefreshControl } from 'react-native';
 import { Image, TextInput, Text, View, Modal } from 'react-native';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ScrollView, Switch, FlatList } from 'react-native';
-import { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { router, useFocusEffect } from 'expo-router';
 import Toast from 'react-native-toast-message';
@@ -55,11 +55,14 @@ const Cart = () => {
   const [modalVisible, setModalVisible] = useState<boolean>(false);
   const [refreshing, setRefreshing] = useState<boolean>(false);
   const [usePoint, setUsePoint] = useState<boolean>(false);
-  const config = {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  };
+  const config = useMemo(
+    () => ({
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }),
+    [token]
+  );
   const {
     data: address,
     loading,
@@ -75,12 +78,12 @@ const Cart = () => {
     setVoucherAmount(0);
   };
 
-  const onRefresh = async () => {
+  const onRefresh = useCallback(async () => {
     setRefreshing(true);
     await refAdd();
     await refPoints();
     setRefreshing(false);
-  };
+  }, [refAdd, refPoints]);
 
   const handlePlaceOrder = async () => {
     try {
@@ -157,7 +160,7 @@ const Cart = () => {
     return <NoProduct text={'Giỏ hàng trống!'} />;
   }
 
-  if (loading) {
+  if (loading && !refreshing) {
     return <LoadingScreen />;
   }
 

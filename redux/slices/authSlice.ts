@@ -23,7 +23,6 @@ export const loginAndSaveAuth = createAsyncThunk(
 
       return payload;
     } catch (error) {
-      console.error('Lỗi khi lưu thông tin đăng nhập vào SecureStore:', error);
       throw error;
     }
   }
@@ -41,7 +40,6 @@ export const logoutAndClearAuth = createAsyncThunk(
 
       return true;
     } catch (error) {
-      console.error('Lỗi khi xóa thông tin đăng xuất khỏi SecureStore:', error);
       throw error;
     }
   }

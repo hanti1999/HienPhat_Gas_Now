@@ -104,7 +104,7 @@ const UpdateAddress = () => {
       if (error.response && error.response.status === 401) {
         getNewToken();
       } else {
-        console.error('Cập nhật địa chỉ không thành công: ', error);
+        // console.error('Cập nhật địa chỉ không thành công: ', error);
         Toast.show({ type: 'error', text1: 'Cập nhật không thành công' });
       }
     } finally {
@@ -127,7 +127,7 @@ const UpdateAddress = () => {
         getNewToken();
       } else {
         Toast.show({ type: 'error', text1: 'Xóa không thành công' });
-        console.error('Xóa địa chỉ không thành công: ', error);
+        // console.error('Xóa địa chỉ không thành công: ', error);
       }
     } finally {
       setDelLoading(false);
@@ -145,7 +145,7 @@ const UpdateAddress = () => {
         },
       }));
     } catch (error) {
-      console.error('Lỗi lấy vị trí:', error);
+      // console.error('Lỗi lấy vị trí:', error);
       Toast.show({ type: 'error', text1: 'Không thể lấy vị trí' });
     }
   };

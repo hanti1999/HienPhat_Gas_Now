@@ -1,10 +1,10 @@
 import { RefreshControl, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import React, { useCallback, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Text, View, Pressable } from 'react-native';
 import { ScrollView, Image } from 'react-native';
 import { router, Link } from 'expo-router';
-import React, { useState } from 'react';
 import { logoutAndClearAuth } from '@/redux/slices/authSlice';
 import { FontAwesome, AntDesign } from '@expo/vector-icons';
 import RectangleButton from '@/components/RectangleButton';
@@ -16,6 +16,7 @@ import useGetData from '@/customHooks/useGetData';
 import logo from '@/assets/images/logoHp.png';
 import { ProfileType } from '@/types/type';
 import LoadingScreen from '../loading-screen';
+import ErrorScreen from '../error-screen';
 
 const url = `${process.env.EXPO_PUBLIC_API}/user`;
 const version: string = '25.06.18';
@@ -23,25 +24,33 @@ const version: string = '25.06.18';
 const Profile = () => {
   const token = useSelector((state: RootState) => state?.auth.accessToken);
   const [refreshing, setRefreshing] = useState<boolean>(false);
-  const config = {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  };
+  const config = useMemo(
+    () => ({
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }),
+    [token]
+  );
   const {
     data: user,
     loading,
+    error,
     refetch,
     clearData,
   } = useGetData<ProfileType>(url, config);
 
-  const onRefresh = async () => {
+  const onRefresh = useCallback(async () => {
     setRefreshing(true);
     await refetch();
     setRefreshing(false);
-  };
+  }, [refetch]);
 
-  if (loading) {
+  if (error) {
+    return <ErrorScreen onRetry={refetch} />;
+  }
+
+  if (loading && !refreshing) {
     return <LoadingScreen />;
   }
 

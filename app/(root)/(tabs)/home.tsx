@@ -3,7 +3,7 @@ import { Dimensions, FlatList, Pressable } from 'react-native';
 import { SwiperFlatList } from 'react-native-swiper-flatlist';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ActivityIndicator, Text } from 'react-native';
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { router } from 'expo-router';
 import axios from 'axios';
 import { IBanner, IBrand, ICategory, Product } from '@/types/type';
@@ -56,15 +56,14 @@ const Home = () => {
   >(urls);
   const { data: banner } = useGetData<IBanner[]>(bannerUrl);
 
-  const onRefresh = async () => {
+  const onRefresh = useCallback(async () => {
     setRefreshing(true);
     await refetch();
     setRefreshing(false);
-  };
+  }, [refetch]);
 
   const getSuggestProduct = async () => {
     // Mỗi khi cuộn đến cuối màn hình sẽ load thêm 12 sản phẩm
-    // bugs: lần cuộn đầu sẽ fetch đến 24 sản phẩm?
     try {
       setLazyLoading(true);
       const res = await axios.get(`${process.env.EXPO_PUBLIC_API}/product`);
