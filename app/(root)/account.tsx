@@ -18,14 +18,6 @@ const Account = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const dispatch: AppDispatch = useDispatch();
 
-  const openModel = () => {
-    setModalVisible(true);
-  };
-
-  const closeModal = () => {
-    setModalVisible(false);
-  };
-
   const handleDeleteAccount = async () => {
     try {
       setLoading(true);
@@ -91,7 +83,7 @@ const Account = () => {
           </Pressable>
 
           <Pressable
-            onPress={() => openModel()}
+            onPress={() => setModalVisible(true)}
             className='flex-row items-center justify-between py-3'
           >
             <Text className='text-base text-red-500 font-semibold'>
@@ -100,7 +92,7 @@ const Account = () => {
           </Pressable>
           <ConfirmModal
             onConfirm={handleDeleteAccount}
-            onClose={closeModal}
+            onClose={() => setModalVisible(false)}
             text='Xác nhận xóa tài khoản? Tất cả dữ liệu sẽ bị xóa vĩnh viễn và không thể khôi phục'
             modalVisible={modalVisible}
             loading={loading}

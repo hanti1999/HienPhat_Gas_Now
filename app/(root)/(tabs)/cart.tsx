@@ -303,7 +303,7 @@ const Cart = () => {
               <Text className='text-[16px]'>Tiền mặt</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity
+            {/* <TouchableOpacity
               className='flex-1 border rounded-lg p-2 flex flex-row items-center relative'
               onPress={() => setPaymentMethod('banking')}
               style={{
@@ -314,7 +314,7 @@ const Cart = () => {
               {paymentMethod === 'banking' && <CheckedLabel />}
               <Image source={bankIcon} className='w-12 h-12' />
               <Text className='text-[16px]'>Quét mã</Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
           </View>
         </View>
         {/* Modal chọn địa chỉ */}

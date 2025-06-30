@@ -30,6 +30,11 @@ const Wishlist = () => {
     loading,
   } = useGetData<Product[]>(url, config);
 
+  const renderItem = useCallback(
+    ({ item }: { item: Product }) => <ProductCard item={item} size={0.5} />,
+    []
+  );
+
   const onRefresh = useCallback(async () => {
     setRefreshing(true);
     await refetch();
@@ -56,7 +61,7 @@ const Wishlist = () => {
         className='bg-gray-100'
         data={wishlist}
         numColumns={2}
-        renderItem={({ item }) => <ProductCard item={item} size={0.5} />}
+        renderItem={renderItem}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
