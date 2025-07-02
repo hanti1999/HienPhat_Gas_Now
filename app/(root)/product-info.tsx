@@ -47,11 +47,14 @@ const ProductInfo = () => {
   const [wlLoading, setWlLoading] = useState<boolean>(false);
   const width = Dimensions.get('window').width;
   const dispatch = useDispatch();
-  const config = {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  };
+  const config = useMemo(
+    () => ({
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }),
+    [token]
+  );
 
   const urls = useMemo(() => {
     return [

@@ -1,7 +1,7 @@
 import { SafeAreaView } from 'react-native-safe-area-context';
+import React, { useCallback, useMemo, useState } from 'react';
 import { FlatList, RefreshControl } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
-import React, { useMemo, useState } from 'react';
 import ScreenHeader from '@/components/ScreenHeader';
 import ProductCard from '@/components/ProductCard';
 import useGetData from '@/customHooks/useGetData';
@@ -18,17 +18,22 @@ const ProductFilter = () => {
   const [refreshing, setRefreshing] = useState<boolean>(false);
   const { data: products, loading, refetch } = useGetData<Product[]>(url);
 
-  const onRefresh = async () => {
+  const renderItem = useCallback(
+    ({ item }: { item: Product }) => <ProductCard item={item} size={0.5} />,
+    []
+  );
+
+  const onRefresh = useCallback(async () => {
     setRefreshing(true);
     await refetch();
     setRefreshing(false);
-  };
+  }, [refetch]);
 
-  if (loading) {
+  if (loading && !refreshing) {
     return <LoadingScreen />;
   }
 
-  if (products?.length === 0) {
+  if (!products || products?.length === 0) {
     return <NoProduct text={'Chưa có sản phẩm'} />;
   }
 
@@ -40,7 +45,7 @@ const ProductFilter = () => {
         data={products}
         initialNumToRender={6}
         numColumns={2}
-        renderItem={({ item }) => <ProductCard item={item} size={0.5} />}
+        renderItem={renderItem}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }

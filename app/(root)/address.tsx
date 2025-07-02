@@ -106,12 +106,12 @@ const Address = () => {
     [token]
   );
 
-  if (loading && !refreshing) {
-    return <LoadingScreen />;
-  }
-
   if (error) {
     return <ErrorScreen onRetry={refetch} />;
+  }
+
+  if (loading && !refreshing) {
+    return <LoadingScreen />;
   }
 
   return (
