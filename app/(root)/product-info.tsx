@@ -1,8 +1,8 @@
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { TouchableOpacity, ActivityIndicator } from 'react-native';
 import { Link, router, useLocalSearchParams } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { SwiperFlatList } from 'react-native-swiper-flatlist';
-import React, { useState, useEffect, useMemo } from 'react';
 import { Image, FlatList, ScrollView } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { View, Text, Dimensions } from 'react-native';
@@ -18,6 +18,7 @@ import { Product, Review } from '@/types/type';
 import getNewToken from '@/utils/getNewToken';
 import { RootState } from '@/redux/store';
 import LoadingScreen from './loading-screen';
+import { useWishlistStatus } from '@/customHooks/useWishlistStatus';
 
 interface IDes {
   description_id: string;
@@ -42,19 +43,15 @@ interface ICarousel {
 const ProductInfo = () => {
   const token = useSelector((state: RootState) => state.auth.accessToken);
   const { itemId } = useLocalSearchParams();
-  const [inWishlist, setIsInWishlist] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [wlLoading, setWlLoading] = useState<boolean>(false);
   const width = Dimensions.get('window').width;
   const dispatch = useDispatch();
-  const config = useMemo(
-    () => ({
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }),
-    [token]
-  );
+  const {
+    inWishlist,
+    isLoading: wlLoading,
+    add: addWishlist,
+    remove: removeWishlist,
+  } = useWishlistStatus(itemId, token);
 
   const urls = useMemo(() => {
     return [
@@ -65,28 +62,6 @@ const ProductInfo = () => {
       `${process.env.EXPO_PUBLIC_API}/feature/${itemId}`,
     ];
   }, [itemId]);
-
-  const checkWishlist = async () => {
-    try {
-      const url = `${process.env.EXPO_PUBLIC_API}/wishlist`;
-      const res = await axios.get(url, config);
-      if (res.status === 200) {
-        const products: Product[] = res.data;
-        const filteredProducts = products.find((p) => p.product_id === itemId);
-        setIsInWishlist(filteredProducts !== undefined);
-      }
-    } catch (error: any) {
-      if (error.response && error.response.status === 401) {
-        getNewToken();
-      } else {
-        // console.error('Lỗi check wishlist', error);
-        Toast.show({
-          type: 'error',
-          text1: 'Kiểm tra mục yêu thích không thành công',
-        });
-      }
-    }
-  };
 
   const addItemToCart = (data: Product) => {
     dispatch(
@@ -118,65 +93,10 @@ const ProductInfo = () => {
     router.push('/(root)/(tabs)/cart');
   };
 
-  const addWishlist = async () => {
-    if (!token) {
-      router.push('/(auth)/sign-in');
-      return;
-    }
-    try {
-      setWlLoading(true);
-      const url = `${process.env.EXPO_PUBLIC_API}/wishlist`;
-      const data = {
-        product_id: itemId,
-      };
-      const res = await axios.post(url, data, config);
-      if (res.status === 201) {
-        Toast.show({ text1: 'Đã thêm vào sản phẩm yêu thích' });
-        checkWishlist();
-      }
-    } catch (error: any) {
-      if (error.response && error.response.status === 401) {
-        getNewToken();
-      } else {
-        // console.log('Lỗi không thêm được wishlist', error);
-        Toast.show({ type: 'error', text1: 'Thêm không thành công' });
-      }
-    } finally {
-      setWlLoading(false);
-    }
-  };
-
-  const removeWishlist = async () => {
-    try {
-      setWlLoading(true);
-      const url = `${process.env.EXPO_PUBLIC_API}/wishlist/${itemId}`;
-      const res = await axios.delete(url, config);
-      if (res.status === 200) {
-        checkWishlist();
-        Toast.show({ text1: 'Đã xóa khỏi sản phẩm yêu thích' });
-      }
-    } catch (error: any) {
-      if (error.response && error.response.status === 401) {
-        getNewToken();
-      } else {
-        // console.log('Lỗi không xóa được wishlist', error);
-        Toast.show({ type: 'error', text1: 'Xoá không thành công' });
-      }
-    } finally {
-      setWlLoading(false);
-    }
-  };
-
   const { data: datas, loading } =
     useGetMultipleData<[Product, ICarousel[], IDes[], Review[], IFeature[]]>(
       urls
     );
-
-  useEffect(() => {
-    if (token) {
-      checkWishlist();
-    }
-  }, []);
 
   if (loading) {
     return <LoadingScreen />;
@@ -193,8 +113,8 @@ const ProductInfo = () => {
       (acc: any, item: any) => acc + item.review_rating,
       0
     );
-    // setAverageRating(totalRating / reviews.length);
-    const averageRating = totalRating / reviews.length;
+    const averageRating =
+      reviews?.length > 0 ? (totalRating / reviews.length).toFixed(1) : 0;
     return (
       <SafeAreaView className='flex-1 bg-white'>
         <ScreenHeader
@@ -266,35 +186,27 @@ const ProductInfo = () => {
             </View>
           </View>
 
-          <FlatList
-            data={feature}
-            keyExtractor={(item) => item?.feature_id}
-            renderItem={({ item }) => (
-              <Text className='pt-0.5'>o {item?.feature_des}</Text>
-            )}
-            scrollEnabled={false}
-            ListHeaderComponent={
-              <Text className='text-[16px] font-semibold mb-2'>
-                Đặc điểm nổi bật
+          <View className='p-3 mb-2 bg-pink-200'>
+            <Text className='text-[16px] font-semibold mb-2'>
+              Đặc điểm nổi bật
+            </Text>
+            {feature?.map((item) => (
+              <Text key={item.feature_id} className='pt-0.5'>
+                o {item.feature_des}
               </Text>
-            }
-            className='p-3 mb-2 bg-pink-200'
-          />
+            ))}
+          </View>
 
-          <FlatList
-            data={description}
-            scrollEnabled={false}
-            keyExtractor={(item) => item?.description_id}
-            renderItem={({ item }) => (
-              <Text className='pt-0.5'>o {item?.description}</Text>
-            )}
-            ListHeaderComponent={
-              <Text className='text-[16px] font-semibold mb-2'>
-                Thông tin chi tiết
+          <View className='p-3 mb-2 bg-pink-200'>
+            <Text className='text-[16px] font-semibold mb-2'>
+              Thông tin chi tiết
+            </Text>
+            {description?.map((item) => (
+              <Text key={item.description_id} className='pt-0.5'>
+                o {item.description}
               </Text>
-            }
-            className='p-3 mb-2 bg-pink-200'
-          />
+            ))}
+          </View>
 
           <View className='p-3 mb-2 bg-pink-300'>
             <Text className='text-[16px] font-semibold mb-2'>Bài đánh giá</Text>
@@ -336,10 +248,17 @@ const ProductInfo = () => {
   }
 };
 
-const Reviews = ({ reviews }: { reviews: Review[] }) => {
+const Reviews = React.memo(({ reviews }: { reviews: Review[] }) => {
+  const renderItem = useCallback(
+    ({ item, index }: { item: Review; index: number }) => (
+      <RenderItem item={item} index={index} />
+    ),
+    []
+  );
+
   return (
     <FlatList
-      renderItem={({ item, index }) => <RenderItem item={item} index={index} />}
+      renderItem={renderItem}
       ListEmptyComponent={<Text>Chưa có đánh giá</Text>}
       showsHorizontalScrollIndicator={false}
       initialNumToRender={2}
@@ -347,9 +266,14 @@ const Reviews = ({ reviews }: { reviews: Review[] }) => {
       horizontal
     />
   );
-};
+});
 
-const RenderItem = ({ item, index }: { item: Review; index: number }) => {
+interface IItemProps {
+  item: Review;
+  index: number;
+}
+
+const RenderItem = React.memo(({ item, index }: IItemProps) => {
   return (
     <View key={index} className='mr-2 bg-white rounded-lg p-2 w-[360px]'>
       <View className='flex-row items-center mb-3' style={{ gap: 4 }}>
@@ -364,8 +288,7 @@ const RenderItem = ({ item, index }: { item: Review; index: number }) => {
         <View>
           <Text className='font-semibold'>{item?.user.user_fullname}</Text>
           <Text className='text-gray-500 text-[12px]'>
-            Đánh giá {moment().diff(moment('2024-12-26T15:16:39.186Z'), 'days')}{' '}
-            ngày trước
+            Đánh giá {moment(item?.review_createat).fromNow()}
           </Text>
         </View>
       </View>
@@ -390,6 +313,6 @@ const RenderItem = ({ item, index }: { item: Review; index: number }) => {
       </View>
     </View>
   );
-};
+});
 
 export default ProductInfo;

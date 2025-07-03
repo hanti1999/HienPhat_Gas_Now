@@ -122,6 +122,7 @@ declare interface Review {
   review_rating: string;
   review_productrating: number;
   review_servicerating: number;
+  review_createat: string;
   user: {
     user_fullname: string;
     user_id: string;

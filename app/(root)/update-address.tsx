@@ -3,8 +3,8 @@ import { KeyboardAvoidingView, Platform } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router, useLocalSearchParams } from 'expo-router';
 import { View, ScrollView, Modal } from 'react-native';
+import React, { useMemo, useState } from 'react';
 import Toast from 'react-native-toast-message';
-import React, { useState } from 'react';
 import axios from 'axios';
 import { District, IAddress, Province, Ward } from '@/types/type';
 import GetLocationButton from '@/components/GetLocationButton';
@@ -37,11 +37,14 @@ const UpdateAddress = () => {
   const [wards, setWards] = useState<Ward[]>([]);
   const [selectedProvince, setSelectedProvince] = useState<string>('');
   const [selectedDistrict, setSelectedDistrict] = useState<string>('');
-  const config = {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  };
+  const config = useMemo(
+    () => ({
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }),
+    [token]
+  );
 
   const toggleSwitch = () => {
     setData((prevState) => ({

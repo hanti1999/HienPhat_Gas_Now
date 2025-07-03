@@ -1,28 +1,32 @@
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router, useLocalSearchParams } from 'expo-router';
+import React, { useMemo, useState } from 'react';
 import Toast from 'react-native-toast-message';
 import { Text, View } from 'react-native';
-import React, { useState } from 'react';
 import axios from 'axios';
 import RectangleInput from '@/components/RectangleInput';
 import ScreenHeader from '@/components/ScreenHeader';
 import CustomButton from '@/components/CustomButton';
 import getNewToken from '@/utils/getNewToken';
 
+const url = `${process.env.EXPO_PUBLIC_API}/user`;
+
 const UpdateName = () => {
   const { token, user_fullname } = useLocalSearchParams();
   const [loading, setLoading] = useState<boolean>(false);
   const [name, setName] = useState<string>('');
+  const config = useMemo(
+    () => ({
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }),
+    [token]
+  );
 
   const handleUpdateName = async () => {
     try {
       setLoading(true);
-      const url = `${process.env.EXPO_PUBLIC_API}/user`;
-      const config = {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      };
       const data = {
         user_fullname: name,
       };

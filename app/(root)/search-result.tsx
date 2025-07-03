@@ -1,7 +1,7 @@
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useLocalSearchParams } from 'expo-router';
+import { useCallback, useMemo } from 'react';
 import { FlatList } from 'react-native';
-import { useMemo } from 'react';
 import ScreenHeader from '@/components/ScreenHeader';
 import ProductCard from '@/components/ProductCard';
 import useGetData from '@/customHooks/useGetData';
@@ -15,6 +15,11 @@ const SearchResult = () => {
     return `${process.env.EXPO_PUBLIC_API}/product/search?search=${input}`;
   }, [input]);
   const { data: products, loading } = useGetData<Product[]>(url);
+
+  const renderItem = useCallback(
+    ({ item }: { item: Product }) => <ProductCard item={item} size={0.5} />,
+    []
+  );
 
   if (loading) {
     return <LoadingScreen />;
@@ -32,7 +37,7 @@ const SearchResult = () => {
         className='bg-gray-100'
         data={products}
         numColumns={2}
-        renderItem={({ item }) => <ProductCard item={item} size={0.5} />}
+        renderItem={renderItem}
         ListHeaderComponent={<ScreenHeader text={'Kết quả tìm kiếm'} />}
       />
     </SafeAreaView>

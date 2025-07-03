@@ -1,10 +1,10 @@
 import { ActivityIndicator, ImageBackground } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { TouchableOpacity, Image } from 'react-native';
+import React, { useCallback, useState } from 'react';
 import { View, Text, FlatList } from 'react-native';
 import Toast from 'react-native-toast-message';
 import { StatusBar } from 'expo-status-bar';
-import React, { useState } from 'react';
 import Constants from 'expo-constants';
 import { router } from 'expo-router';
 import { Entypo, Ionicons } from '@expo/vector-icons';
@@ -21,6 +21,11 @@ const url = `${process.env.EXPO_PUBLIC_API}/product/top-discount`;
 const Sale = () => {
   const { data: products, loading } = useGetData<Product[]>(url);
 
+  const renderItem = useCallback(
+    ({ item }: { item: Product }) => <ProductCard item={item} />,
+    []
+  );
+
   if (loading) {
     return <LoadingScreen />;
   }
@@ -30,7 +35,7 @@ const Sale = () => {
       <FlatList
         data={products}
         keyExtractor={(item) => item?.product_id}
-        renderItem={({ item }) => <ProductCard item={item} />}
+        renderItem={renderItem}
         showsVerticalScrollIndicator={false}
         ListHeaderComponent={
           <>
@@ -84,7 +89,7 @@ const Header = () => {
   );
 };
 
-const ProductCard = ({ item }: { item: Product }) => {
+const ProductCard = React.memo(({ item }: { item: Product }) => {
   const [isLoading, setLoading] = useState<boolean>(false);
   const dispatch = useDispatch();
 
@@ -166,6 +171,6 @@ const ProductCard = ({ item }: { item: Product }) => {
       </TouchableOpacity>
     </View>
   );
-};
+});
 
 export default Sale;
