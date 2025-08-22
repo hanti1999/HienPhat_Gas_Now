@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { TouchableOpacity, ActivityIndicator } from 'react-native';
 import { Link, router, useLocalSearchParams } from 'expo-router';
+import React, { useState, useMemo, useCallback } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { SwiperFlatList } from 'react-native-swiper-flatlist';
 import { Image, FlatList, ScrollView } from 'react-native';
@@ -8,17 +8,15 @@ import { useDispatch, useSelector } from 'react-redux';
 import { View, Text, Dimensions } from 'react-native';
 import Toast from 'react-native-toast-message';
 import moment from 'moment';
-import axios from 'axios';
+import { useWishlistStatus } from '@/customHooks/useWishlistStatus';
 import useGetMultipleData from '@/customHooks/useGetMultipleData';
 import { FontAwesome, AntDesign } from '@expo/vector-icons';
 import RectangleButton from '@/components/RectangleButton';
 import { addToCart } from '@/redux/slices/cartSlice';
 import ScreenHeader from '@/components/ScreenHeader';
 import { Product, Review } from '@/types/type';
-import getNewToken from '@/utils/getNewToken';
 import { RootState } from '@/redux/store';
 import LoadingScreen from './loading-screen';
-import { useWishlistStatus } from '@/customHooks/useWishlistStatus';
 
 interface IDes {
   description_id: string;
@@ -46,13 +44,6 @@ const ProductInfo = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const width = Dimensions.get('window').width;
   const dispatch = useDispatch();
-  const {
-    inWishlist,
-    isLoading: wlLoading,
-    add: addWishlist,
-    remove: removeWishlist,
-  } = useWishlistStatus(itemId, token);
-
   const urls = useMemo(() => {
     return [
       `${process.env.EXPO_PUBLIC_API}/product/${itemId}`,
@@ -62,6 +53,18 @@ const ProductInfo = () => {
       `${process.env.EXPO_PUBLIC_API}/feature/${itemId}`,
     ];
   }, [itemId]);
+
+  const {
+    inWishlist,
+    isLoading: wlLoading,
+    add: addWishlist,
+    remove: removeWishlist,
+  } = useWishlistStatus(itemId, token);
+
+  const { data: datas, loading } =
+    useGetMultipleData<[Product, ICarousel[], IDes[], Review[], IFeature[]]>(
+      urls
+    );
 
   const addItemToCart = (data: Product) => {
     dispatch(
@@ -92,11 +95,6 @@ const ProductInfo = () => {
     addItemToCart(data);
     router.push('/(root)/(tabs)/cart');
   };
-
-  const { data: datas, loading } =
-    useGetMultipleData<[Product, ICarousel[], IDes[], Review[], IFeature[]]>(
-      urls
-    );
 
   if (loading) {
     return <LoadingScreen />;
